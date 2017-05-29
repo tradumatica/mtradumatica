@@ -1,0 +1,74 @@
+{% extends "base.html" %}
+{% block content %}
+<div class="jumbotron">
+  <div class="container">
+    <h1>{{ _('MTradumàtica') }}</h1>
+    <p>{{ _('With MTradumàtica you can train custom statistical machine
+             translation (SMT) systems. Create SMT components and understand how
+             they all interact together.') }}</p> 
+    <p><a class="btn btn-primary btn-lg" href="{{ url_for('files') }}" role="button">{{ _('Start
+             uploading your files now') }} &raquo;</a></p>
+  </div>
+</div>
+
+<div class="container">
+  <div class="row">
+    <div class="col-md-4">
+      <h2>{{ _('Upload files') }}</h2>
+      <p>{{ _('Start uploading files: plain text files with source and
+      target language texts or TMX translation memories. If you need some
+      more text you can find it at <a href="http://opus.lingfil.uu.se" target="_blank">OPUS</a>.') }}</p>
+      <p><a class="btn btn-default" href="{{ url_for('files') }}" role="button">{{ _('Upload files') }} &raquo;</a></p>
+    </div>
+
+    
+    <div class="col-md-4">
+      <h2>{{ _('Create Monotexts') }}</h2>
+      <p>{{ _('Create monolingual corpora from one or more of your files.
+      They will be used to train language models (LMs) for the target languages of
+    your SMT systems.') }}</p>
+      <p><a class="btn btn-default" href="{{ url_for('monolingual_corpora') }}" role="button">{{
+      _('Create Monotexts') }} &raquo;</a></p>
+    </div> 
+
+
+    <div class="col-md-4">
+      <h2>{{ _('Build LMs') }}</h2>
+      <p>{{ _('See how different language models (LMs) can affect
+      translation quality, especially when they are similar to what you want to
+      translate.') }} </p>
+      <p><a class="btn btn-default" href="{{ url_for('language_models') }}" role="button">{{
+      _('Train Language Models') }} &raquo;</a></p>
+    </div>
+  </div>
+  <div class="row">
+    <div class="col-md-4">
+      <h2>{{ _('Create Bitexts') }}</h2>
+      <p>{{ _('Create bilingual corpora from one or more
+      paired source-target files. You can join two or more
+      bitexts together to create a bigger one.') }}</p>
+      <p><a class="btn btn-default" href="{{ url_for('bitexts') }}" role="button">{{
+      _('Create a Bitext') }} &raquo;</a></p>
+    </div> 
+
+    <div class="col-md-4">
+      <h2>{{ _('Build Translators') }}</h2>
+      <p>{{ _('Build a new machine translator with bitexts and language
+      models. Create translators with different texts and see
+      the effect of optimising them.') }} </p>
+      <p><a class="btn btn-default" href="{{ url_for('translators') }}" role="button">{{
+      _('Train a Translator') }} &raquo;</a></p>
+    </div>
+
+
+    <div class="col-md-4">
+      <h2>{{ _('Translate') }}</h2>
+      <p>{{ _('See your translators in action, test and compare them.
+      Translate short texts or documents. As soon as you have a new translator, you
+      will be able to try it!') }} </p>
+      <p><a class="btn btn-default" href="{{ url_for('translate_page') }}" role="button">{{
+      _('Translate') }} &raquo;</a></p>
+    </div>
+  </div>
+</div>
+{% endblock %}
