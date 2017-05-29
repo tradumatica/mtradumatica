@@ -1,0 +1,41 @@
+.TH lt-comp 1 2006-03-08 "" ""
+.SH NAME
+lt-tmxcomp \- This application is part of the lexical processing modules
+and tools (
+.B lttoolbox
+)
+.PP
+This tool is part of the apertium machine translation
+architecture: \fBhttp://apertium.org\fR.
+.SH SYNOPSIS
+.B lt-tmxcomp
+lang1-lang2 tmx_file output_file
+.PP
+.SH DESCRIPTION
+.BR lt-comp 
+Is the application responsible for compiling translation memories in 
+the TMX format used by \fBlt-tmxproc\fR in \fIApertium\fR into a compact  
+and efficient representation (a class of finite-state transducers called 
+augmented letter transducers).
+.PP
+.SH OPTIONS
+.TP
+.B lang1
+Input language
+.TP
+.B lang2
+Output language
+.SH FILES
+.B tmx_file
+The input translation memory, in TMX format.
+.PP
+.B output_file
+The compiled translation memory (a finite state transducer).
+
+.SH SEE ALSO
+.I lt-tmxproc\fR(1),
+.I apertium\fR(1).
+.SH BUGS
+Lots of...lurking in the dark and waiting for you!
+.SH AUTHOR
+(c) 2005,2006 Universitat d'Alacant / Universidad de Alicante. 

@@ -1,0 +1,50 @@
+.TH apertium-deslatex 1 2012-02-29 "" ""
+.SH NAME
+apertium-deslatex \- This application is part of (
+.B apertium 
+)
+.PP
+This tool is part of the apertium open-source machine translation toolbox: \fBhttp://www.apertium.org\fR.
+.SH SYNOPSIS
+.B apertium-deslatex
+[ \-h ] [ \-i ] [ \-n ]
+[ <input file> [ <output file> ] ]
+.PP
+.SH DESCRIPTION
+.BR apertium-deslatex
+This filter preprocess apertium-prelatex output to a deformatted 'XMLish'
+LaTeX custom format. The output suitable for
+processing with lt-proc. Format information (newlines, tabs, etc.) is enclosed in brackets so that lt-proc treats it as whitespace between words.
+.SH OPTIONS
+.TP
+.B \-h, \-\-help
+Display this help.
+.B \-i
+Makes the addition of trailing sentence terminator (".") unconditional, often
+leading to duplicates.
+.B \-n
+Suppresses the addition of a trailing sentence terminator.
+.PP
+.SH EXAMPLE
+.TP
+You could write the following to show how the word "gener" is analysed: 
+.TP
+echo "<textit/><CONTENTS>gener</CONTENTS>" | apertium-deslatex | lt-proc ca-es.automorf.bin
+.PP
+.SH SEE ALSO
+.I apertium-destxt\fR(1),
+.I apertium-prelatex\fR(1),
+.I apertium-postlatex\fR(1),
+.I apertium-relatex\fR(1),
+.I apertium-postlatex-raw\fR(1),
+.I lt-proc\fR(1),
+.I apertium\fR(1).
+.SH BUGS
+Complicated constructions in LaTeX (i.e. custom defined tags) are not (yet)
+supported.
+.PP
+.SH AUTHOR
+Copyright (c) 2005, 2006 Universitat d'Alacant / Universidad de Alicante.
+This is free software.  You may redistribute copies of it under the terms
+of the GNU General Public License <http://www.gnu.org/licenses/gpl.html>.
+
