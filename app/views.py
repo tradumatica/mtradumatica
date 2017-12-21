@@ -146,7 +146,12 @@ def query_tm():
 def file_upload():
   file     = request.files['file']
   basename = secure_filename(file.filename)
-
+  
+  try:
+      os.stat(app.config['UPLOAD_FOLDER'])
+  except:
+      os.mkdir(app.config['UPLOAD_FOLDER'])       
+  
   filename = os.path.join(app.config['UPLOAD_FOLDER'], "{0:05d}-{1}".format(randint(1,100000), basename))
   while os.path.exists(filename):
     filename = os.path.join(app.config['UPLOAD_FOLDER'], "{0:05d}-{1}".format(randint(1,100000), basename))
@@ -199,6 +204,12 @@ def bitext_create(parname,language1,language2):
   name=parname+"_"+language1+"_"+language2
   #create empty bitext
   basename = secure_filename(name)
+  try:
+      os.stat(app.config['UPLOAD_FOLDER'])
+  except:
+      os.mkdir(app.config['UPLOAD_FOLDER'])       
+
+  
   dirname = os.path.join(app.config['UPLOAD_FOLDER'], "{0:05d}-bitext-{1}".format(randint(1,100000), basename))
   while os.path.exists(dirname):
     dirname = os.path.join(app.config['UPLOAD_FOLDER'], "{0:05d}-bitext-{1}".format(randint(1,100000), basename))
@@ -223,6 +234,12 @@ def monolingualcorpus_create(parname,language1):
   name=parname+"_"+language1
   #create empty bitext
   basename = secure_filename(name)
+  
+  try:
+      os.stat(app.config['UPLOAD_FOLDER'])
+  except:
+      os.mkdir(app.config['UPLOAD_FOLDER'])       
+
   filename = os.path.join(app.config['UPLOAD_FOLDER'], "{0:05d}-monolingualcorpus-{1}".format(randint(1,100000), basename))
   while os.path.exists(filename):
     filename = os.path.join(app.config['UPLOAD_FOLDER'], "{0:05d}-monolingualcorpus-{1}".format(randint(1,100000), basename))
