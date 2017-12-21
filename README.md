@@ -17,7 +17,7 @@ $ MTRADUMATICADIR/scripts/install.sh
 
 ```bash
 $ source MTRADUMATICADIR/venv/bin/activate
-$ python db_create.py
+$ python MTRADUMATICADIR/db_create.py
 $ deactivate
 ```
 
