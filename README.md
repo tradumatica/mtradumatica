@@ -1,6 +1,6 @@
 # MTradumàtica
 
-## Installation instructions for Ubuntu 14.04 LTS
+## Installation instructions for Ubuntu 16.04 LTS
 
 6-step procedure:
 1. Ensure that all prerrequisites are installed
