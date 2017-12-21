@@ -22,5 +22,5 @@ $ deactivate
 ```bash
 $ MTRADUMATICADIR/scripts/startup.sh
 ```
-5. Go to "http://localhost:5001" with a web browser
+5. Go to "http://localhost:8081" with a web browser
 6. Enjoy!
