@@ -1,0 +1,12 @@
+[submodule "software/mosesdecoder"]
+	path = software/mosesdecoder
+	url = https://github.com/moses-smt/mosesdecoder.git
+[submodule "software/mgiza"]
+	path = software/mgiza
+	url = https://github.com/moses-smt/mgiza.git
+[submodule "software/apertium"]
+	path = software/apertium
+	url = https://github.com/apertium/apertium.git
+[submodule "software/lttoolbox"]
+	path = software/lttoolbox
+	url = https://github.com/apertium/lttoolbox.git
