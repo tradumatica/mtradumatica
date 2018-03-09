@@ -8,7 +8,8 @@ import shutil
 import sys
 from app import app,db
 
-tempfile.tempdir = os.path.dirname(os.path.dirname(os.path.realpath(__file__))) + "/tmp"
+#tempfile.tempdir = os.path.dirname(os.path.dirname(os.path.realpath(__file__))) + "/tmp"
+tempfile.tempdir = app.config['TMP_FOLDER']
 
 def get_makefile_tuning(l1,l2, translatorpath):
   rootdir  = os.path.dirname(os.path.dirname(os.path.realpath(__file__)))

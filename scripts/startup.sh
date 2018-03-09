@@ -21,8 +21,20 @@ if [ ! -d $ROOT/logs ]
 then mkdir $ROOT/logs
 fi
 
+if [ ! -d $ROOT/uploads ]
+then mkdir $ROOT/uploads
+fi
+
+if [ ! -d $ROOT/translators ]
+then mkdir $ROOT/translators
+fi
+
+if [ ! -d $ROOT/tmp ]
+then mkdir $ROOT/tmp
+fi
+
 if [ "$OPTION" = "-d" ]
-  then DEBUG_MODE="1" 
+  then DEBUG_MODE="1"
        echo "[debug] starting redis + celery only... [done]"
   else echo "Starting redis + celery + gunicorn... [done]"
 fi
@@ -34,6 +46,10 @@ $ROOT/scripts/shutdown.sh >/dev/null
 
 source $ROOT/venv/bin/activate
 
+if [ ! -d $ROOT/redis-data ]
+then mkdir $ROOT/redis-data
+fi
+
 redis-server $ROOT/conf/redis.conf # as a daemon, with pidfile
 sleep 2
 nohup celery worker --workdir $ROOT \
@@ -41,7 +57,7 @@ nohup celery worker --workdir $ROOT \
                     --logfile=$ROOT/logs/celery-worker.log &
 
 echo $! >$ROOT/proc/celery.pid
-                   
+
 if [ "$DEBUG_MODE" != "1" ]
 then nohup gunicorn -c $ROOT/conf/gunicorn.conf app:app &
 fi

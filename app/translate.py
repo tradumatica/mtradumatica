@@ -4,8 +4,11 @@ import tempfile
 import os
 import codecs
 import shutil
+from app import app
 
-tempfile.tempdir = os.path.dirname(os.path.dirname(os.path.realpath(__file__))) + "/tmp"
+
+#tempfile.tempdir = os.path.dirname(os.path.dirname(os.path.realpath(__file__))) + "/tmp"
+tempfile.tempdir = app.config['TMP_FOLDER']
 doctypes = ["txt", "odt", "ods", "odp", "docx", "xlsx", "pptx", "html", "xml"]
 
 nl       = regex.compile(ur"[\n]", regex.MULTILINE)

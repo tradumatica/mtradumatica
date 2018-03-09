@@ -29,18 +29,18 @@ class Corpus(db.Model):
   def __repr__(self):
     return "<Corpus {0} {1} {2} {3} {4}>".format(self.name, self.nlines, self.nwords, self.nchars, self.lang)
 
-  def serialize(self):
+  def __json__(self):
     return {
             'id': self.id,
             'name': self.name,
             'mydate': self.mydate,
-			'type': self.type,
-			'lang': self.lang,
-			'nlines': self.nlines,
-			'nwords': self.nwords,
-			'nchars': self.nchars,
-			'size': self.size,
-			'path': self.path
+	    'type': self.type,
+	    'lang': self.lang,
+	    'nlines': self.nlines,
+	    'nwords': self.nwords,
+	    'nchars': self.nchars,
+	    'size': self.size,
+	    'path': self.path
         }
 
 class LanguageModel(db.Model):
@@ -54,8 +54,9 @@ class LanguageModel(db.Model):
   path    = db.Column(db.String(256))
   exitstatus = db.Column(db.Integer)
   translatorsfrombitext = db.relationship('TranslatorFromBitext',backref=db.backref('languagemodel', lazy='joined'), lazy='dynamic')
+  generated_id = db.Column(db.String(128))
 
-  def serialize(self):
+  def __json__(self):
     return {
             'id': self.id,
             'name': self.name,
@@ -63,7 +64,8 @@ class LanguageModel(db.Model):
             'lang': self.lang,
             'monocorpus_id': self.monocorpus_id,
             'path': self.path,
-            'task_id' : self.task_id
+            'task_id' : self.task_id,
+            'generated_id': self.generated_id
         }
   def get_blm_path(self):
     return os.path.join(self.path,"LM.blm")
@@ -82,7 +84,7 @@ class Bitext(db.Model):
 #  left  = db.Column(db.Integer, db.ForeignKey('corpus.id'))
 #  right = db.Column(db.Integer, db.ForeignKey('corpus.id'))
 
-  def serialize(self):
+  def __json__(self):
     return {
             'id': self.id,
             'name': self.name,
@@ -106,15 +108,13 @@ class MonolingualCorpus(db.Model):
   path   = db.Column(db.String(256))
   languagemodels = db.relationship('LanguageModel',backref=db.backref('monocorpus', lazy='joined'), lazy='dynamic')
 
-  def serialize(self):
-    return {
-            'id': self.id,
+  def __json__(self):
+    return {'id': self.id,
             'name': self.name,
             'mydate': self.mydate,
-			'lang': self.lang,
-			'nlines': self.nlines,
-			'path': self.path
-        }
+	    'lang': self.lang,
+	    'nlines': self.nlines,
+            'path': self.path}
 
 #TODO: create class AddTMXBitext
 class AddCorpusBitext(db.Model):
@@ -132,19 +132,21 @@ class AddCorpusMonoCorpus(db.Model):
 
 class TranslatorFromBitext(db.Model):
   id = db.Column(db.Integer, primary_key = True)
-  name    = db.Column(db.String(100))
-  lang1   = db.Column(db.String(10))
-  lang2   = db.Column(db.String(10))
-  mydate = db.Column(db.DateTime)
-  mydatefinished = db.Column(db.DateTime)
-  mydateopt = db.Column(db.DateTime)
+  name              = db.Column(db.String(100))
+  lang1             = db.Column(db.String(10))
+  lang2             = db.Column(db.String(10))
+  mydate            = db.Column(db.DateTime)
+  mydatefinished    = db.Column(db.DateTime)
+  mydateopt         = db.Column(db.DateTime)
   mydateoptfinished = db.Column(db.DateTime)
-  bitext_id = db.Column(db.Integer, db.ForeignKey('bitext.id'))
-  languagemodel_id = db.Column(db.Integer, db.ForeignKey('language_model.id'))
-  task_id = db.Column(db.String(128))
-  task_opt_id = db.Column(db.String(128))
-  basename    = db.Column(db.String(256))
-  exitstatus = db.Column(db.Integer)
+  bitext_id         = db.Column(db.Integer, db.ForeignKey('bitext.id'))
+  languagemodel_id  = db.Column(db.Integer, db.ForeignKey('language_model.id'))
+  task_id           = db.Column(db.String(128))
+  task_opt_id       = db.Column(db.String(128))
+  generated_id      = db.Column(db.String(128))
+  basename          = db.Column(db.String(256))
+  exitstatus        = db.Column(db.Integer)
+  
   def get_path(self):
     return train.build_translator_path(self.basename)
 

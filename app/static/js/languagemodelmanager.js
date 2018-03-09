@@ -73,11 +73,11 @@ $('body').on('change', 'input.file_checkbox', function() {
 
   if(any)
   {
-    $('#delete_all').addClass("icon-enabled");
+    $('#delete_all').addClass("trashbin-enabled");
   }
   else
   {
-    $('#delete_all').removeClass("icon-enabled");
+    $('#delete_all').removeClass("trashbin-enabled");
     $('#checkbox_all').prop("checked", false);
     $('#checkbox_all').removeClass("checkbox-inconsistent");
   }
@@ -89,12 +89,12 @@ $('#checkbox_all').change(function() {
   if($(this).is(":checked"))
   {
     $('.file_checkbox').prop("checked", true);
-    $('#delete_all').addClass("icon-enabled");
+    $('#delete_all').addClass("trashbin-enabled");
   }
   else
   {
     $('.file_checkbox').prop("checked", false);
-    $('#delete_all').removeClass("icon-enabled");
+    $('#delete_all').removeClass("trashbin-enabled");
   }
 });
 
@@ -112,7 +112,7 @@ $('#delete_all').click(function() {
 
   $('#checkbox_all').prop("checked", false);
   $('#checkbox_all').removeClass("checkbox-inconsistent")
-  $('#delete_all').removeClass("icon-enabled");
+  $('#delete_all').removeClass("trashbin-enabled");
 
   table.ajax.reload();
 });

@@ -253,17 +253,23 @@ def monolingualcorpus_create(parname,language1):
   return jsonify(status = "OK")
 
 @app.route('/actions/languagemodel-create/<string:parname>/<string:language1>/<string:monocorpusid>')
-def languagemodel_create(parname,language1, monocorpusid):
+def languagemodel_create(parname, language1, monocorpusid):
   #TODO: check existing monocorpus with the same name?
 
   #launch task, deal with filenames and so on
   monocorpus   = MonolingualCorpus.query.get(monocorpusid)
   t_id = train.lm_id_generator(language1)
-  task = celerytasks.train_lm.apply_async(args=[monocorpus, t_id])
   filename = train.build_lm_path(t_id,language1)
 
-  m = LanguageModel(name=parname , lang = language1,  mydate  = datetime.utcnow(), monocorpus_id = monocorpusid, path= filename, task_id = task.id)
-  db.session.add(m)
+  lm = LanguageModel(name=parname , lang = language1, monocorpus_id = monocorpusid, path= filename, generated_id = t_id)
+  db.session.add(lm)
+  db.session.commit()
+
+  task = celerytasks.train_lm.apply_async(args=[lm.id])
+
+  lm.task_id = task.id
+  lm.mydate = datetime.utcnow()
+  db.session.add(lm)
   db.session.commit()
 
   return jsonify(status = "OK")
@@ -275,7 +281,7 @@ def translator_create(parname,language1, language2, bitextid, languagemodelid):
   bitext   = Bitext.query.get(bitextid)
   languagemodel = LanguageModel.query.get(languagemodelid)
   t_id = train.id_generator(language1,language2)
-  task = celerytasks.train_smt.apply_async(args=[language1,language2,bitext,languagemodel, t_id])
+  task = celerytasks.train_smt.apply_async(args=[language1,language2, bitextid ,languagemodelid, t_id])
   filename = train.build_translator_basename(t_id,language1,language2)
 
   t = TranslatorFromBitext(name=parname , lang1 = language1, lang2 = language2, mydate  = datetime.utcnow(), bitext_id = bitextid, languagemodel_id = languagemodelid , basename= filename, task_id = task.id)
@@ -289,15 +295,22 @@ def translator_createfromfiles(parname,file1id, file2id):
   #TODO: check existing Translator with the same name?
 
   #launch task, deal with filenames and so on
-  file1= Corpus.query.get(file1id)
+  file1 = Corpus.query.get(file1id)
   file2 = Corpus.query.get(file2id)
 
-  t_id = train.id_generator(file1.lang,file2.lang)
-  task = celerytasks.train_simple_smt.apply_async(args=[file1.serialize(),file2.serialize(), t_id])
+  t_id = train.id_generator(file1.lang, file2.lang)
+  filename = train.build_translator_basename(t_id, file1.lang, file2.lang)
+
+  t = TranslatorFromBitext(name=parname, lang1 = file1.lang, lang2 = file2.lang, basename=filename, generated_id = t_id)
+  db.session.add(t)
+  db.session.commit()
+  
+  task = celerytasks.train_simple_smt.apply_async(args=[file1id, file2id, t.id])
   
   filename = train.build_translator_basename(t_id,file1.lang,file2.lang)
 
-  t = TranslatorFromBitext(name=parname, lang1 = file1.lang, lang2 = file2.lang, mydate  = datetime.utcnow() , basename= filename, task_id = task.id)
+  t.mydate  = datetime.utcnow()
+  t.task_id = task.id
   db.session.add(t)
   db.session.commit()
 
@@ -396,7 +409,7 @@ def file_plain_list(language=None):
     files= Corpus.query.filter(Corpus.lang == language)
   else:
     files= Corpus.query.all()
-  return jsonify(data=[f.serialize() for f in files])
+  return jsonify(data=[f.__json__() for f in files])
 
 
 
@@ -448,7 +461,7 @@ def bitext_plain_list(language1=None, language2=None):
     files= Bitext.query.filter(Bitext.lang1 == language1).filter(Bitext.lang2 == language2)
   else:
     files= Bitext.query.all()
-  return jsonify(data=[f.serialize() for f in files])
+  return jsonify(data=[f.__json__() for f in files])
 
 @app.route('/actions/bitext-plainlist/<int:trid>')
 def bitext_plain_list_for_translator(trid):
@@ -458,7 +471,7 @@ def bitext_plain_list_for_translator(trid):
     #sort languages
     language1,language2=sort_language_pair(tr.lang1,tr.lang2)
     files= Bitext.query.filter(Bitext.lang1 == language1).filter(Bitext.lang2 == language2)
-  return jsonify(data=[f.serialize() for f in files])
+  return jsonify(data=[f.__json__() for f in files])
 
 
 @app.route('/actions/bitext-list', methods=["POST"])
@@ -506,7 +519,7 @@ def monolingualCorpus_plain_list(language=None):
     files= MonolingualCorpus.query.filter(MonolingualCorpus.lang == language)
   else:
     files= MonolingualCorpus.query.all()
-  return jsonify(data=[f.serialize() for f in files])
+  return jsonify(data=[f.__json__() for f in files])
 
 
 @app.route('/actions/monolingualcorpus-list', methods=["POST"])
@@ -554,7 +567,7 @@ def languageModel_plain_list(language=None):
     files= LanguageModel.query.filter(LanguageModel.exitstatus == 0).filter(LanguageModel.lang == language)
   else:
     files= LanguageModel.query.filter(LanguageModel.exitstatus == 0)
-  return jsonify(data=[f.serialize() for f in files])
+  return jsonify(data=[f.__json__() for f in files])
 
 @app.route('/actions/languagemodel-list', methods=["POST"])
 def languageModel_list():
@@ -674,7 +687,7 @@ def translator_optimize(translatorid,bitextid):
   tr= TranslatorFromBitext.query.get(translatorid)
   bitext = Bitext.query.get(bitextid)
 
-  task = celerytasks.tune_smt.apply_async(args=[tr.lang1, tr.lang2,tr,bitext])
+  task = celerytasks.tune_smt.apply_async(args=[tr.lang1, tr.lang2,translatorid,bitext])
 
   tr.mydateopt = datetime.utcnow()
   tr.task_opt_id=task.id
@@ -933,7 +946,7 @@ def build_simple(id1, id2):
   c1   = Corpus.query.get(id1)
   c2   = Corpus.query.get(id2)
   t_id = train.id_generator(c1.lang,c2.lang)
-  task = celerytasks.train_simple_smt.apply_async(args=[c1, c2, t_id])
+  task = celerytasks.train_simple_smt.apply_async(args=[id1, id2, t_id])
   #TODO: use train.build_translator_path
   t_name    = "{0}-{1}-{2}".format(t_id, c1.lang, c2.lang)
   t_path    = os.path.join(app.config['TRANSLATORS_FOLDER'], t_name)

@@ -15,16 +15,8 @@ $ sudo MTRADUMATICADIR/scripts/run-as-root.sh
 ```bash
 $ MTRADUMATICADIR/scripts/install.sh
 ```
- 
-#### 3. Create the system database database 
 
-```bash
-$ source MTRADUMATICADIR/venv/bin/activate
-$ python MTRADUMATICADIR/db_create.py
-$ deactivate
-```
-
-#### 4. Start service
+#### 3. Start service
 
 ```bash
 $ MTRADUMATICADIR/scripts/startup.sh

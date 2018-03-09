@@ -3,8 +3,11 @@ import regex
 import tempfile
 import os
 import codecs
+from app import app
 
-tempfile.tempdir = os.path.dirname(os.path.dirname(os.path.realpath(__file__))) + "/tmp"
+#tempfile.tempdir = os.path.dirname(os.path.dirname(os.path.realpath(__file__))) + "/tmp"
+
+tempfile.tempdir = app.config['TMP_FOLDER']
 
 
 nl       = regex.compile(ur"[\n]", regex.MULTILINE)

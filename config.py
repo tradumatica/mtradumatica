@@ -11,6 +11,7 @@ DOWNLOAD_FOLDER       = os.path.join(basedir, "downloads")
 TRANSLATORS_FOLDER    = os.path.join(basedir, "translators")
 LMS_FOLDER            = os.path.join(basedir, "lms")
 SCRIPTS_FOLDER        = os.path.join(basedir, "scripts")
+TMP_FOLDER            = os.path.join(basedir, "tmp")
 EXECUTABLE_FOLDER     = os.path.join(os.path.join(basedir, "venv"), "bin")
 
 TRANSLATION_PROGRAM   = os.path.join(SCRIPTS_FOLDER, "translate-docs.sh")
