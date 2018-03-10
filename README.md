@@ -4,6 +4,13 @@
 
 6-step procedure:
 
+#### 0. Download Mtradumàtica
+
+```bash
+$ git clone --recurse-submodules GIT_REPO_URL
+```
+
+
 #### 1. Ensure that all prerrequisites are installed
  
 ```bash
