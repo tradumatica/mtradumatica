@@ -29,4 +29,4 @@ $ MTRADUMATICADIR/scripts/install.sh
 $ MTRADUMATICADIR/scripts/startup.sh
 ```
 
-#### 5. Go to "http://localhost:8081" with a web browser
+#### 5. Go to "http://localhost:8080" with a web browser
