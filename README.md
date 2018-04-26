@@ -17,7 +17,7 @@ $ sudo ./scripts/run-as-root.sh
 ```
 2. Download and install local dependencies
 ```bash
-$ MTRADUMATICADIR/scripts/install.sh
+$ ./scripts/install.sh
 ```
 3. Create the system database database 
 ```bash
@@ -28,7 +28,7 @@ $ source deactivate
 4. Start service
 
 ```bash
-$ MTRADUMATICADIR/scripts/startup.sh
+$ ./scripts/startup.sh
 ```
 5. Go to "http://localhost:8080" with a web browser
 6. Enjoy!
