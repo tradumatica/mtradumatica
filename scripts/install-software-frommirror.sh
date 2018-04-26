@@ -14,7 +14,7 @@ fi
 # Download zlib
 if [ ! -d $ROOT/software/zlib ]; then
   cd $ROOT/software
-  wget "http://zlib.net/zlib-1.2.8.tar.gz" -O zlib.tar.gz
+  wget "http://zlib.net/zlib-1.2.11.tar.gz" -O zlib.tar.gz
 #  wget "http://downloads.sourceforge.net/project/libpng/zlib/1.2.8/zlib-1.2.8.tar.gz" -O zlib.tar.gz
   mkdir zlib && tar xzf zlib.tar.gz -C zlib --strip-component 1
   rm zlib.tar.gz
@@ -29,8 +29,10 @@ make install || exit 1
 # Download boost
 if [ ! -d $ROOT/software/boost ]; then
   cd $ROOT/software
-  wget "http://mirror.liquidtelecom.com/sourceforge/b/bo/boost/boost/1.61.0/boost_1_61_0.tar.bz2" -O boost.tar.bz2 || exit 1
-  #wget "http://sourceforge.net/projects/boost/files/latest/download?source=files" -O boost.tar.bz2 || exit 1
+  #wget "http://mirror.liquidtelecom.com/sourceforge/b/bo/boost/boost/1.61.0/boost_1_61_0.tar.bz2" -O boost.tar.bz2 || exit 1
+  #wget "http://sourceforge.net/projects/boost/files/latest/download?source=files" -O boost.tar.gz || exit 1
+  #wget "https://netix.dl.sourceforge.net/project/boost/boost/1.66.0/boost_1_66_0.tar.bz2" -O boost.tar.bz2 || exit 1
+  wget  https://sourceforge.net/projects/boost/files/boost/1.66.0/boost_1_66_0.tar.bz2/download -O boost.tar.bz2 || exit 1
   mkdir boost && tar xjf boost.tar.bz2 -C boost --strip-components 1
   rm boost.tar.bz2
 fi
@@ -43,8 +45,9 @@ cd $ROOT/software/boost
 # Download cmph
 if [ ! -d $ROOT/software/cmph ]; then
   cd $ROOT/software
-  wget "http://mirror.liquidtelecom.com/sourceforge/c/cm/cmph/cmph/cmph-2.0.tar.gz" -O cmph.tar.gz || exit 1
+  #wget "http://mirror.liquidtelecom.com/sourceforge/c/cm/cmph/cmph/cmph-2.0.tar.gz" -O cmph.tar.gz || exit 1
   #wget "http://sourceforge.net/projects/cmph/files/latest/download?source=files" -O cmph.tar.gz || exit 1
+  wget https://sourceforge.net/projects/cmph/files/cmph/cmph-2.0.tar.gz/download -O cmph.tar.gz || exit 1
   mkdir cmph && tar xzf cmph.tar.gz -C cmph --strip-components 1
   rm cmph.tar.gz
 fi
@@ -69,7 +72,7 @@ make install || exit 1
 # Download xmlrpc-c
 if [ ! -d $ROOT/software/xmlrpc-c ]; then
   cd $ROOT/software
-  wget "http://mirror.liquidtelecom.com/sourceforge/x/xm/xmlrpc-c/Xmlrpc-c%20Super%20Stable/1.39.08/xmlrpc-c-1.39.08.tgz" -O xmlrpc-c.tar.gz || exit 1
+  wget "https://sourceforge.net/projects/xmlrpc-c/files/Xmlrpc-c%20Super%20Stable/1.39.12/xmlrpc-c-1.39.12.tgz/download" -O xmlrpc-c.tar.gz || exit 1
   #wget "http://sourceforge.net/projects/xmlrpc-c/files/latest/download?source=files" -O xmlrpc-c.tar.gz || exit 1
   mkdir xmlrpc-c && tar xzf xmlrpc-c.tar.gz -C xmlrpc-c --strip-components 1
   rm xmlrpc-c.tar.gz
@@ -126,7 +129,8 @@ make -j$CORES PREFIX=$ROOT/venv/local install || exit 1
 
 if [ ! -d $ROOT/software/lttoolbox ]; then
   cd $ROOT/software
-  svn co https://svn.code.sf.net/p/apertium/svn/trunk/lttoolbox
+#  svn co https://svn.code.sf.net/p/apertium/svn/trunk/lttoolbox
+  git clone https://github.com/apertium/lttoolbox.git 
 fi
 
 cd $ROOT/software/lttoolbox
@@ -136,7 +140,8 @@ make install  || exit 1
 
 if [ ! -d $ROOT/software/apertium ]; then
   cd $ROOT/software
-  svn co https://svn.code.sf.net/p/apertium/svn/trunk/apertium
+#  svn co https://svn.code.sf.net/p/apertium/svn/trunk/apertium
+  git clone https://github.com/apertium/apertium.git
 fi
 
 cd $ROOT/software/apertium
