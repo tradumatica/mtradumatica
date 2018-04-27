@@ -43,7 +43,7 @@ $ ./scripts/startup.sh
 
 ### Setting the service port
 
-Before startin the service (step 4), if you already have another service running on port 8080, set up a different one by editing the file `conf/gunicorn.conf` and locate the following line 
+Before starting the service (step 4), if you already have another service running on port 8080, set up a different one by editing the file `conf/gunicorn.conf` and locate the following line 
 
 ```bash
 bind         = '0.0.0.0:8080'
