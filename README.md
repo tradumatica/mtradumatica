@@ -23,7 +23,7 @@ $ ./scripts/install.sh
 ```bash
 $ source venv/bin/activate
 $ python db_create.py
-$ source deactivate
+$ deactivate
 ```
 4. Start service
 
