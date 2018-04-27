@@ -48,5 +48,5 @@ Before the startup, edit the file `conf/gunicorn.conf` and locat the following l
 ```bash
 bind         = '0.0.0.0:8080'
 ```
-Here, replace 8080 with another port number (< 65535).
+Here, replace 8080 by another port number (<= 65535).
 
