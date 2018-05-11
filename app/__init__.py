@@ -4,8 +4,9 @@ from flask.ext.sqlalchemy import SQLAlchemy
 from flask_login import LoginManager
 import os
 
-app    = Flask(__name__, static_folder='static', static_url_path='')
+app    = Flask(__name__, static_folder='static', static_url_path='', instance_relative_config=True)
 app.config.from_object('config')
+app.config.from_pyfile('config.py')
 
 directory = os.path.dirname(app.config['SQLALCHEMY_DATABASE_URI'][len("sqlite:///"):])
 
