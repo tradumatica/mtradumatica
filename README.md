@@ -7,7 +7,7 @@
 #### 0. Download Mtradumàtica
 
 ```bash
-$ git clone --recurse-submodules GIT_REPO_URL
+$ git clone --recurse-submodules https://github.com/tradumatica/mtradumatica
 ```
 
 
@@ -29,4 +29,4 @@ $ MTRADUMATICADIR/scripts/install.sh
 $ MTRADUMATICADIR/scripts/startup.sh
 ```
 
-#### 5. Go to "http://localhost:80" with a web browser
+#### 5. Browse to "http://localhost:80"
