@@ -4,8 +4,11 @@ import tempfile
 import os
 import codecs
 import shutil
+from app import app
 
-tempfile.tempdir = os.path.dirname(os.path.dirname(os.path.realpath(__file__))) + "/tmp"
+
+#tempfile.tempdir = os.path.dirname(os.path.dirname(os.path.realpath(__file__))) + "/tmp"
+tempfile.tempdir = app.config['TMP_FOLDER']
 doctypes = ["txt", "odt", "ods", "odp", "docx", "xlsx", "pptx", "html", "xml"]
 
 nl       = regex.compile(ur"[\n]", regex.MULTILINE)
@@ -29,7 +32,7 @@ def translate(text, translator, doctype="txt"):
   
   output= tempfile.NamedTemporaryFile(delete = False)
   output.close()
-  translation_command = "{0} -f {1} {2} {3} {4}".format(tp, doctype, translator, input.name, output.name)
+  translation_command = '{0} -f {1} "{2}" {3} {4}'.format(tp, doctype, translator, input.name, output.name)
   proc = subprocess.Popen(translation_command, shell = True, preexec_fn = os.setsid, close_fds = True)
   proc.communicate();
   
@@ -55,7 +58,7 @@ def translate(text, translator, doctype="txt"):
 def translate_document(document_name, translator, doctype="txt"):
   output = tempfile.NamedTemporaryFile(delete = False)
   output.close()
-  translation_command = "{0} -f {1} {2} {3} {4}".format(tp, doctype, translator, document_name, output.name)
+  translation_command = '{0} -f {1} "{2}" {3} {4}'.format(tp, doctype, translator, document_name, output.name)
   proc = subprocess.Popen(translation_command, shell = True, preexec_fn = os.setsid, close_fds = True)
   proc.communicate();
   return output.name
@@ -64,7 +67,7 @@ def translate_dir(temporary_dir, translator, doctype):
   source_file = os.path.join(temporary_dir, "source")
   target_file = os.path.join(temporary_dir, "target")
     
-  translation_command = "{0} -f {1} {2} {3} {4}".format(tp, doctype, translator, source_file, target_file)
+  translation_command = '{0} -f {1} "{2}" {3} {4}'.format(tp, doctype, translator, source_file, target_file)
   return subprocess.Popen(translation_command, shell = True, preexec_fn = os.setsid, close_fds = True)
 #  proc.communicate();
 

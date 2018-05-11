@@ -2,8 +2,8 @@
 
 lang_select_list = [(u"af", u"Afrikaans"),        (u"sq", u"Shqip"),           (u"am", u"አማርኛ"),             (u"ar", u"العربية"), 
                     (u"an", u"Aragonés"),         (u"hy", u"Հայերեն"),         (u"ae", u"Avesta"),           (u"ay", u"Aymar aru"), 
-                    (u"az", u"Azərbaycan dili"),  (u"eu", u"Euskara"),         (u"be", u"Беларуская мова"),  (u"bi", u"Bislama"), 
-                    (u"bs", u"Bosanski"),         (u"br", u"Brezhoneg"),       (u"bg", u"Български език"),   (u"ca", u"Català"), 
+                    (u"az", u"Azərbaycan dili"),  (u"eu", u"Euskara"),         (u"be", u"Беларуская"),       (u"bi", u"Bislama"), 
+                    (u"bs", u"Bosanski"),         (u"br", u"Brezhoneg"),       (u"bg", u"Български"),        (u"ca", u"Català"), 
                     (u"ce", u"Нохчийн мотт"),     (u"ny", u"ChiCheŵa"),        (u"zh", u"中文"),             (u"cv", u"Чӑваш чӗлхи"), 
                     (u"co", u"Corsu"),            (u"hr", u"Hrvatski"),        (u"cs", u"Čeština"),          (u"da", u"Dansk"), 
                     (u"nl", u"Nederlands"),       (u"en", u"English"),         (u"eo", u"Esperanto"),        (u"et", u"Eesti"), 

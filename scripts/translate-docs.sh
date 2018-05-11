@@ -46,16 +46,16 @@ with open(sys.argv[1], "r") as other:
 nline = 0
 for i in sys.stdin:
   nline += 1
-  
+
   if str(nline) in dicblocks:
     sys.stdout.write(dicblocks[str(nline)])
     nline += 1
-    
+
   sys.stdout.write(i)
 else:
   if str(nline+1) in dicblocks:
-    sys.stdout.write(dicblocks[str(nline+1)])  
-    
+    sys.stdout.write(dicblocks[str(nline+1)])
+
 HERE
 ) $1
 }
@@ -84,7 +84,7 @@ def next_df_token(input):
 for i in next_df_token(sys.stdin):
   sys.stdout.write(i)
 HERE
-)  
+)
 }
 
 f2p ()
@@ -123,15 +123,51 @@ for i in next_df_token(sys.stdin):
     sys.stdout.write(base64.b64encode(i))
     sys.stdout.write('"/>\\n')
   else:
-    sys.stdout.write(i)  
+    sys.stdout.write(i)
 HERE
 )
 }
 
-translate ()
+get_translators()
 {
+  PARAM=$1
 
-MYTMPDIR=$(mktemp -d)
+python <(cat <<HERE
+import sys
+print(sys.argv[1].replace(";;;;", " "))
+HERE
+) $PARAM
+
+}
+
+translate()
+{
+  MYTMPDIR=$(mktemp -d)
+  cat >$MYTMPDIR/gen_input
+
+  for TRANS in $(get_translators $ENGINE); do
+    L1=$(python -c 'print "'$TRANS'".split("-")[1]')
+    L2=$(python -c 'print "'$TRANS'".split("-")[2]')
+    if [[ -e $MYTMPDIR/gen_output ]]; then
+      mv $MYTMPDIR/gen_output $MYTMPDIR/gen_input
+      #cat $MYTMPDIR/gen_input
+    fi
+    translate_chain $MYTMPDIR $TRANS
+  done
+
+  if [[ -e $MYTMPDIR/gen_output ]]; then
+    cat $MYTMPDIR/gen_output
+  else
+    cat $MYTMPDIR/gen_input
+  fi
+
+  rm -Rf $MYTMPDIR
+}
+
+translate_chain ()
+{
+MYTMPDIR=$1
+ENGINE=$2
 
 if [ -f "$ROOT/translators/$ENGINE/moses.tuned.ini" ]; then
 	INIFILE="$ROOT/translators/$ENGINE/moses.tuned.ini"
@@ -141,6 +177,7 @@ fi
 
 cd $ROOT/translators/$ENGINE
 
+cat $MYTMPDIR/gen_input | \
 f2p | \
 unbraid $MYTMPDIR/unb | \
 $TOK -q -l $L1 2>/dev/null | \
@@ -150,33 +187,21 @@ $DETRU| \
 $DETOK -q -l $L2 2>/dev/null > $MYTMPDIR/detok
 
 braid $MYTMPDIR/unb <$MYTMPDIR/detok | \
-p2f
+p2f >$MYTMPDIR/gen_output
 
-rm -Rf $MYTMPDIR
 }
 
 message ()
 {
-  echo "USAGE: $(basename $0) [-d datadir] [-f format] [-u] <direction> [in [out]]"
-  echo " -d datadir       directory of linguistic data"
+  echo "USAGE: $(basename $0) [-f format] [-u] <direction> [in [out]]"
   echo " -f format        one of: txt (default), html, rtf, odt, docx, wxml, xlsx, pptx,"
   echo "                  xpresstag, html-noent, latex, latex-raw"
-  echo " -a               display ambiguity"
-  echo " -u               don't display marks '*' for unknown words"
   echo " -n               don't insert period before possible sentence-ends"
-  echo " -m memory.tmx    use a translation memory to recycle translations"
-  echo " -o direction     translation direction using the translation memory,"
-  echo "                  by default 'direction' is used instead"
-  echo " -l               lists the available translation directions and exits"
-  echo " direction        typically, LANG1-LANG2, but see modes.xml in language data"
+  echo " -h               display this help"
+  echo " direction        String of the form L1-L2[;;;;L2-L3]+"
   echo " in               input file (stdin by default)"
   echo " out              output file (stdout by default)"
   exit 1
-}
-
-list_directions ()
-{
-  echo "";
 }
 
 locale_utf8 ()
@@ -337,16 +362,11 @@ translate_docx ()
   fi
   OTRASALIDA=$(mktemp "$TMPDIR/apertium.XXXXXXXX")
 
-  if [ "$UWORDS" = "no" ]; then
-    OPCIONU="-u";
-  else OPCIONU="";
-  fi
-
   unzip -q -o -d "$INPUT_TMPDIR" "$INFILE"
 
   for i in $(find "$INPUT_TMPDIR"|grep "xlsx$");
   do LOCALTEMP=$(mktemp "$TMPDIR/apertium.XXXXXXXX");
-    $ABSOLUTE_PATH_TRANSLATOR -f xlsx -d "$DATADIR" "$OPCIONU" "$PAIR" <"$i" >"$LOCALTEMP";
+    $ABSOLUTE_PATH_TRANSLATOR -f xlsx "$PAIR" <"$i" >"$LOCALTEMP";
     cp "$LOCALTEMP" "$i";
     rm "$LOCALTEMP";
   done;
@@ -391,16 +411,11 @@ translate_pptx ()
   fi
   OTRASALIDA=$(mktemp "$TMPDIR/apertium.XXXXXXXX")
 
-  if [ "$UWORDS" = "no" ]; then
-    OPCIONU="-u";
-  else OPCIONU="";
-  fi
-
   unzip -q -o -d "$INPUT_TMPDIR" "$INFILE"
 
   for i in $(find "$INPUT_TMPDIR"|grep "xlsx$"); do
     LOCALTEMP=$(mktemp "$TMPDIR/apertium.XXXXXXXX")
-    $ABSOLUTE_PATH_TRANSLATOR -f xlsx -d "$DATADIR" "$OPCIONU" "$PAIR" <"$i" >"$LOCALTEMP";
+    $ABSOLUTE_PATH_TRANSLATOR -f xlsx "$PAIR" <"$i" >"$LOCALTEMP";
     cp "$LOCALTEMP" "$i"
     rm "$LOCALTEMP"
   done;
@@ -488,10 +503,6 @@ translate_htmlnoent ()
   rm -Rf "$TMCOMPFILE"
 }
 
-
-
-
-
 ##########################################################
 # Option and argument parsing, setting globals variables #
 ##########################################################
@@ -504,9 +515,7 @@ trap 'rm -Rf "$TMCOMPFILE"' EXIT
 PAIR=""
 INFILE="/dev/stdin"
 FORMAT="txt"
-DATADIR=$DEFAULT_DIRECTORY
 TRANSLATION_MEMORY_DIRECTION=$PAIR
-LIST_MODES_AND_EXIT=false
 FORMAT_OPTIONS=""
 
 # Skip (but store) non-option arguments that come before options:
@@ -521,24 +530,16 @@ while [[ $OPTIND -le $# ]]; do
 done
 
 
-while getopts ":uahlf:d:m:o:n" opt; do
+while getopts ":hf:n" opt; do
   case "$opt" in
     f) FORMAT=$OPTARG ;;
-    d) DATADIR=$OPTARG ;;
-    m) TRANSLATION_MEMORY_FILE=$OPTARG ;;
-    o) TRANSLATION_MEMORY_DIRECTION=$OPTARG ;;
-    u) UWORDS="no" ;;
     n) FORMAT_OPTIONS="-n" ;;
-    a) OPTION_TAGGER="-m" ;;
-    l) LIST_MODES_AND_EXIT=true ;;
     h) message ;;
     \?) echo "ERROR: Unknown option $OPTARG"; message ;;
     :) echo "ERROR: $OPTARG requires an argument"; message ;;
   esac
 done
 shift $(($OPTIND-1))
-
-if $LIST_MODES_AND_EXIT; then list_directions; exit 0; fi
 
 # Restore non-option arguments that came before options back into arg list:
 set -- "${ARGS_PREOPT[@]}" "$@"
@@ -572,42 +573,14 @@ esac
 
 ENGINE=$PAIR
 
-L1=$(python -c 'print "'$ENGINE'".split("-")[1]')
-L2=$(python -c 'print "'$ENGINE'".split("-")[2]')
-
-
-if [[ -n $TRANSLATION_MEMORY_FILE ]]; then
-  "$APERTIUM_PATH/lt-tmxcomp" "$TRANSLATION_MEMORY_DIRECTION" "$TRANSLATION_MEMORY_FILE" "$TMCOMPFILE" >/dev/null
-  if [ "$?" != "0" ]; then
-    echo "Error: Cannot compile TM '$TRANSLATION_MEMORY_FILE'"
-    echo"   hint: use -o parameter"
-    message
-  fi
-fi
-
-if [[ ! -d "$DATADIR/modes" ]]; then
-  echo "Error: Directory '$DATADIR/modes' does not exist."
-  message
-fi
-
 #Parametro opcional, de no estar, lee de la entrada estandar (stdin)
 
 case "$FORMAT" in
   none)
-    if [ "$UWORDS" = "no" ]; then
-      OPTION="-n";
-    else OPTION="-g";
-    fi
     ;;
   txt|rtf|html|xpresstag|mediawiki)
-    if [ "$UWORDS" = "no" ]; then OPTION="-n";
-    else OPTION="-g";
-    fi;
     ;;
   rtf)
-    if [ "$UWORDS" = "no" ]; then OPTION="-n";
-    else OPTION="-g";
-    fi;
     MILOCALE=$(locale -a|grep -i -v "utf\|^C$\|^POSIX$"|head -1);
     if [ "$MILOCALE" = "" ]; then
       echo "Error: Install a ISO-8859-1 compatible locale in your system";
@@ -617,79 +590,51 @@ case "$FORMAT" in
     ;;
 
   odt)
-    if [ "$UWORDS" = "no" ]; then OPTION="-n";
-    else OPTION="-g";
-    fi;
     translate_odt
     exit 0
     ;;
   latex)
-    if [ "$UWORDS" = "no" ]; then OPTION="-n";
-    else OPTION="-g";
-    fi;
     translate_latex
     exit 0
     ;;
   latex-raw)
-    if [ "$UWORDS" = "no" ]; then OPTION="-n";
-    else OPTION="-g";
-    fi;
     translate_latex_raw
     exit 0
     ;;
-  
-  
+
+
   docx)
-    if [ "$UWORDS" = "no" ]; then OPTION="-n";
-    else OPTION="-g";
-    fi;
     translate_docx
     exit 0
     ;;
   xlsx)
-    if [ "$UWORDS" = "no" ]; then OPTION="-n";
-    else OPTION="-g";
-    fi;
     translate_xlsx
     exit 0
     ;;
   pptx)
-    if [ "$UWORDS" = "no" ]; then OPTION="-n";
-    else OPTION="-g";
-    fi;
     translate_pptx
     exit 0
     ;;
   html-noent)
-    if [ "$UWORDS" = "no" ]; then OPTION="-n";
-    else OPTION="-g";
-    fi;
     translate_htmlnoent
     exit 0
     ;;
-  
+
   wxml)
-    if [ "$UWORDS" = "no" ]; then OPTION="-n";
-    else OPTION="-g";
-    fi;
     locale_utf8
     ;;
-  
+
   txtu)
     FORMAT="txt";
-    OPTION="-n"
     ;;
   htmlu)
     FORMAT="html";
-    OPTION="-n";
     ;;
   xpresstagu)
     FORMAT="xpresstag";
-    OPTION="-n";
     ;;
   rtfu)
     FORMAT="rtf";
-    OPTION="-n";
     MILOCALE=$(locale -a|grep -i -v "utf\|^C$\|^POSIX$"|head -1);
     if [ "$MILOCALE" = "" ]; then
       echo "Error: Install a ISO-8859-1 compatible locale in your system";
@@ -699,31 +644,26 @@ case "$FORMAT" in
     ;;
 
   odtu)
-    OPTION="-n"
     translate_odt
     exit 0
     ;;
 
   docxu)
-    OPTION="-n"
     translate_docx
     exit 0
     ;;
 
   xlsxu)
-    OPTION="-n"
     translate_xlsx
     exit 0
     ;;
 
   pptxu)
-    OPTION="-n"
     translate_pptx
     exit 0
     ;;
 
   wxmlu)
-    OPTION="-n";
     locale_utf8
     ;;
 
@@ -731,7 +671,6 @@ case "$FORMAT" in
 
   *) # Por defecto asumimos txt
     FORMAT="txt"
-    OPTION="-g"
     ;;
 esac
 
@@ -746,12 +685,7 @@ if [ "$FORMAT" = "none" ]; then
     cat "$INFILE"
 else
   "$APERTIUM_PATH/apertium-des$FORMAT" ${FORMAT_OPTIONS} "$INFILE"
-fi | if [ "$TRANSLATION_MEMORY_FILE" = "" ];
-     then
-         cat
-     else
-       "$APERTIUM_PATH/lt-tmxproc" "$TMCOMPFILE"
-     fi | translate | if [ "$FORMAT" = "none" ]; then
+fi | translate | if [ "$FORMAT" = "none" ]; then
                    if [ "$REDIR" = "" ]; then
                        cat
                    else
@@ -764,4 +698,3 @@ fi | if [ "$TRANSLATION_MEMORY_FILE" = "" ];
                    "$APERTIUM_PATH/apertium-re$FORMAT" > "$SALIDA"
                  fi
                fi
-

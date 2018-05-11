@@ -200,10 +200,12 @@ $("#lmtab").click(function(){
   $("#tmtab_contents").addClass("hidden");
   $("#pbdtab_contents").addClass("hidden");
   $("#mttab_contents").addClass("hidden");
+  $("#mrtab_contents").addClass("hidden");
   $("#lmtab_tab").addClass("active");
   $("#tmtab_tab").removeClass("active");
   $("#pbdtab_tab").removeClass("active");
   $("#mttab_tab").removeClass("active");
+  $("#mrtab_tab").removeClass("active");
 });
 
 $("#tmtab").click(function(){
@@ -211,10 +213,12 @@ $("#tmtab").click(function(){
   $("#tmtab_contents").removeClass("hidden");
   $("#pbdtab_contents").addClass("hidden");
   $("#mttab_contents").addClass("hidden");
+  $("#mrtab_contents").addClass("hidden");  
   $("#lmtab_tab").removeClass("active");
   $("#tmtab_tab").addClass("active");
   $("#pbdtab_tab").removeClass("active");
   $("#mttab_tab").removeClass("active");
+  $("#mrtab_tab").removeClass("active");
 });
 
 $("#pbdtab").click(function(){
@@ -222,10 +226,12 @@ $("#pbdtab").click(function(){
   $("#tmtab_contents").addClass("hidden");
   $("#pbdtab_contents").removeClass("hidden");
   $("#mttab_contents").addClass("hidden");
+  $("#mrtab_contents").addClass("hidden");
   $("#lmtab_tab").removeClass("active");
   $("#tmtab_tab").removeClass("active");
   $("#pbdtab_tab").addClass("active");
   $("#mttab_tab").removeClass("active");
+  $("#mrtab_tab").removeClass("active");
 });
 
 $("#mttab").click(function(){
@@ -233,12 +239,26 @@ $("#mttab").click(function(){
   $("#tmtab_contents").addClass("hidden");
   $("#pbdtab_contents").addClass("hidden");
   $("#mttab_contents").removeClass("hidden");
+  $("#mrtab_contents").addClass("hidden");
   $("#lmtab_tab").removeClass("active");
   $("#tmtab_tab").removeClass("active");
   $("#pbdtab_tab").removeClass("active");
   $("#mttab_tab").addClass("active");
+  $("#mrtab_tab").removeClass("active");
 });
 
+$("#mrtab").click(function(){
+  $("#lmtab_contents").addClass("hidden");
+  $("#tmtab_contents").addClass("hidden");
+  $("#pbdtab_contents").addClass("hidden");
+  $("#mttab_contents").addClass("hidden");
+  $("#mrtab_contents").removeClass("hidden");
+  $("#lmtab_tab").removeClass("active");
+  $("#tmtab_tab").removeClass("active");
+  $("#pbdtab_tab").removeClass("active");
+  $("#mttab_tab").removeClass("active");
+  $("#mrtab_tab").addClass("active");
+});
 
 $("#lmsel").change(function(){
   refreshSubmitButtons();
@@ -319,6 +339,7 @@ $(document).ready(function(){
   $("form#form-tmtab").submit(false);
   $("form#form-pbdtab").submit(false);
   $("form#form-mttab").submit(false);
+  $("form#from-mrtab").submit(false);
   refreshSubmitButtons();  
 });
 

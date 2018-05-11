@@ -1,52 +1,32 @@
 # MTradumàtica
 
-## Minimum hardware recommendations
-* Linux (Ubuntu 14.04 LTS)
-* 4-core (8 thread) CPU or more
-* 12 GB of RAM or more
-* 5 GB or more of free hard disk space, as much as possible recommended to train large models (big translators, using over one million sentence pairs)
+## Installation instructions for Ubuntu 16.04 LTS or Ubuntu 18.04 LTS
 
-## Installation instructions for Ubuntu 14.04 LTS
+6-step procedure:
 
-6-step (+1) procedure, it could take 1-2h depending on hardware specifications:
-
-0. Download mtradumatica
+#### 0. Download Mtradumàtica
 
 ```bash
-$ git clone https://github.com/tradumatica/mtradumatica.git
-$ cd mtradumatica
+$ git clone --recurse-submodules GIT_REPO_URL
 ```
 
-1. Ensure that all prerequisites are installed
+
+#### 1. Ensure that all prerrequisites are installed
+ 
 ```bash
-$ sudo ./scripts/run-as-root.sh
+$ sudo MTRADUMATICADIR/scripts/run-as-root.sh
 ```
-2. Download and install local dependencies
+
+#### 2. Download and install local dependencies
+ 
 ```bash
-$ ./scripts/install.sh
+$ MTRADUMATICADIR/scripts/install.sh
 ```
-3. Create the system database database 
-```bash
-$ source venv/bin/activate
-$ python db_create.py
-$ deactivate
-```
-4. Start service
+
+#### 3. Start service
 
 ```bash
-$ ./scripts/startup.sh
+$ MTRADUMATICADIR/scripts/startup.sh
 ```
-5. Go to "http://localhost:8080" with a web browser
-6. Enjoy!
 
-## Troubleshooting
-
-### Setting the service port
-
-Before the startup, edit the file `conf/gunicorn.conf` and locat the following line 
-
-```bash
-bind         = '0.0.0.0:8080'
-```
-Here, replace 8080 by another port number (<= 65535).
-
+#### 5. Go to "http://localhost:80" with a web browser

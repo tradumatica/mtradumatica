@@ -3,6 +3,8 @@ from app import app
 import train
 import datetime
 import os
+from flask.ext.login import UserMixin
+from flask_dance.consumer.backend.sqla import OAuthConsumerMixin, SQLAlchemyBackend
 
 # Many to many relationships
 
@@ -15,32 +17,33 @@ tm_has_bitext = db.Table('tm_has_bitext',
                          db.Column('bitext_id', db.Integer, db.ForeignKey('bitext.id')))
 
 class Corpus(db.Model):
-  id     = db.Column(db.Integer, primary_key=True)
-  name   = db.Column(db.String(100))
-  mydate = db.Column(db.DateTime)
-  type   = db.Column(db.String(32))
-  lang   = db.Column(db.String(10))
-  nlines = db.Column(db.Integer)
-  nwords = db.Column(db.Integer)
-  nchars = db.Column(db.Integer)
-  size   = db.Column(db.Integer)
-  path   = db.Column(db.String(256))
-
+  id      = db.Column(db.Integer, primary_key=True)
+  name    = db.Column(db.String(100))
+  mydate  = db.Column(db.DateTime)
+  type    = db.Column(db.String(32))
+  lang    = db.Column(db.String(10))
+  nlines  = db.Column(db.Integer)
+  nwords  = db.Column(db.Integer)
+  nchars  = db.Column(db.Integer)
+  size    = db.Column(db.Integer)
+  path    = db.Column(db.String(256))
+  user_id = db.Column(db.Integer, db.ForeignKey('users.id'))
+  
   def __repr__(self):
     return "<Corpus {0} {1} {2} {3} {4}>".format(self.name, self.nlines, self.nwords, self.nchars, self.lang)
 
-  def serialize(self):
+  def __json__(self):
     return {
             'id': self.id,
             'name': self.name,
             'mydate': self.mydate,
-			'type': self.type,
-			'lang': self.lang,
-			'nlines': self.nlines,
-			'nwords': self.nwords,
-			'nchars': self.nchars,
-			'size': self.size,
-			'path': self.path
+	    'type': self.type,
+	    'lang': self.lang,
+	    'nlines': self.nlines,
+	    'nwords': self.nwords,
+	    'nchars': self.nchars,
+	    'size': self.size,
+	    'path': self.path
         }
 
 class LanguageModel(db.Model):
@@ -54,7 +57,10 @@ class LanguageModel(db.Model):
   path    = db.Column(db.String(256))
   exitstatus = db.Column(db.Integer)
   translatorsfrombitext = db.relationship('TranslatorFromBitext',backref=db.backref('languagemodel', lazy='joined'), lazy='dynamic')
-  def serialize(self):
+  generated_id = db.Column(db.String(128))
+  user_id = db.Column(db.Integer, db.ForeignKey('users.id'))
+
+  def __json__(self):
     return {
             'id': self.id,
             'name': self.name,
@@ -62,7 +68,8 @@ class LanguageModel(db.Model):
             'lang': self.lang,
             'monocorpus_id': self.monocorpus_id,
             'path': self.path,
-            'task_id' : self.task_id
+            'task_id' : self.task_id,
+            'generated_id': self.generated_id
         }
   def get_blm_path(self):
     return os.path.join(self.path,"LM.blm")
@@ -80,7 +87,9 @@ class Bitext(db.Model):
   translatorsfrombitext = db.relationship('TranslatorFromBitext',backref=db.backref('bitext', lazy='joined'), lazy='dynamic')
 #  left  = db.Column(db.Integer, db.ForeignKey('corpus.id'))
 #  right = db.Column(db.Integer, db.ForeignKey('corpus.id'))
-  def serialize(self):
+  user_id = db.Column(db.Integer, db.ForeignKey('users.id'))
+
+  def __json__(self):
     return {
             'id': self.id,
             'name': self.name,
@@ -102,17 +111,17 @@ class MonolingualCorpus(db.Model):
   nlines = db.Column(db.Integer)
   mydate = db.Column(db.DateTime)
   path   = db.Column(db.String(256))
+  user_id = db.Column(db.Integer, db.ForeignKey('users.id'))
+
   languagemodels = db.relationship('LanguageModel',backref=db.backref('monocorpus', lazy='joined'), lazy='dynamic')
 
-  def serialize(self):
-    return {
-            'id': self.id,
+  def __json__(self):
+    return {'id': self.id,
             'name': self.name,
             'mydate': self.mydate,
-			'lang': self.lang,
-			'nlines': self.nlines,
-			'path': self.path
-        }
+	    'lang': self.lang,
+	    'nlines': self.nlines,
+            'path': self.path}
 
 #TODO: create class AddTMXBitext
 class AddCorpusBitext(db.Model):
@@ -130,21 +139,27 @@ class AddCorpusMonoCorpus(db.Model):
 
 class TranslatorFromBitext(db.Model):
   id = db.Column(db.Integer, primary_key = True)
-  name    = db.Column(db.String(100))
-  lang1   = db.Column(db.String(10))
-  lang2   = db.Column(db.String(10))
-  mydate = db.Column(db.DateTime)
-  mydatefinished = db.Column(db.DateTime)
-  mydateopt = db.Column(db.DateTime)
+  name              = db.Column(db.String(100))
+  lang1             = db.Column(db.String(10))
+  lang2             = db.Column(db.String(10))
+  mydate            = db.Column(db.DateTime)
+  mydatefinished    = db.Column(db.DateTime)
+  mydateopt         = db.Column(db.DateTime)
   mydateoptfinished = db.Column(db.DateTime)
-  bitext_id = db.Column(db.Integer, db.ForeignKey('bitext.id'))
-  languagemodel_id = db.Column(db.Integer, db.ForeignKey('language_model.id'))
-  task_id = db.Column(db.String(128))
-  task_opt_id = db.Column(db.String(128))
-  basename    = db.Column(db.String(256))
-  exitstatus = db.Column(db.Integer)
+  bitext_id         = db.Column(db.Integer, db.ForeignKey('bitext.id'))
+  languagemodel_id  = db.Column(db.Integer, db.ForeignKey('language_model.id'))
+  task_id           = db.Column(db.String(128))
+  task_opt_id       = db.Column(db.String(128))
+  generated_id      = db.Column(db.String(128))
+  basename          = db.Column(db.String(256))
+  exitstatus        = db.Column(db.Integer)
+  user_id           = db.Column(db.Integer, db.ForeignKey('users.id'))
+
   def get_path(self):
-    return train.build_translator_path(self.basename)
+    result = []
+    for i in self.basename.split(";;;;"):
+      result.append(train.build_translator_path(i))
+    return result
 
 class Translation(db.Model):
   id          = db.Column(db.Integer, primary_key = True)
@@ -160,6 +175,7 @@ class Translation(db.Model):
   exit_status = db.Column(db.Integer)
   task_id     = db.Column(db.String(128))
   path        = db.Column(db.String(256))
+  user_id = db.Column(db.Integer, db.ForeignKey('users.id'))
 
 #This class is never used
 class TranslationModel(db.Model):
@@ -167,6 +183,8 @@ class TranslationModel(db.Model):
   name    = db.Column(db.String(100))
   corpora = db.relationship('Bitext', secondary = tm_has_bitext)
   path    = db.Column(db.String(256))
+  user_id = db.Column(db.Integer, db.ForeignKey('users.id'))
+
 
 #This class is never used
 class SMT(db.Model):
@@ -184,3 +202,24 @@ class Translator(db.Model):
   start   = db.Column(db.DateTime, default=datetime.datetime.utcnow)
   sl      = db.Column(db.String(10))
   tl      = db.Column(db.String(10))
+  user_id = db.Column(db.Integer, db.ForeignKey('users.id'))
+
+class User(UserMixin, db.Model):
+  __tablename__   = 'users'
+  id              = db.Column(db.Integer, primary_key=True)
+  username        = db.Column(db.String(250))
+  social_id       = db.Column(db.String(250))
+  email           = db.Column(db.String(60), unique=True)
+  admin           = db.Column(db.Boolean, default=False)
+  corpora         = db.relationship("Corpus")
+  language_models = db.relationship("LanguageModel")
+  bitexts         = db.relationship("Bitext")
+  mono_corpora    = db.relationship("MonolingualCorpus")
+  tfbitexts       = db.relationship("TranslatorFromBitext")
+  translation     = db.relationship("Translation")
+  translators     = db.relationship("Translator")
+
+class OAuth(OAuthConsumerMixin, db.Model):
+  __tablename__ = "flask_dance_oauth"
+  user_id = db.Column(db.Integer, db.ForeignKey(User.id))
+  user    = db.relationship("User")  

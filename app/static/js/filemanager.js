@@ -95,11 +95,11 @@ $('body').on('change', 'input.file_checkbox', function() {
 
   if(any)
   {
-    $('#delete_all').addClass("icon-enabled");
+    $('#delete_all').addClass("trashbin-enabled");
   }
   else
   {
-    $('#delete_all').removeClass("icon-enabled");
+    $('#delete_all').removeClass("trashbin-enabled");
     $('#checkbox_all').prop("checked", false);
     $('#checkbox_all').removeClass("checkbox-inconsistent");
   }
@@ -111,12 +111,12 @@ $('#checkbox_all').change(function() {
   if($(this).is(":checked"))
   {
     $('.file_checkbox').prop("checked", true);
-    $('#delete_all').addClass("icon-enabled");
+    $('#delete_all').addClass("trashbin-enabled");
   }
   else
   {
     $('.file_checkbox').prop("checked", false);
-    $('#delete_all').removeClass("icon-enabled");
+    $('#delete_all').removeClass("trashbin-enabled");
   }
 });
 
@@ -129,23 +129,25 @@ $('#delete_all').click(function() {
       my_str = $(this).attr("id");
       $.ajax({
         url: "actions/file-delete/" + $(this).attr("id").substring("checkbox-".length)
+      }).done(function(){
+        table.ajax.reload();
       });
     }
   });
 
   $('#checkbox_all').prop("checked", false);
   $('#checkbox_all').removeClass("checkbox-inconsistent")
-  $('#delete_all').removeClass("icon-enabled");
+  $('#delete_all').removeClass("trashbin-enabled");
 
-  table.ajax.reload();
 });
 
 $('.seleclang').click(function() {
   seleclang_lang = $(this).attr("lang");
   $.ajax({
     url: "actions/file-setlang/" + seleclang_id + "/" + seleclang_lang
+  }).done(function(){
+    table.ajax.reload();  
   });
 
   $('#lang-dialog').modal("hide");
-  table.ajax.reload();
 });

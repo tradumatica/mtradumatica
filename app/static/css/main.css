@@ -25,6 +25,12 @@ input[type='checkbox']{
   opacity: 0.5;
 }
 
+.trashbin-enabled{
+  cursor:pointer;
+  opacity: 0.5;
+  color: red;
+}
+
 .glyphicon-download-alt {
   opacity: 0.5;
   cursor:pointer;

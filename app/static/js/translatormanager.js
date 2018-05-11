@@ -86,11 +86,11 @@ $('body').on('change', 'input.file_checkbox', function() {
 
   if(any)
   {
-    $('#delete_all').addClass("icon-enabled");
+    $('#delete_all').addClass("trashbin-enabled");
   }
   else
   {
-    $('#delete_all').removeClass("icon-enabled");
+    $('#delete_all').removeClass("trashbin-enabled");
     $('#checkbox_all').prop("checked", false);
     $('#checkbox_all').removeClass("checkbox-inconsistent");
   }
@@ -102,12 +102,12 @@ $('#checkbox_all').change(function() {
   if($(this).is(":checked"))
   {
     $('.file_checkbox').prop("checked", true);
-    $('#delete_all').addClass("icon-enabled");
+    $('#delete_all').addClass("trashbin-enabled");
   }
   else
   {
     $('.file_checkbox').prop("checked", false);
-    $('#delete_all').removeClass("icon-enabled");
+    $('#delete_all').removeClass("trashbin-enabled");
   }
 });
 
@@ -121,13 +121,14 @@ $('#delete_all').click(function() {
         url: "actions/translator-delete/" + $(this).attr("id").substring("checkbox-".length)
       });
     }
+  }).done(function(){
+    table.ajax.reload();
   });
 
   $('#checkbox_all').prop("checked", false);
   $('#checkbox_all').removeClass("checkbox-inconsistent")
-  $('#delete_all').removeClass("icon-enabled");
+  $('#delete_all').removeClass("trashbin-enabled");
 
-  table.ajax.reload();
 });
 
 
@@ -230,51 +231,70 @@ $('#lang-dialog').modal("show");
 
 
 //submit create form
-$('#buttonCreate').click(function(){
-	resultValFormName=$('#form-new-translator-name').valid();
+$('#buttonCreate').click(function() {
+  resultValFormName=$('#form-new-translator-name').valid();
 
-	if($('.nav-tabs .active a').attr("href") === "#tab1"){
-		resultValFormBLM = $('#form-new-translator-BLM').valid();
-		resultValLanguage=validateInputLanguage(['inputLanguage1','inputLanguage2'])
-		if(resultValFormName && resultValFormBLM && resultValLanguage){
-		$.ajax( "actions/translator-create/"+$('#inputName').val()+"/"+$('#inputLanguage1').text()+"/"+$('#inputLanguage2').text()+"/"+$('#selBitext').val()+"/"+$('#selLanguageModel').val() )
-	  .done(function() {
-	    table.ajax.reload();
-		//close modal
-		$('#modal-add').modal("hide");
-	  })
-	  .fail(function() {
-		 //TODO: better error handling
-	    console.log( "error" );
-	  }).always(function() {
-	    //Always close modal?
-	  });
-  	}
-
-	}else
-	{
-	  resultValFormFiles = $('#form-new-translator-files').valid();
-          if(resultValFormName && resultValFormFiles){
-			$.ajax( "actions/translator-createfromfiles/"+$('#inputName').val()+"/"+$('#selFile1').val()+"/"+$('#selFile2').val() )
-		  .done(function() {
-		    table.ajax.reload();
-			//close modal
-			$('#modal-add').modal("hide");
-		  })
-		  .fail(function() {
-			 //TODO: better error handling
-		    console.log( "error" );
-		  }).always(function() {
-		    //Always close modal?
-		  });
-	  }
-
-	
-	
-	
-	
+  if($('.nav-tabs .active a').attr("href") === "#tab1")
+  {
+    resultValFormBLM = $('#form-new-translator-BLM').valid();
+    resultValLanguage=validateInputLanguage(['inputLanguage1','inputLanguage2'])
+    if(resultValFormName && resultValFormBLM && resultValLanguage)
+    {
+      $.ajax("actions/translator-create/"+$('#inputName').val()+"/"+$('#inputLanguage1').text()+"/"+$('#inputLanguage2').text()+"/"+$('#selBitext').val()+"/"+$('#selLanguageModel').val())
+        .done(function() {
+	  table.ajax.reload();
+	  //close modal
+	  $('#modal-add').modal("hide");
+	})
+	.fail(function() {
+	  //TODO: better error handling
+	  console.log( "error" );
+	})
+	.always(function() {
+	  //Always close modal?
+	});
+    }
   }
-
+  else if($('.nav-tabs .active a').attr("href") === "#tab2")
+  {
+    resultValFormFiles = $('#form-new-translator-files').valid();
+    if(resultValFormName && resultValFormFiles)
+    {
+      $.ajax( "actions/translator-createfromfiles/"+$('#inputName').val()+"/"+$('#selFile1').val()+"/"+$('#selFile2').val() )
+        .done(function() {
+	  table.ajax.reload();
+	  //close modal
+	  $('#modal-add').modal("hide");
+        })
+	.fail(function() {
+	  //TODO: better error handling
+	  console.log( "error" );
+	})
+	.always(function() {
+	  //Always close modal?
+	});
+    }
+  }
+  else if($('.nav-tabs .active a').attr("href") === "#tab3")
+  {
+    resultValFormFiles = $('#form-new-translator-existing').valid();
+    if(resultValFormName && resultValFormFiles)
+    {
+      $.ajax( "actions/translator-createfromexisting/"+$('#inputName').val()+"/"+$('#selTrans1').val()+"/"+$('#selTrans2').val() )
+        .done(function() {
+          table.ajax.reload();
+	  //close modal
+	  $('#modal-add').modal("hide");
+	})
+	.fail(function() {
+	  //TODO: better error handling
+	  console.log( "error" );
+	})
+	.always(function() {
+	  //Always close modal?
+	});
+     }
+   }	
 });
 
 
