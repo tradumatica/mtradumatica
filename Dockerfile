@@ -36,7 +36,6 @@ RUN apt-get update -q --fix-missing && \
     apt-get install -y redis-server && \
     /opt/mtradumatica/scripts/install.sh && \
     rm -Rf /opt/mtradumatica/software && \  
-    rm -Rf /opt/mtradumatica/.git
     apt-get autoremove -y && \
     apt-get autoclean
 
