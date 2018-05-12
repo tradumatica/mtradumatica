@@ -96,7 +96,7 @@ LM.blm: LM.arpa
 	build_binary $< $@
 
 LM.arpa: corpus.$(L2).true
-	lmplz -o $(LM_ORDER) -S 80% -T . <$< >$@
+	lmplz --discount_fallback -o $(LM_ORDER) -S 80% -T . <$< >$@
 
 corpus.$(L2).true: corpus.$(L2).tcm corpus.$(L2).tok
 	truecase.perl --model $< <$(word 2,$^) >$@
@@ -256,7 +256,7 @@ LM.blm: LM.arpa
 	build_binary $< $@
 
 LM.arpa: corpus.$(L2).true
-	lmplz -o $(LM_ORDER) -S 80% -T . <$< >$@
+	lmplz --discount_fallback -o $(LM_ORDER) -S 80% -T . <$< >$@
 
 """
 
