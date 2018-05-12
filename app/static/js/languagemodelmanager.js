@@ -106,6 +106,8 @@ $('#delete_all').click(function() {
       my_str = $(this).attr("id");
       $.ajax({
         url: "actions/languagemodel-delete/" + $(this).attr("id").substring("checkbox-".length)
+      }).done(function(){
+        table.ajax.reload();
       });
     }
   }).done(function(){
@@ -114,7 +116,7 @@ $('#delete_all').click(function() {
 
   $('#checkbox_all').prop("checked", false);
   $('#checkbox_all').removeClass("checkbox-inconsistent")
-  $('#delete_all').removeClass("trashbin-enabled");
+  $('#dele[Ate_all').removeClass("trashbin-enabled");
 
 });
 
