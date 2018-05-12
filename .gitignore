@@ -1,1 +1,3 @@
 instance/
+*/*.pyc
+*.pyc
