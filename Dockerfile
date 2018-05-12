@@ -39,6 +39,6 @@ RUN apt-get update -q --fix-missing && \
     apt-get autoremove -y && \
     apt-get autoclean
 
-EXPOSE 80 10000
+EXPOSE 8080 10000
 
 CMD /opt/mtradumatica/scripts/docker-entrypoint.sh
