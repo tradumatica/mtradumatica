@@ -33,6 +33,8 @@ $ MTRADUMATICADIR/scripts/startup.sh
 
 ## Docker-based installation (for Linux, Windows or Mac)
 
+You may need to install Docker, you can get it from here https://www.docker.com/community-edition
+
 4-step procedure:
 
 #### 0. Download Mtradumàtica
