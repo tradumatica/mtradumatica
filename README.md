@@ -76,5 +76,3 @@ GOOGLE_OAUTH_CLIENT_SECRET  = 'xxxxxxxxxxxxxxx'
 ```
 The admin accounts in ADMINS will allow you to use admin features as translator optimization or the remote Moses server. You can set as many as you want.
 
-```
-
