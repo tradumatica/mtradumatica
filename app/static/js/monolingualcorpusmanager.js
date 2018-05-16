@@ -110,6 +110,8 @@ $('#delete_all').click(function() {
       my_str = $(this).attr("id");
       $.ajax({
         url: "actions/monolingualcorpus-delete/" + $(this).attr("id").substring("checkbox-".length)
+      }).done(function(){
+        table.ajax.reload();
       });
     }
   }).done(function(){

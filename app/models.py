@@ -153,6 +153,8 @@ class TranslatorFromBitext(db.Model):
   generated_id      = db.Column(db.String(128))
   basename          = db.Column(db.String(256))
   exitstatus        = db.Column(db.Integer)
+  moses_served      = db.Column(db.Boolean, default=False)
+  moses_served_port = db.Column(db.Integer)
   user_id           = db.Column(db.Integer, db.ForeignKey('users.id'))
 
   def get_path(self):

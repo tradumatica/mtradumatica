@@ -1,5 +1,8 @@
+import errno
 import langid
 import os
+import psutil
+import socket
 
 class condec(object):
   def __init__(self, dec, condition):
@@ -76,3 +79,22 @@ def recursive_link(source, dest):
   for i in files:
     os.link(os.path.join(source, i), os.path.join(dest,i))
 
+
+def is_port_used(port_number):
+  s = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
+  try:
+    s.bind(("127.0.0.1", port_number))
+  except socket.error, e:
+    if e.errno == errno.EADDRINUSE:
+      return True
+    else:
+      return False
+  s.close()
+
+def is_proc_alive(nproc):
+  for p in psutil.process_iter():
+    if p.pid == nproc:
+      return True
+  else:
+    return False
+    

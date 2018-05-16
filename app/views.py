@@ -4,6 +4,7 @@ import languages
 import os
 import querymodels as qm
 import magic
+import moses_service
 import regex
 import shutil
 import tasks as celerytasks
@@ -204,12 +205,14 @@ def contact():
 @app.route('/inspect', methods=["GET"])  
 @utils.condec(login_required, app.config['USER_LOGIN_ENABLED'])
 def inspect():
+  urlmoses = ("".join(url_for('index', _external=True).split(":")[0:2])).split("/")[2]+":"+str(app.config["MOSES_SERVICE_PORT"])
+  moses_active = TranslatorFromBitext.query.filter(TranslatorFromBitext.moses_served == True).count() > 0
   translators = [ t for t in TranslatorFromBitext.query.filter(TranslatorFromBitext.user_id == get_uid()).filter(not_(TranslatorFromBitext.basename.like("%;;;;%"))) if t.mydatefinished != None and t.exitstatus == 0 ]
   all_real_translators = [t for t in TranslatorFromBitext.query.filter(not_(TranslatorFromBitext.basename.like("%;;;;%"))) if t.mydatefinished != None and t.exitstatus == 0 ]
   language_m  = [ l for l in LanguageModel.query.filter(LanguageModel.user_id == get_uid()).all() if l.mydatefinished != None and  l.exitstatus == 0]
   return render_template("inspect.html", lsl = language_list(), title = _("Inspect"), trans = translators, lm = language_m, 
                          all_trans = all_real_translators, user_login_enabled = app.config['USER_LOGIN_ENABLED'],
-                         user = current_user)
+                         user = current_user, urlmoses = urlmoses, moses_active = moses_active)
 
 @app.route('/actions/query-lm', methods=["GET", "POST"])
 @utils.condec(login_required, app.config['USER_LOGIN_ENABLED'])
@@ -1247,6 +1250,7 @@ def search_dic():
   
   return jsonify(translations=search_dictionary(filename, word.encode("utf-8")))
 
+
 @app.route('/ws/translate', methods=["POST"])
 def ws_translate():
   obj  = request.json
@@ -1297,3 +1301,47 @@ def ws_list():
     tlist.append({"id":t.id, "name":t.name, "src":t.lang1, "trg":t.lang2})
   return jsonify(list=tlist)
 
+@app.route('/actions/moses-status')
+@utils.condec(login_required, app.config['USER_LOGIN_ENABLED'])
+def moses_alive():
+  if not os.path.isfile(app.config["MOSES_SERVICE_PIDFILE"]):
+    return jsonify(status="off", active=[])
+  pid = -1
+  with open(app.config["MOSES_SERVICE_PIDFILE"], "r") as pidf:
+    pid = int(pidf.read())
+  if pid == -1 or not utils.is_proc_alive(pid):
+    return jsonify(status="off", active=[])
+  if not utils.is_port_used(app.config["MOSES_SERVICE_PORT"]):
+    return jsonify(status="off", active = [])
+
+  active = []
+  for tbf in TranslatorFromBitext.query.filter(TranslatorFromBitext.moses_served == True):
+    active.append(tbf.id)
+    
+  if len(active) > 0:
+    return jsonify(status="on", active = active)
+        
+  return jsonify(status="off", active = [])
+
+@app.route('/actions/moses-activate/<int:engine_id>')
+@utils.condec(login_required, app.config['USER_LOGIN_ENABLED'])
+def moses_activate(engine_id):
+  if not app.config["USER_LOGIN_ENABLED"] or (app.config["USER_LOGIN_ENABLED"] and current_user.admin):
+    tfb = TranslatorFromBitext.query.get(engine_id)    
+    moses_service.moses_start(tfb.basename)
+    tfb.moses_served = True
+    tfb.moses_served_port = app.config["MOSES_SERVICE_PORT"]
+    db.session.commit()
+    
+  return jsonify(status="OK")
+
+@app.route('/actions/moses-deactivate')
+@utils.condec(login_required, app.config['USER_LOGIN_ENABLED'])
+def moses_deactivate():
+  if not app.config["USER_LOGIN_ENABLED"] or (app.config["USER_LOGIN_ENABLED"] and current_user.admin):
+    moses_service.moses_stop()
+    for tfb in TranslatorFromBitext.query.filter(TranslatorFromBitext.moses_served == True):
+      tfb.moses_served = False
+      tfb.moses_served_port = None
+    db.session.commit()
+  return jsonify(status="OK")

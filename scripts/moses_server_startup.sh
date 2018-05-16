@@ -3,7 +3,8 @@
 export LC_ALL=C.UTF-8
 ROOT=$(readlink -f $(dirname $(readlink -f $0))/..)
 ENGINE="$1"
-PORT=20000
+PORT="$2"
+PIDFILE="$3"
 
 source $ROOT/venv/bin/activate
 
@@ -12,14 +13,14 @@ if [ -f "$ROOT/translators/$ENGINE/moses.tuned.ini" ]; then
   MOSES_INI="moses.tuned.ini"
 fi
 
-if [ -f "$ROOT/proc/moses_server.pid" ]; then
-  curpid=$(cat "$ROOT/proc/moses_server.pid")
+if [ -f "$PIDFILE" ]; then
+  curpid=$(cat "$PIDFILE")
   kill -9 $curpid
-  rm $ROOT/proc/moses_server.pid
+  rm "$PIDFILE"
 fi
 
 [ -d $ROOT/logs ] || mkdir $ROOT/logs
 
 cd $ROOT/translators/$ENGINE
 nohup mosesserver --server-port $PORT -f $MOSES_INI &>>$ROOT/logs/moses_server.log &
-echo $! >$ROOT/proc/moses_server.pid
+echo $! >"$PIDFILE"

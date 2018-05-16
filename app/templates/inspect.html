@@ -30,7 +30,7 @@
           <div class="form-group">
             <label for="lmsel">{{ _('LM / LM from translator') }}</label>
             <select id="lmsel" class="form-control" >
-              <option value="" selected>
+              <option value="" selected="selected">
               {% for d in lm %}
               <option value="lm-{{d.id}}">[LM] {{d.name}} [{{d.lang}}]</option>
               {% endfor %}
@@ -71,7 +71,7 @@
           <div class="form-group">
             <label for="tmsel">{{ _('TM from translator') }}</label>
             <select id="tmsel" class="form-control" >
-              <option value="" selected></option> 
+              <option value="" selected="selected"></option> 
               {% for d in trans %}
               <option value="{{ d.id }}">{{ d.name }} [{{d.lang1}} &rarr; {{ d.lang2 }}]</option>
               {% endfor %}
@@ -100,9 +100,9 @@
       <div class="row" >
         <div class="col-md-6  col-md-offset-3"> 
           <div class="form-group">
-	    <label for="translatorsel">{{ _('Translator') }}</label>
+	    <label for="mtsel">{{ _('Translator') }}</label>
 	    <select id="mtsel" class="form-control" >
-	      <option value="" selected></option> 
+	      <option value="" selected="selected"></option> 
               {% for d in trans %}
                 <option value="{{ d.id }}">{{ d.name }} [{{d.lang1}} &rarr; {{ d.lang2 }}]</option>
               {% endfor %}
@@ -210,7 +210,7 @@
           <div class="form-group">
             <label for="source_target">{{ _('Query type') }}</label>
             <select id="source_target" class="form-control">
-              <option value="src" selected>{{ _('Source') }}</option>
+              <option value="src" selected="selected">{{ _('Source') }}</option>
               <option value="trg">{{ _('Target') }}</option>
             </select>
           </div>
@@ -221,7 +221,7 @@
           <div class="form-group">
             <label for="pbdsel">{{ _('Translator') }}</label>
             <select id="pbdsel" class="form-control" >
-              <option value="" selected></option> 
+              <option value="" selected="selected"></option> 
               {% for d in trans %}
               <option value="{{ d.id }}">{{ d.name }} [{{d.lang1}} &rarr; {{ d.lang2 }}]</option>
               {% endfor %}
@@ -247,15 +247,23 @@
   
   {% if user == None or user.admin %}
   <form id="form-mrtab">
-    <div id="mrtab_contents">
-      <div class="row" >
+    <div id="mrtab_contents" class="hidden">
+      <div class="row">
+        <div class="col-md-6  col-md-offset-3"> 
+        {{ _('Use the address <code>{}</code> to access the remote Moses translation service').format(urlmoses) }}
+        </div>
+      </div>
+      <div class="row">
+        <div>&nbsp;</div>
+      </div>
+      <div class="row">
         <div class="col-md-6  col-md-offset-3"> 
           <div class="form-group">
-            <label for="lmsel">{{ _('Translator') }}</label>
-            <select id="tmsel" class="form-control" >
-              <option value="" selected></option> 
+            <label for="mrsel">{{ _('Translator') }}</label>
+            <select id="mrsel" class="form-control" {% if moses_active %} disabled="disabled" {% endif %}>
+              <option value=""></option> 
               {% for d in all_trans %}
-              <option value="{{ d.id }}">{{ d.name }} [{{d.lang1}} &rarr; {{ d.lang2 }}]</option>
+              <option value="{{ d.id }}" {% if d.moses_served == True %} selected="selected" {% endif %}>{{ d.name }} [{{d.lang1}} &rarr; {{ d.lang2 }}]</option>
               {% endfor %}
             </select>
           </div>
@@ -263,8 +271,8 @@
       </div>
       <div class="row text-center">
         <br/>
-        
-        <button id="submit" type="submit" class="btn btn-primary">{{ _('Start server') }}</button>
+        <button id="submit5" type="submit" class="btn btn-success {% if moses_active %} disabled {% endif %}">{{ _('Start server') }}</button>
+        <button id="clear5" type="submit" class="btn btn-danger {% if not moses_active %} disabled {% endif %}">{{ _('Stop server') }}</button>
       </div>
     </div>
   </form>

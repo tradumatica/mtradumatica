@@ -119,6 +119,8 @@ $('#delete_all').click(function() {
       my_str = $(this).attr("id");
       $.ajax({
         url: "actions/translator-delete/" + $(this).attr("id").substring("checkbox-".length)
+      }).done(function(){
+        table.ajax.reload();
       });
     }
   }).done(function(){
@@ -142,19 +144,20 @@ $('tbody').on('click', 'button', function() {
 	//get list of compatible bitexts, populate modal and show it
 	//fill select with bitexts
 	$.ajax( "actions/bitext-plainlist/"+idOfTranslatorToOptimize)
-	   .done(function(data) {
-		   $('#selBitextOptimize').empty();
-			if(data.data.length  > 0){
-				$.each(data.data, function(i, item) {
-				   $("#selBitextOptimize").append($("<option></option>").val(item.id).html(item.name+" / "+item.nlines));
-				});
-			}
-			else{
-				$("#selBitextOptimize").append($("<option></option>").val(null).html(""));
-			}
-			//SHow modal
-			$('#modal-optimize').modal("show");
-		   })
+	  .done(function(data) {
+	    $('#selBitextOptimize').empty();
+	    if(data.data.length  > 0)
+	    {
+	      $.each(data.data, function(i, item){
+	        $("#selBitextOptimize").append($("<option></option>").val(item.id).html(item.name+" / "+item.nlines));
+	      });
+	    }
+	    else{
+	      $("#selBitextOptimize").append($("<option></option>").val(null).html(""));
+	    }
+	    //SHow modal
+	    $('#modal-optimize').modal("show");
+	});
 
 });
 

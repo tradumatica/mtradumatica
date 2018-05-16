@@ -46,7 +46,23 @@ function refreshSubmitButtons()
   else
   {
     $("#clear4").removeClass("disabled");
+  }
+  
+  if($("select#mrsel option").filter(":selected").text() == "")
+  {
+    $("#submit5").addClass("disabled");
+    $("#clear5").addClass("disabled");
+  }
+  else if($('#mrsel').is(':disabled'))
+  {
+    $("#submit5").addClass("disabled");
+    $("#clear5").removeClass("disabled");
   }   
+  else
+  {
+    $("#submit5").removeClass("disabled");
+    $("#clear5").addClass("disabled");
+  }  
 }
 
 
@@ -195,6 +211,50 @@ $("#clear4").click(function(){
   $("#outputtext4").val("");
 });
 
+
+$("#submit5").click(function(){
+  id = parseInt($("#mrsel").val());
+  
+  $.ajax({
+    url: "actions/moses-activate/"+id.toString(),
+    dataType: "json",
+    contentType: "application/json",
+    type: "GET"
+  })
+  .done(function(data) {
+    if(data.status == "OK")
+    {
+      $("#clear5").removeClass("disabled");
+      $("#submit5").addClass("disabled");
+      $('#mrsel').attr('disabled', true);
+    }
+  })
+  .fail(function() {
+    alert("Error");
+  });
+  
+});
+
+$("#clear5").click(function(){
+  $.ajax({
+    url: "actions/moses-deactivate",
+    dataType: "json",
+    contentType: "application/json",
+    type: "GET"
+  })
+  .done(function(data){
+    if(data.status == "OK")
+    {
+      $("#clear5").addClass("disabled");      
+      $("#submit5").removeClass("disabled");
+      $('#mrsel').attr("disabled", false);
+    }
+  })
+  .fail(function(){
+    alert("Error");
+  });
+});
+
 $("#lmtab").click(function(){
   $("#lmtab_contents").removeClass("hidden");
   $("#tmtab_contents").addClass("hidden");
@@ -273,6 +333,10 @@ $("#pbdsel").change(function(){
 });
 
 $("#mtsel").change(function(){
+  refreshSubmitButtons();
+});
+
+$("#mrsel").change(function(){
   refreshSubmitButtons();
 });
 

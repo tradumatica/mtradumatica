@@ -13,7 +13,7 @@ LMS_FOLDER            = os.path.join(basedir, "lms")
 SCRIPTS_FOLDER        = os.path.join(basedir, "scripts")
 TMP_FOLDER            = os.path.join(basedir, "tmp")
 EXECUTABLE_FOLDER     = os.path.join(os.path.join(basedir, "venv"), "bin")
-
+PROC_FOLDER           = os.path.join(basedir, "proc")
 TRANSLATION_PROGRAM   = os.path.join(SCRIPTS_FOLDER, "translate-docs.sh")
 TRANSLATION_PROGRAM_TRACE = os.path.join(SCRIPTS_FOLDER, "translate-trace.sh")
 QUERY_LM_PROGRAM      = os.path.join(EXECUTABLE_FOLDER, "query")
@@ -21,10 +21,13 @@ QUERY_TM_PROGRAM      = os.path.join(EXECUTABLE_FOLDER, "queryPhraseTableMin")
 CELERY_BROKER_URL     = 'redis://localhost:6379/0'
 CELERY_RESULT_BACKEND = 'redis://localhost:6379/0'
 CELERYD_CONCURRENCY   = 4
-
+MOSES_SERVICE_PORT    = 10000
+MOSES_SERVICE_PIDFILE = os.path.join(PROC_FOLDER, "moses_server.pid")
 
 SECRET_KEY = 'development key' # change by your own
 DEBUG      = False
+
+
 
 USER_LOGIN_ENABLED          = False
 ENABLE_NEW_LOGINS           = True

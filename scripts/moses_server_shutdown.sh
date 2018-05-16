@@ -2,10 +2,12 @@ ROOT=$(readlink -f $(dirname $(readlink -f $0))/..)
 
 source $ROOT/venv/bin/activate
 
-if [ -f "$ROOT/proc/moses_server.pid" ]; then
-  curpid=$(cat "$ROOT/proc/moses_server.pid")
+PIDFILE="$1"
+
+if [ -f "$PIDFILE" ]; then
+  curpid=$(cat "$PIDFILE")
   kill -9 $curpid
-  rm "$ROOT/proc/moses_server.pid"
+  rm "$PIDFILE"
 fi
 
 
