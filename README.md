@@ -1,6 +1,6 @@
 # MTradumàtica
 
-## Installation instructions for Ubuntu 16.04 LTS or Ubuntu 18.04 LTS
+## Fast installation instructions for Ubuntu 16.04 LTS or Ubuntu 18.04 LTS
 
 6-step procedure:
 
@@ -29,4 +29,32 @@ $ MTRADUMATICADIR/scripts/install.sh
 $ MTRADUMATICADIR/scripts/startup.sh
 ```
 
-#### 5. Browse to "http://localhost:80"
+#### 5. Browse to "http://localhost:8080"
+
+## Docker-based installation (for Linux, Windows or Mac)
+
+4-step procedure:
+
+#### 0. Download Mtradumàtica
+
+```bash
+$ git clone --recurse-submodules https://github.com/tradumatica/mtradumatica
+```
+
+#### 1. Build the Docker image
+
+```bash
+$ cd mtradumatica
+$ docker build -t mtradumatica .
+```
+
+#### 2. Excute the container
+
+```bash
+$ docker run -p 8080:8080 -p10000:10000 -d --name mtradumatica mtradumatica
+```
+
+#### 3. Browse to "http://localhost:8080"
+
+
+
