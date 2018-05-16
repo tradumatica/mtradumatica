@@ -205,7 +205,7 @@ def contact():
 @app.route('/inspect', methods=["GET"])  
 @utils.condec(login_required, app.config['USER_LOGIN_ENABLED'])
 def inspect():
-  urlmoses = ("".join(url_for('index', _external=True).split(":")[0:2])).split("/")[2]+":"+str(app.config["MOSES_SERVICE_PORT"])
+  urlmoses = "http://"+("".join(url_for('index', _external=True).split(":")[0:2])).split("/")[2]+":"+str(app.config["MOSES_SERVICE_PORT"])+"/RPC2"
   moses_active = TranslatorFromBitext.query.filter(TranslatorFromBitext.moses_served == True).count() > 0
   all_users = {}
   for i in User.query.all():
