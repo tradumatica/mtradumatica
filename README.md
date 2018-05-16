@@ -62,7 +62,7 @@ $ docker run -p 8080:8080 -p10000:10000 -d --name mtradumatica mtradumatica
 
 Both installation procedures can provide multiple user accounts inside Mtradumatica based on the Google identity server through the OAUTH2 protocol. The procedure of setting such a server in the Google side is a bit complex and Google changes it from time to time, but it can be found [here]( https://developers.google.com/identity/protocols/OAuth2UserAgent). Although not official, a useful resource is [this video](https://www.youtube.com/watch?v=A_5zc3DYZfs).
 
-From the process above, you will get at the end two strings, "client ID" and "client secret". You can edit the config.py file in the following way
+From the process above, you will get at the end two strings, "client ID" and "client secret". You can edit the config.py file in the following way (alternatively, you can create a instance/config.py file with the following content):
 
 ```python
 SECRET_KEY = 'put a random string here'
