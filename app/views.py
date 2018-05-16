@@ -207,12 +207,16 @@ def contact():
 def inspect():
   urlmoses = ("".join(url_for('index', _external=True).split(":")[0:2])).split("/")[2]+":"+str(app.config["MOSES_SERVICE_PORT"])
   moses_active = TranslatorFromBitext.query.filter(TranslatorFromBitext.moses_served == True).count() > 0
+  all_users = {}
+  for i in User.query.all():
+    all_users[i.id] = i.email
+  all_users[None]=""
   translators = [ t for t in TranslatorFromBitext.query.filter(TranslatorFromBitext.user_id == get_uid()).filter(not_(TranslatorFromBitext.basename.like("%;;;;%"))) if t.mydatefinished != None and t.exitstatus == 0 ]
   all_real_translators = [t for t in TranslatorFromBitext.query.filter(not_(TranslatorFromBitext.basename.like("%;;;;%"))) if t.mydatefinished != None and t.exitstatus == 0 ]
   language_m  = [ l for l in LanguageModel.query.filter(LanguageModel.user_id == get_uid()).all() if l.mydatefinished != None and  l.exitstatus == 0]
   return render_template("inspect.html", lsl = language_list(), title = _("Inspect"), trans = translators, lm = language_m, 
                          all_trans = all_real_translators, user_login_enabled = app.config['USER_LOGIN_ENABLED'],
-                         user = current_user, urlmoses = urlmoses, moses_active = moses_active)
+                         user = current_user, urlmoses = urlmoses, moses_active = moses_active, all_users = all_users)
 
 @app.route('/actions/query-lm', methods=["GET", "POST"])
 @utils.condec(login_required, app.config['USER_LOGIN_ENABLED'])
