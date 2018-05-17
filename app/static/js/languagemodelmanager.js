@@ -108,6 +108,7 @@ $('#delete_all').click(function() {
         url: "actions/languagemodel-delete/" + $(this).attr("id").substring("checkbox-".length)
       }).done(function(){
         table.ajax.reload();
+        $('#delete_all').removeClass("trashbin-enabled");
       });
     }
   }).done(function(){
