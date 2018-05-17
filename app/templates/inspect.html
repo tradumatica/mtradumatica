@@ -9,7 +9,7 @@
     <li id="tmtab_tab"><a id="tmtab" href="#">{{ _('Translation models') }}</a></li>
     <li id="pbdtab_tab"><a id="pbdtab" href="#">{{ _('Probabilistic bilingual dictionary') }}</a></li>
     <li id="mttab_tab"><a id="mttab" href="#">{{ _('Translation details') }}</a></li>
-    {% if user.admin %}
+    {% if user == None or user.admin %}
     <li id="mrtab_tab"><a id="mrtab" href="#">{{ _('Moses remote server') }}</a></li> 
     {% endif %}
   </ul>

@@ -45,6 +45,11 @@ def get_uid():
     return current_user.id
   return None
 
+def get_user():
+  if current_user.get_id() != None:
+    return current_user
+  else:
+    return None
 
 def query_order(column, type):
   if type == "asc":
@@ -158,11 +163,12 @@ def language_models():
 @app.route('/translators', methods=["GET","POST"])
 @utils.condec(login_required, app.config['USER_LOGIN_ENABLED'])
 def translators():
+
   data = Corpus.query.filter(Corpus.user_id == get_uid()).all()
   translators = [t for t in TranslatorFromBitext.query.filter(TranslatorFromBitext.user_id == get_uid()).all() if t.mydatefinished != None and t.exitstatus == 0]
   return render_template("translators.html", lsl = language_list(), title = _("Translators"), data = data, translators = translators,
                          user_login_enabled = app.config['USER_LOGIN_ENABLED'],
-                         user = current_user)
+                         user = get_user())
 
 @app.route('/translate', methods=["GET","POST"])
 @utils.condec(login_required, app.config['USER_LOGIN_ENABLED'])
@@ -216,7 +222,7 @@ def inspect():
   language_m  = [ l for l in LanguageModel.query.filter(LanguageModel.user_id == get_uid()).all() if l.mydatefinished != None and  l.exitstatus == 0]
   return render_template("inspect.html", lsl = language_list(), title = _("Inspect"), trans = translators, lm = language_m, 
                          all_trans = all_real_translators, user_login_enabled = app.config['USER_LOGIN_ENABLED'],
-                         user = current_user, urlmoses = urlmoses, moses_active = moses_active, all_users = all_users)
+                         user = get_user(), urlmoses = urlmoses, moses_active = moses_active, all_users = all_users)
 
 @app.route('/actions/query-lm', methods=["GET", "POST"])
 @utils.condec(login_required, app.config['USER_LOGIN_ENABLED'])
@@ -766,7 +772,7 @@ def choose_optimization_icons(trobj):
   icons_finished = u'<span id="finished-{0}" class="glyphicon glyphicon-ok text-success" aria-hidden="true"></span>'
   icons_hidden   = u''
 
-  if not current_user.admin:
+  if get_user() != None and not current_user.admin:
     return icons_hidden
   if trobj.task_id != None and celerytasks.train_smt.AsyncResult(trobj.task_id).state in ['PENDING','PROGRESS']:
     #we do not print optimization icons if smt training is still running
@@ -786,7 +792,7 @@ def choose_optimization_cell(trobj):
   optimizeButtonDisabled= u'<button type="button" id="button-optimize-{0}" class="btn btn-default btn-sm" disabled="disabled"> <span class="glyphicon glyphicon-wrench" aria-hidden="true"></span> Optimize</button>'.format(trobj.id)
   optimizeButtonEnabled = u'<button type="button" id="button-optimize-{0}" class="btn btn-default btn-sm"><span class="glyphicon glyphicon-wrench" aria-hidden="true"></span> Optimize</button>'.format(trobj.id)
   optimizeButtonHidden  = u''
-  if not current_user.admin:
+  if get_user() != None and not current_user.admin:
     return optimizeButtonHidden
   if trobj.task_id != None and celerytasks.train_smt.AsyncResult(trobj.task_id).state in ['PENDING','PROGRESS']:
     #we do not print optimization icons if smt training is still running
