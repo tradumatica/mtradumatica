@@ -789,8 +789,8 @@ def choose_optimization_icons(trobj):
 
 def choose_optimization_cell(trobj):
   date_fmt   = u'%Y-%m-%d %H:%M:%S'
-  optimizeButtonDisabled= u'<button type="button" id="button-optimize-{0}" class="btn btn-default btn-sm" disabled="disabled"> <span class="glyphicon glyphicon-wrench" aria-hidden="true"></span> Optimize</button>'.format(trobj.id)
-  optimizeButtonEnabled = u'<button type="button" id="button-optimize-{0}" class="btn btn-default btn-sm"><span class="glyphicon glyphicon-wrench" aria-hidden="true"></span> Optimize</button>'.format(trobj.id)
+  optimizeButtonDisabled= u'<button type="button" id="button-optimize-{0}" class="btn btn-default btn-sm" disabled="disabled"> <span class="glyphicon glyphicon-wrench" aria-hidden="true"></span>'.format(trobj.id)+_('Optimize')+'</button>'
+  optimizeButtonEnabled = u'<button type="button" id="button-optimize-{0}" class="btn btn-default btn-sm"><span class="glyphicon glyphicon-wrench" aria-hidden="true"></span>'.format(trobj.id)+_('Optimize')+'</button>'
   optimizeButtonHidden  = u''
   if get_user() != None and not current_user.admin:
     return optimizeButtonHidden
@@ -953,6 +953,16 @@ def translator_delete(id):
 
       if train.is_proc_running(pid):
         train.kill_execution(pid, tmpdir)
+  #optimization ongoing
+  if t.task_opt_id != None:
+    task  = celerytasks.train_smt.AsyncResult(t.task_opt_id)
+    if task.state == 'PROGRESS':
+      pid     = task.info.get('proc_id', 0)
+      tmpdir  = task.info.get('tmpdir', '')
+      task.revoke(terminate=True)
+
+      if train.is_proc_running(pid):
+        train.kill_execution(pid, tmpdir)
 
   for i in t.get_path():
     shutil.rmtree(i, ignore_errors=True)
@@ -960,6 +970,31 @@ def translator_delete(id):
   db.session.delete(t)
   db.session.commit()
   return jsonify(status = "OK")
+
+@app.route('/actions/optimization-kill/<int:id>')
+@utils.condec(login_required, app.config['USER_LOGIN_ENABLED'])
+def optimization_kill(id):
+  t = TranslatorFromBitext.query.get(id)
+  if t is None:
+    abort(401)
+    return
+
+  #stop task
+  if t.task_opt_id != None:
+    task  = celerytasks.train_smt.AsyncResult(t.task_opt_id)
+    if task.state == 'PROGRESS':
+      pid     = task.info.get('proc_id', 0)
+      tmpdir  = task.info.get('tmpdir', '')
+      task.revoke(terminate=True)
+
+      if train.is_proc_running(pid):
+        train.kill_execution(pid, tmpdir)
+  
+  t.mydateopt = None
+  t.task_opt_id = None
+  db.session.commit()
+  return jsonify(status = "OK")
+  
 
 @app.route('/actions/file-download/<int:id>')
 @utils.condec(login_required, app.config['USER_LOGIN_ENABLED'])

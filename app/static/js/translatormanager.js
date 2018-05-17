@@ -43,6 +43,7 @@ table=$('#translatorlist').DataTable({
 
 	/***** Enable optimization counter  *********/
 	spanid="optimization-time-"+id;
+	cancelid="cancel-id-"+id;
 	optimizingContent=$('td', row).eq(7).text();
 	parts=optimizingContent.split("#");
 	if( parts.length <= 1 ){
@@ -56,7 +57,7 @@ table=$('#translatorlist').DataTable({
 			$('td', row).eq(7).html('<span class="label label-success" id="'+spanid+'">'+diffStr+'</span>');
 		}else{
 			//optimization is running, display counter
-			$('td', row).eq(7).html('<span class="label label-primary" id="'+spanid+'"></span>');
+			$('td', row).eq(7).html('<span class="label label-primary" id="'+spanid+'"></span> <span class="glyphicon glyphicon-remove trashbin-enabled" id="'+cancelid+'"></span>');
 
 			updater = init_clock(parts[0],spanid,id);
 			timerid = setInterval(updater,500);
@@ -131,9 +132,16 @@ $('#delete_all').click(function() {
   $('#checkbox_all').prop("checked", false);
   $('#checkbox_all').removeClass("checkbox-inconsistent")
   $('#delete_all').removeClass("trashbin-enabled");
-
 });
 
+
+$('body').on('click', 'span.glyphicon-remove', function(){
+  $.ajax({
+    url: "actions/optimization-kill/" + $(this).attr("id").substring("cancel-id-".length)
+  }).done(function(){
+    table.ajax.reload();
+  });
+});
 
 //Manage optimization modal
 var idOfTranslatorToOptimize = -1;
