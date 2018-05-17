@@ -131,6 +131,8 @@ $('#delete_all').click(function() {
         url: "actions/file-delete/" + $(this).attr("id").substring("checkbox-".length)
       }).done(function(){
         table.ajax.reload();
+        $('#delete_all').removeClass("trashbin-enabled");
+
       });
     }
   });
