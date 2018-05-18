@@ -1,3 +1,6 @@
+$('body .dropdown-toggle').dropdown(); 
+
+
 var table = $('#filelist').DataTable({
   serverSide: true,
   ajax: {
@@ -105,6 +108,7 @@ $('body').on('change', 'input.file_checkbox', function() {
   }
 
 });
+
 
 $('#checkbox_all').change(function() {
   $(this).removeClass("checkbox-inconsistent");

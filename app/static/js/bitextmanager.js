@@ -1,3 +1,4 @@
+$('body .dropdown-toggle').dropdown(); 
 
 table=$('#bitextlist').DataTable({
 

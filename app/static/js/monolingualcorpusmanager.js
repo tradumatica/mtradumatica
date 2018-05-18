@@ -1,4 +1,5 @@
 
+
 table=$('#monolingualcorpuslist').DataTable({
 
   serverSide: true,
@@ -239,3 +240,5 @@ $('#form-new-monolingualcorpus').validate({
 			  }
 		  }
 	  });
+
+$('body .dropdown-toggle').dropdown(); 
