@@ -17,12 +17,12 @@ import utils
 from app import app, db, login_manager
 from datetime import datetime
 from dictionaries import search_dictionary
-from flask import abort, jsonify, render_template, request, Response, send_file, redirect, url_for, session, flash
+from flask import abort, flash, g, jsonify, redirect, render_template, request, Response, send_file, session, url_for
 from flask_dance.contrib.google import make_google_blueprint, google
 from flask_dance.consumer.backend.sqla import SQLAlchemyBackend
 from flask_dance.consumer import oauth_authorized
 from flask_login import login_user, logout_user, login_required, current_user
-from flask.ext.babel import gettext, _
+from flask.ext.babel import gettext, _, babel
 from random import randint
 from sqlalchemy import asc, desc, not_
 from sqlalchemy.orm.exc import NoResultFound

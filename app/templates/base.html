@@ -64,18 +64,15 @@
             <li{% if request.path == '/translate' %} class="active" {% endif %}><a href="{{ url_for('translate_page') }}">{{ _('Translate') }}</a></li>
             <li{% if request.path == '/inspect' %} class="active" {% endif %}><a href="{{ url_for('inspect') }}">{{ _('Inspect') }}</a></li>
           </ul>
-          {% if user_login_enabled %}
           <ul class="nav navbar-nav navbar-right">
-            {% if user.is_authenticated %}
-            <li style="padding-top:15px; padding-bottom:15px; position:relative; line-height:20px;
-            {% if user.admin %} color:#d00; {% else %} color:#eee; {% endif %}">{{ user.username }}</li>
+            <li> </li>
+            {% if user_login_enabled and user.is_authenticated %}
+            <li style="padding-top:15px; padding-bottom:15px; position:relative; line-height:20px; {% if user.admin %} color:#d00; {% else %} color:#eee; {% endif %}">{{ user.username }}</li>
             <li><a href="{{ url_for('logout') }}">{{ _('Logout') }}</a></li>
             {% else %}
             <li><a href="{{ url_for('google.login') }}">{{ _('Login') }}</a></li>
             {% endif %}
-          </ul>
-          {% endif %}
-<!--          <ul class="nav navbar-nav navbar-right">
+  
             <li class="dropdown">
               <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">EN <span class="caret" /></a>
               <ul class="dropdown-menu">
@@ -83,7 +80,7 @@
                 <li><a href="#">ES</a></li>
               </ul>            
             </li>
-          </ul> -->
+          </ul>
         </div><!--/.nav-collapse -->
       </div>
     </nav>
@@ -118,6 +115,7 @@
         <p class="text-muted credit">{{ _('Developed by Prompsit Language Engineering') }}
         - {{ _('<a href="https://tradumatica.github.io">Visit MTradumàtica on Github</a>') }}</p>
       </div>
+      
     </footer>
 
 
