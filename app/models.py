@@ -213,6 +213,7 @@ class User(UserMixin, db.Model):
   social_id       = db.Column(db.String(250))
   email           = db.Column(db.String(60), unique=True)
   admin           = db.Column(db.Boolean, default=False)
+  lang            = db.Column(db.String(32))
   corpora         = db.relationship("Corpus")
   language_models = db.relationship("LanguageModel")
   bitexts         = db.relationship("Bitext")

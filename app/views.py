@@ -15,6 +15,7 @@ import translate as mosestranslate
 import utils
 
 from app import app, db, login_manager
+from app.config import LANGUAGES
 from datetime import datetime
 from dictionaries import search_dictionary
 from flask import abort, flash, g, jsonify, redirect, render_template, request, Response, send_file, session, url_for
@@ -22,7 +23,7 @@ from flask_dance.contrib.google import make_google_blueprint, google
 from flask_dance.consumer.backend.sqla import SQLAlchemyBackend
 from flask_dance.consumer import oauth_authorized
 from flask_login import login_user, logout_user, login_required, current_user
-from flask.ext.babel import gettext, _, babel
+from flask.ext.babel import refresh, _
 from random import randint
 from sqlalchemy import asc, desc, not_
 from sqlalchemy.orm.exc import NoResultFound
@@ -39,6 +40,21 @@ google_blueprint = make_google_blueprint(scope = ["profile", "email"])
 if app.config["USER_LOGIN_ENABLED"]:
   app.register_blueprint(google_blueprint, url_prefix = '/google_login')
   google_blueprint.backend = SQLAlchemyBackend(OAuth, db.session, user = current_user)
+
+
+
+@babel.localeselector
+def get_locale():
+  if current_user.is_authenticated:
+    return current_user.lang  
+  elif session['lang'] != None:
+    return session['lang']
+  else:
+    result = request.accept_languages.best_match(LANGUAGES.keys())
+  return result
+
+app.jinja_env.globals.update(get_locale = get_locale)
+app.jinja_env.globals.update(LANGUAGES = LANGUAGES)
 
 def get_uid():
   if current_user.is_authenticated:
@@ -82,8 +98,8 @@ def google_logged_in(blueprint, token):
     username  = account_info_json['displayName']
     social_id = account_info_json['id']
     email     = account_info_json['emails'][0]['value']
-    
-    query = User.query.filter_by(social_id=social_id, username = username, email = email)
+    lang      = get_locale()    
+    query = User.query.filter_by(social_id=social_id, username = username, email = email, lang = lang)
 
     try:
       user = query.one()
