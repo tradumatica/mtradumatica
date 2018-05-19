@@ -14,8 +14,7 @@ import train
 import translate as mosestranslate
 import utils
 
-from app import app, db, login_manager
-from app.config import LANGUAGES
+from app import app, db, login_manager, babel
 from datetime import datetime
 from dictionaries import search_dictionary
 from flask import abort, flash, g, jsonify, redirect, render_template, request, Response, send_file, session, url_for
@@ -41,20 +40,30 @@ if app.config["USER_LOGIN_ENABLED"]:
   app.register_blueprint(google_blueprint, url_prefix = '/google_login')
   google_blueprint.backend = SQLAlchemyBackend(OAuth, db.session, user = current_user)
 
-
-
 @babel.localeselector
 def get_locale():
-  if current_user.is_authenticated:
+  if current_user.is_authenticated and current_user.lang in app.config["LANGUAGES"].keys():
     return current_user.lang  
-  elif session['lang'] != None:
+  elif 'lang' in session and lang['session'] in app.config["LANGUAGES"].keys():
     return session['lang']
   else:
-    result = request.accept_languages.best_match(LANGUAGES.keys())
+    result = request.accept_languages.best_match(app.config["LANGUAGES"].keys())
   return result
 
+@app.route('/actions/switch-language/<string:langcode>')
+def switch_language(langcode):
+  if current_user.is_authenticated:
+    current_user.lang = langcode
+  else:
+    session['lang'] = langcode
+    
+  refresh();
+  return redirect(request.referrer)
+
+
 app.jinja_env.globals.update(get_locale = get_locale)
-app.jinja_env.globals.update(LANGUAGES = LANGUAGES)
+app.jinja_env.globals.update(LANGUAGES = app.config["LANGUAGES"])
+app.jinja_env.globals.update(sorted = sorted)
 
 def get_uid():
   if current_user.is_authenticated:

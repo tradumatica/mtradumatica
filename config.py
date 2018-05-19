@@ -1,3 +1,5 @@
+# -*- coding: utf-8 -*-
+
 import os
 basedir = os.path.abspath(os.path.dirname(__file__))
 
@@ -27,9 +29,7 @@ MOSES_SERVICE_PIDFILE = os.path.join(PROC_FOLDER, "moses_server.pid")
 SECRET_KEY = 'development key' # change by your own
 DEBUG      = False
 
-LANGUAGES = { 'ca': 'Català',
-              'en': 'English',
-              'es': 'Spanish' }
+LANGUAGES = { 'ca': 'Català', 'en': 'English', 'es': 'Spanish' }
 
 USER_LOGIN_ENABLED          = False
 ENABLE_NEW_LOGINS           = True
