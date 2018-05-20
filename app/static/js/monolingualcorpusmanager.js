@@ -11,7 +11,8 @@ table=$('#monolingualcorpuslist').DataTable({
   order : [[4, "desc"]],
   createdRow : function ( row, data, index ) {
 	 addFormatedDateToDatatables(row,4);
-  }
+  },
+  language: datatables_lang
 });
 
 

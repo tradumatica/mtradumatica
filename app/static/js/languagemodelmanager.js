@@ -46,7 +46,8 @@ table=$('#languagemodellist').DataTable({
 	date = new Date(timestamp);
 	$('td', row).eq(4).text(date.toLocaleDateString()+" "+date.toLocaleTimeString());
 
-        }
+        },
+  language: datatables_lang
 });
 
 

@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PROJECT VERSION\n"
 "Report-Msgid-Bugs-To: EMAIL@ADDRESS\n"
-"POT-Creation-Date: 2018-05-20 04:49+0000\n"
+"POT-Creation-Date: 2018-05-20 09:13+0000\n"
 "PO-Revision-Date: 2018-05-20 04:18+0000\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language: es\n"
@@ -18,122 +18,182 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "Generated-By: Babel 2.1.1\n"
 
-#: views.py:118
+#: views.py:130
 msgid "New user logging is temporary disabled"
 msgstr "El acceso de usuarios nuevos está temporalmente deshabilitado"
 
-#: views.py:136
+#: views.py:148
 msgid "User temporary banned"
 msgstr "Usuario expulsado temporalmente"
 
-#: views.py:140
+#: views.py:152
 msgid "You have been logged in successfully"
 msgstr "Ha logrado acceder al entorno"
 
-#: views.py:146
+#: views.py:158
 msgid "You logged out successfully"
 msgstr "Ha logrado salir del entorno"
 
-#: views.py:155
+#: views.py:167
 msgid "Home"
 msgstr "Inicio"
 
-#: views.py:163 templates/files.html:10
+#: views.py:175 templates/files.html:10
 msgid "File manager"
 msgstr "Ficheros"
 
-#: views.py:171 templates/bitexts.html:10
+#: views.py:183 templates/bitexts.html:10
 msgid "Bitext manager"
 msgstr "Bitextos"
 
-#: views.py:178
+#: views.py:190
 msgid "Monolingual corpora"
 msgstr "Corpus monolingüe"
 
-#: views.py:185 templates/inspect.html:8
+#: views.py:197 templates/inspect.html:8
 msgid "Language models"
 msgstr "Modelos de lengua"
 
-#: views.py:195 templates/base.html:63
+#: views.py:207 templates/base.html:93
 msgid "Translators"
 msgstr "Traductores"
 
-#: views.py:203 templates/base.html:64 templates/index.html:66
+#: views.py:215 templates/base.html:94 templates/index.html:66
 #: templates/index.html:71 templates/inspect.html:123 templates/test.html:18
 #: templates/translate.html:4 templates/translate.html:44
 #: templates/translate.html:82
 msgid "Translate"
 msgstr "Traducir"
 
-#: views.py:211
+#: views.py:223
 msgid "Tasks"
 msgstr "Tareas"
 
-#: views.py:216
+#: views.py:228
 msgid "Test"
 msgstr "Prueba"
 
-#: views.py:221
+#: views.py:233
 msgid "Dashboard"
 msgstr "Panel de control"
 
-#: views.py:226
+#: views.py:238
 msgid "Web service"
 msgstr "Servicio web"
 
-#: views.py:231
+#: views.py:243
 msgid "About"
 msgstr "Acerca de"
 
-#: views.py:235
+#: views.py:247
 msgid "Contact"
 msgstr "Contacto"
 
-#: views.py:249 templates/base.html:65 templates/inspect.html:4
+#: views.py:261 templates/base.html:95 templates/inspect.html:4
 msgid "Inspect"
 msgstr "Inspeccionar"
 
-#: views.py:818 views.py:819 templates/translators.html:196
+#: views.py:830 views.py:831 templates/translators.html:196
 msgid "Optimize"
 msgstr "Optimizar"
 
-#: templates/base.html:50
+#: templates/base.html:27
+msgid "No data available in table"
+msgstr "No hay datos disponibles"
+
+#: templates/base.html:28
+msgid "Showing _START_ to _END_ of _TOTAL_ entries"
+msgstr "Mostrando _START_ a _END_ de _TOTAL_ entradas"
+
+#: templates/base.html:29
+msgid "Showing 0 to 0 of 0 entries"
+msgstr "Mostrando 0 a 0 de 0 entradas"
+
+#: templates/base.html:30
+msgid "(filtered from _MAX_ total entries)"
+msgstr "(filtrado de _MAX_ entradas en total)"
+
+#: templates/base.html:33
+msgid "Show _MENU_ entries"
+msgstr "Mostrando _MENU_ entradas"
+
+#: templates/base.html:34
+msgid "Loading..."
+msgstr "Cargando..."
+
+#: templates/base.html:35
+msgid "Processing..."
+msgstr "Procesando..."
+
+#: templates/base.html:36
+msgid "Search:"
+msgstr "Buscar:"
+
+#: templates/base.html:37
+msgid "No matching records found"
+msgstr "No se encontraron registros concordantes"
+
+#: templates/base.html:39
+msgid "First"
+msgstr "Primera"
+
+#: templates/base.html:40
+msgid "Last"
+msgstr "Última"
+
+#: templates/base.html:41
+msgid "Next"
+msgstr "Siguiente"
+
+#: templates/base.html:42
+msgid "Previous"
+msgstr "Anterior"
+
+#: templates/base.html:45
+msgid ": activate to sort column ascending"
+msgstr ": activar para ordenar la columna ascendentemente"
+
+#: templates/base.html:46
+msgid ": activar para ordenar la columna descendentemente"
+msgstr ""
+
+#: templates/base.html:80
 msgid "Toggle navigation"
 msgstr "Cambiar vista"
 
-#: templates/base.html:55 templates/index.html:5
+#: templates/base.html:85 templates/index.html:5
 msgid "MTradumàtica"
 msgstr "MTradumàtica"
 
-#: templates/base.html:59 templates/bitexts.html:86
+#: templates/base.html:89 templates/bitexts.html:86
 msgid "Files"
 msgstr "Ficheros"
 
-#: templates/base.html:60
+#: templates/base.html:90
 msgid "Monotexts"
 msgstr "Monotextos"
 
-#: templates/base.html:61
+#: templates/base.html:91
 msgid "LMs"
 msgstr "MLs"
 
-#: templates/base.html:62
+#: templates/base.html:92
 msgid "Bitexts"
 msgstr "Bitextos"
 
-#: templates/base.html:71
+#: templates/base.html:101
 msgid "Logout"
 msgstr "Salir"
 
-#: templates/base.html:73
+#: templates/base.html:103
 msgid "Login"
 msgstr "Acceder"
 
-#: templates/base.html:97
+#: templates/base.html:129
 msgid "Change language selection"
 msgstr "Cambiar selección de idioma"
 
-#: templates/base.html:106 templates/bitexts.html:69 templates/bitexts.html:115
+#: templates/base.html:138 templates/bitexts.html:69 templates/bitexts.html:115
 #: templates/bitexts.html:141 templates/files.html:60
 #: templates/language-models.html:78 templates/monolingual-corpora.html:64
 #: templates/monolingual-corpora.html:105
@@ -142,11 +202,11 @@ msgstr "Cambiar selección de idioma"
 msgid "Close"
 msgstr "Cerrar"
 
-#: templates/base.html:116
+#: templates/base.html:148
 msgid "Developed by Prompsit Language Engineering"
 msgstr "Desarrollado por Prompsit Language Engineering"
 
-#: templates/base.html:117
+#: templates/base.html:149
 msgid "Visit MTradumàtica on Github"
 msgstr "Visite MTradumàtica en Github"
 
@@ -236,7 +296,6 @@ msgid "(you can upload more than one file at once)"
 msgstr "(puede cargar más de un fichero a la vez)"
 
 #: templates/index.html:6
-#
 msgid "Download MTradumàtica on GitHub"
 msgstr "Descargue MTradumàtica en Github"
 
@@ -251,8 +310,8 @@ msgid ""
 "understand how\n"
 "             they all interact together."
 msgstr ""
-"Con Mtradumàtica puede entrenar sistemas de traducción estadística "
-"(SMT) a medida, crear sus componentes y entender cómo interactúan."
+"Con Mtradumàtica puede entrenar sistemas de traducción estadística (SMT) "
+"a medida, crear sus componentes y entender cómo interactúan."
 
 #: templates/index.html:11
 msgid "Start uploading your files now"
@@ -272,7 +331,8 @@ msgid ""
 msgstr ""
 "Cargue sus ficheros: parejas de ficheros de texto alineados a frase por "
 "línea o bien memorias de traducción TMX. Si necesita más texto puede "
-"conseguirlo en <a href=\"http://opus.lingfil.uu.se\" target=\"_blank\">OPUS</a>."
+"conseguirlo en <a href=\"http://opus.lingfil.uu.se\" "
+"target=\"_blank\">OPUS</a>."
 
 #: templates/index.html:27 templates/index.html:32
 msgid "Create Monotexts"
@@ -285,9 +345,9 @@ msgid ""
 "languages of\n"
 "    your SMT systems."
 msgstr ""
-"Cree corpus monolingües a partir de uno o más de sus ficheros, "
-"que serán utilizados posteriormente para entrenar modelos de lengua "
-"(MLs) de las lenguas meta de sus traductores SMT."
+"Cree corpus monolingües a partir de uno o más de sus ficheros, que serán "
+"utilizados posteriormente para entrenar modelos de lengua (MLs) de las "
+"lenguas meta de sus traductores SMT."
 
 #: templates/index.html:37
 msgid "Build LMs"
@@ -300,9 +360,9 @@ msgid ""
 "want to\n"
 "      translate."
 msgstr ""
-"Investigue cómo diferentes modelos de lengua (MLs) pueden afectar "
-"a la calidad de la traducción, en especial cuando los textos utilizados "
-"se parecen más la tarea de traducción".
+"Investigue cómo diferentes modelos de lengua (MLs) pueden afectar a la "
+"calidad de la traducción, en especial cuando los textos utilizados se "
+"parecen más la tarea de traducción\""
 
 #: templates/index.html:42
 msgid "Train Language Models"
@@ -318,9 +378,8 @@ msgid ""
 "      paired source-target files. You can join two or more\n"
 "      bitexts together to create a bigger one."
 msgstr ""
-"Cree corpus bilingües para uno o más pares de ficheros "
-"lengua orígen-lengua meta. Es posible juntar dos o más bitextos "
-"para crear uno mayor."
+"Cree corpus bilingües para uno o más pares de ficheros lengua orígen-"
+"lengua meta. Es posible juntar dos o más bitextos para crear uno mayor."
 
 #: templates/index.html:52
 msgid "Create a Bitext"
@@ -336,9 +395,9 @@ msgid ""
 "      models. Create translators with different texts and see\n"
 "      the effect of optimising them."
 msgstr ""
-"Crear un nuevo traductor automático a partir de un bitexto y "
-"un modelo de lengua. Cree traductores con textos diferentes y "
-"observe el efecto de la optimización."
+"Crear un nuevo traductor automático a partir de un bitexto y un modelo de"
+" lengua. Cree traductores con textos diferentes y observe el efecto de la"
+" optimización."
 
 #: templates/index.html:61
 msgid "Train a Translator"
@@ -351,9 +410,9 @@ msgid ""
 "translator, you\n"
 "      will be able to try it!"
 msgstr ""
-"Eche un vistazo a sus traductores, pruébelos y compárelos. "
-"Traduzca textos cortos o documentos tan pronto como tenga "
-"un nuevo traductor disponible." 
+"Eche un vistazo a sus traductores, pruébelos y compárelos. Traduzca "
+"textos cortos o documentos tan pronto como tenga un nuevo traductor "
+"disponible."
 
 #: templates/inspect.html:5
 msgid "Query and examine components of SMT engines."
@@ -474,8 +533,8 @@ msgid ""
 "Use the address <code>{}</code> to access the remote Moses translation "
 "service"
 msgstr ""
-"Use la dirección <code>{}</code> para acceder al servicio remoto de traducción "
-
+"Use la dirección <code>{}</code> para acceder al servicio remoto de "
+"traducción "
 
 #: templates/inspect.html:274
 msgid "Start server"
@@ -501,9 +560,7 @@ msgstr "Entrenador de modelos de lengua"
 msgid ""
 "Train language models by selecting monotexts previously defined. The "
 "training will be automatically launched!"
-msgstr ""
-"Entrene modelos de lengua mediante la selección de monotextos previamente
-definidos. El entrenamiento se lanzará automáticamente."
+msgstr "Entrene modelos de lengua mediante la selección de monotextos previament"
 
 #: templates/language-models.html:19
 msgid "Model name"
@@ -534,9 +591,9 @@ msgid ""
 "Create monolingual corpora to train language models. Add one or more "
 "files to each monotext provided that they are all in the same language!"
 msgstr ""
-"Cree corpus monolingües que se utilizarán para entrenar modelos de lengua. "
-"Añada uno o más ficheros a cada monotexto procurando que todos ellos estén "
-"en el mismo idioma."
+"Cree corpus monolingües que se utilizarán para entrenar modelos de "
+"lengua. Añada uno o más ficheros a cada monotexto procurando que todos "
+"ellos estén en el mismo idioma."
 
 #: templates/monolingual-corpora.html:19
 msgid "Monotext name"
@@ -599,8 +656,8 @@ msgid ""
 "You can remove the current MT system by pressing the button. The MT "
 "system will be removed permanently."
 msgstr ""
-"Puede eliminar el SMT actual mediante el botón. El traductor será eliminado "
-"del sistema permanentemente."
+"Puede eliminar el SMT actual mediante el botón. El traductor será "
+"eliminado del sistema permanentemente."
 
 #: templates/tasks.html:49
 msgid "Remove system"
@@ -615,8 +672,8 @@ msgid ""
 "Type or paste some text in the input text area, then press 'Submit' to "
 "get the translation done."
 msgstr ""
-"Introduzca texto en la entrada y presione 'Enviar' para "
-"obtener la traducción."
+"Introduzca texto en la entrada y presione 'Enviar' para obtener la "
+"traducción."
 
 #: templates/translate.html:5
 msgid ""
@@ -627,7 +684,6 @@ msgid ""
 msgstr ""
 "Seleccióne un traductor, adjunte un documento y presione 'Traducir' para "
 "obtenr la traducción. Los tipos de documento que se pueden procesar son "
-HTML, TXT, DOCX, PPTX, XLSX, ODT, ODS y ODP."
 
 #: templates/translate.html:9
 msgid "Text"
@@ -663,15 +719,18 @@ msgstr ""
 
 #: templates/translators.html:12
 msgid "Optimising can take time but also bring higher quality."
-msgstr "La optimización puede llevar mucho tiempo pero también proporcionar una mejor calidad."
+msgstr ""
+"La optimización puede llevar mucho tiempo pero también proporcionar una "
+"mejor calidad."
 
 #: templates/translators.html:19
 msgid "Translator name"
 msgstr "Nombre"
 
 #: templates/translators.html:20
-msgid "Par de lenguas"
-msgstr ""
+#, fuzzy
+msgid "Language pair"
+msgstr "Idiomas"
 
 #: templates/translators.html:21 templates/translators.html:80
 msgid "Bitext"
@@ -740,3 +799,7 @@ msgstr "Añadir"
 #: templates/translators.html:178
 msgid "Optimize translator"
 msgstr "Optimizar traductor"
+
+#~ msgid "Par de lenguas"
+#~ msgstr ""
+

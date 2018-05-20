@@ -1,5 +1,9 @@
 <!DOCTYPE html>
+{% if LANGUAGES == None or len(LANGUAGES) == 0 %}
 <html lang="en">
+{% else %}
+<html lang="{{ get_locale() }}">
+{% endif %}
   <head>
     <meta charset="utf-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
@@ -17,6 +21,32 @@
     {% block extracss %}{% endblock %}
     <link href="{{ url_for('.static', filename='css/main.css') }}" rel="stylesheet">
     <link href="{{ url_for('.static', filename='css/sticky-footer-navbar.css') }}" rel="stylesheet">
+    <script>
+      var datatables_lang ={
+    "decimal":        "",
+    "emptyTable":     "{{ _('No data available in table') }}",
+    "info":           "{{ _('Showing _START_ to _END_ of _TOTAL_ entries') }}",
+    "infoEmpty":      "{{ _('Showing 0 to 0 of 0 entries') }}",
+    "infoFiltered":   "{{ _('(filtered from _MAX_ total entries)') }}",
+    "infoPostFix":    "",
+    "thousands":      ",",
+    "lengthMenu":     "{{ _('Show _MENU_ entries') }}",
+    "loadingRecords": "{{ _('Loading...') }}",
+    "processing":     "{{ _('Processing...') }}",
+    "search":         "{{ _('Search:') }}",
+    "zeroRecords":    "{{ _('No matching records found') }}",
+    "paginate": {
+        "first":      "{{ _('First') }}",
+        "last":       "{{ _('Last') }}",
+        "next":       "{{ _('Next') }}",
+        "previous":   "{{ _('Previous') }}"
+    },
+    "aria": {
+        "sortAscending":  "{{ _(': activate to sort column ascending') }}",
+        "sortDescending": "{{ _(': activate to sort column descending') }}"
+    }
+};
+    </script>
     <!-- HTML5 shim and Respond.js for IE8 support of HTML5 elements and
     media queries -->
     <!--[if lt IE 9]>

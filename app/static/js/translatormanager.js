@@ -67,7 +67,8 @@ table=$('#translatorlist').DataTable({
 			init_status_checker("actions/status-translator-optimization",id);
 		}
     }
-}
+},
+  language: datatables_lang
 });
 
 

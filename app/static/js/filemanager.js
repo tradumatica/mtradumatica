@@ -11,7 +11,8 @@ var table = $('#filelist').DataTable({
   order : [[6, "desc"]],
   createdRow : function ( row, data, index ) {
 	addFormatedDateToDatatables(row,6);
-  }
+  },
+  language: datatables_lang
 });
 
 
