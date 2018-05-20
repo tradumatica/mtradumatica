@@ -1,4 +1,6 @@
 instance/
+venv/
+logs/
 */*.pyc
 *.pyc
 *~
