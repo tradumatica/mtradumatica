@@ -366,7 +366,7 @@ msgstr ""
 
 #: templates/index.html:42
 msgid "Train Language Models"
-msgstr "Entrene modelos de lengua"
+msgstr "Entrenar modelos de lengua"
 
 #: templates/index.html:47
 msgid "Create Bitexts"
@@ -401,7 +401,7 @@ msgstr ""
 
 #: templates/index.html:61
 msgid "Train a Translator"
-msgstr "Entrene un Traductor"
+msgstr "Entrenar un Traductor"
 
 #: templates/index.html:67
 msgid ""
@@ -560,7 +560,7 @@ msgstr "Entrenador de modelos de lengua"
 msgid ""
 "Train language models by selecting monotexts previously defined. The "
 "training will be automatically launched!"
-msgstr "Entrene modelos de lengua mediante la selección de monotextos previament"
+msgstr "Entrenar modelos de lengua mediante la selección de monotextos previament"
 
 #: templates/language-models.html:19
 msgid "Model name"
@@ -576,7 +576,7 @@ msgstr "Tiempo de entrenamiento"
 
 #: templates/language-models.html:42
 msgid "Train a new language model"
-msgstr "Entrene un nuevo modelo de lengua"
+msgstr "Entrenar un nuevo modelo de lengua"
 
 #: templates/language-models.html:79
 msgid "Train"
@@ -613,7 +613,7 @@ msgstr "Fichero para añadir"
 
 #: templates/tasks.html:4
 msgid "Train SMT system"
-msgstr "Entrene un sistema SMT"
+msgstr "Entrenar un sistema SMT"
 
 #: templates/tasks.html:5
 msgid ""
@@ -714,7 +714,7 @@ msgid ""
 "Train SMT systems by combining bitexts and language models for a language"
 " pair."
 msgstr ""
-"Entrene sistemas SMT mediante la combinación de bitextos y modelos de "
+"Entrenar sistemas SMT mediante la combinación de bitextos y modelos de "
 "lengua para un par de lenguas dado."
 
 #: templates/translators.html:12
