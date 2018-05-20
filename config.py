@@ -29,7 +29,8 @@ MOSES_SERVICE_PIDFILE = os.path.join(PROC_FOLDER, "moses_server.pid")
 SECRET_KEY = 'development key' # change by your own
 DEBUG      = False
 
-LANGUAGES = { 'ca': u'Català', 'en': u'English', 'es': u'Spanish' }
+# Uncomment it to enable translations. Follow instructions in README.md to add more languages
+#LANGUAGES = { 'ca': u'Català', 'en': u'English', 'es': u'Spanish' }
 
 USER_LOGIN_ENABLED          = False
 ENABLE_NEW_LOGINS           = True

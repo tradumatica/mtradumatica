@@ -42,6 +42,8 @@ if app.config["USER_LOGIN_ENABLED"]:
 
 @babel.localeselector
 def get_locale():
+  if "LANGUAGES" not in app.config:
+    return "en"
   if current_user.is_authenticated and current_user.lang in app.config["LANGUAGES"].keys():
     return current_user.lang  
   elif 'lang' in session and lang['session'] in app.config["LANGUAGES"].keys():
@@ -52,6 +54,8 @@ def get_locale():
 
 @app.route('/actions/switch-language/<string:langcode>')
 def switch_language(langcode):
+  if "LANGUAGES" not in app.config or langcode not in app.config["LANGUAGES"]:
+    return "en"
   if current_user.is_authenticated:
     current_user.lang = langcode
     db.session.commit()
@@ -59,12 +63,20 @@ def switch_language(langcode):
     session['lang'] = langcode
     
   refresh();
-  return redirect(request.referrer)
+  if request.referrer != None:
+    return redirect(request.referrer)
+  else:
+    return redirect(url_for('index'))
 
 
 app.jinja_env.globals.update(get_locale = get_locale)
-app.jinja_env.globals.update(LANGUAGES = app.config["LANGUAGES"])
+if "LANGUAGES" in app.config:
+  app.jinja_env.globals.update(LANGUAGES = app.config["LANGUAGES"])
+else:
+  app.jinja_env.globals.update(LANGUAGES = None)
+  
 app.jinja_env.globals.update(sorted = sorted)
+app.jinja_env.globals.update(len = len)
 
 def get_uid():
   if current_user.is_authenticated:

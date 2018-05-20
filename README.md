@@ -97,6 +97,7 @@ for this
 LANGUAGES = { 'ca': u'Català', 'en': u'English', 'es': u'Spanish', 'pt': u'Português'}
 ```
 Note the small u BEFORE and STICKED to the quotation marks after the colons.
+Uncoment the line if necessary.
 
 #### 2. Get the .po file for the new language
 
