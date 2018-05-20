@@ -1,6 +1,11 @@
 instance/
 venv/
 logs/
+db/
+proc/
+redis-data/
+*/*.pot
+*/*/*/*/*.mo
 */*.pyc
 *.pyc
 *~
