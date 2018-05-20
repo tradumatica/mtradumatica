@@ -215,7 +215,7 @@ msgid ""
 "Create bilingual corpora to train SMT systems. Add as many source-target "
 "files as you want to your bitext provided that they are parallel!"
 msgstr ""
-"Cree corpus bilingües para entrenar sistemas de traducción automática "
+"Crear corpus bilingües para entrenar sistemas de traducción automática "
 "estadística. Agregue tantos ficheros paralelos como quiera a su bitextos."
 
 #: templates/bitexts.html:18
@@ -336,7 +336,7 @@ msgstr ""
 
 #: templates/index.html:27 templates/index.html:32
 msgid "Create Monotexts"
-msgstr "Cree monotextos"
+msgstr "Crear monotextos"
 
 #: templates/index.html:28
 msgid ""
@@ -345,13 +345,13 @@ msgid ""
 "languages of\n"
 "    your SMT systems."
 msgstr ""
-"Cree corpus monolingües a partir de uno o más de sus ficheros, que serán "
+"Crear corpus monolingües a partir de uno o más de sus ficheros, que serán "
 "utilizados posteriormente para entrenar modelos de lengua (MLs) de las "
 "lenguas meta de sus traductores SMT."
 
 #: templates/index.html:37
 msgid "Build LMs"
-msgstr "Cree MLs"
+msgstr "Crear MLs"
 
 #: templates/index.html:38
 msgid ""
@@ -370,7 +370,7 @@ msgstr "Entrene modelos de lengua"
 
 #: templates/index.html:47
 msgid "Create Bitexts"
-msgstr "Cree bitextos"
+msgstr "Crear bitextos"
 
 #: templates/index.html:48
 msgid ""
@@ -378,7 +378,7 @@ msgid ""
 "      paired source-target files. You can join two or more\n"
 "      bitexts together to create a bigger one."
 msgstr ""
-"Cree corpus bilingües para uno o más pares de ficheros lengua orígen-"
+"Crear corpus bilingües para uno o más pares de ficheros lengua orígen-"
 "lengua meta. Es posible juntar dos o más bitextos para crear uno mayor."
 
 #: templates/index.html:52
@@ -387,7 +387,7 @@ msgstr "Crear un Bitexto"
 
 #: templates/index.html:56
 msgid "Build Translators"
-msgstr "Cree traductores"
+msgstr "Crear traductores"
 
 #: templates/index.html:57
 msgid ""
@@ -396,7 +396,7 @@ msgid ""
 "      the effect of optimising them."
 msgstr ""
 "Crear un nuevo traductor automático a partir de un bitexto y un modelo de"
-" lengua. Cree traductores con textos diferentes y observe el efecto de la"
+" lengua. Crear traductores con textos diferentes y observe el efecto de la"
 " optimización."
 
 #: templates/index.html:61
@@ -591,7 +591,7 @@ msgid ""
 "Create monolingual corpora to train language models. Add one or more "
 "files to each monotext provided that they are all in the same language!"
 msgstr ""
-"Cree corpus monolingües que se utilizarán para entrenar modelos de "
+"Crear corpus monolingües que se utilizarán para entrenar modelos de "
 "lengua. Añada uno o más ficheros a cada monotexto procurando que todos "
 "ellos estén en el mismo idioma."
 
@@ -728,7 +728,6 @@ msgid "Translator name"
 msgstr "Nombre"
 
 #: templates/translators.html:20
-#, fuzzy
 msgid "Language pair"
 msgstr "Idiomas"
 
@@ -800,6 +799,4 @@ msgstr "Añadir"
 msgid "Optimize translator"
 msgstr "Optimizar traductor"
 
-#~ msgid "Par de lenguas"
-#~ msgstr ""
 
