@@ -30,10 +30,8 @@ RUN apt-get update -q --fix-missing && \
                        git-core \
                        build-essential \
                        libboost-all-dev \
-                       software-properties-common && \
-    add-apt-repository -y ppa:chris-lea/redis-server && \
-    apt-get update && \
-    apt-get install -y redis-server && \
+                       software-properties-common \
+                       redis && \
     /opt/mtradumatica/scripts/install.sh && \
     rm -Rf /opt/mtradumatica/software && \  
     apt-get autoremove -y && \

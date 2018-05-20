@@ -30,7 +30,7 @@ SECRET_KEY = 'development key' # change by your own
 DEBUG      = False
 
 # Uncomment it to enable translations. Follow instructions in README.md to add more languages
-#LANGUAGES = { 'ca': u'Català', 'en': u'English', 'es': u'Spanish' }
+LANGUAGES = { 'ca': u'Català', 'en': u'English', 'es': u'Spanish' }
 
 USER_LOGIN_ENABLED          = False
 ENABLE_NEW_LOGINS           = True

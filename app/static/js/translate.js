@@ -29,6 +29,11 @@ $("#clear").click(function(){
  refreshSubmitButtons();
 });
 
+$("#form-texttrans").submit(function(e){
+  return false;
+});
+
+
 $("#submit").click(function(){
   if($("#inputtext").val().trim() == "")
   {
@@ -50,6 +55,7 @@ $("#submit").click(function(){
     $("#my-please-wait").modal("hide");
   });
 });
+
 
 $("#form-doctrans").submit(function(e){
   e.preventDefault();

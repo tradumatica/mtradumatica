@@ -4,6 +4,8 @@ logs/
 db/
 proc/
 redis-data/
+uploads/
+translators/
 */*.pot
 */*/*/*/*.mo
 */*.pyc
