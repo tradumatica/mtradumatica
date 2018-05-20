@@ -1,0 +1,713 @@
+# Catalan translations for PROJECT.
+# Copyright (C) 2018 ORGANIZATION
+# This file is distributed under the same license as the PROJECT project.
+# FIRST AUTHOR <EMAIL@ADDRESS>, 2018.
+#
+#, fuzzy
+msgid ""
+msgstr ""
+"Project-Id-Version: PROJECT VERSION\n"
+"Report-Msgid-Bugs-To: EMAIL@ADDRESS\n"
+"POT-Creation-Date: 2018-05-20 04:49+0000\n"
+"PO-Revision-Date: 2018-05-20 04:18+0000\n"
+"Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
+"Language: ca\n"
+"Language-Team: ca <LL@li.org>\n"
+"Plural-Forms: nplurals=2; plural=(n != 1)\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=utf-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Generated-By: Babel 2.1.1\n"
+
+#: views.py:118
+msgid "New user logging is temporary disabled"
+msgstr ""
+
+#: views.py:136
+msgid "User temporary banned"
+msgstr ""
+
+#: views.py:140
+msgid "You have been logged in successfully"
+msgstr ""
+
+#: views.py:146
+msgid "You logged out successfully"
+msgstr ""
+
+#: views.py:155
+msgid "Home"
+msgstr ""
+
+#: views.py:163 templates/files.html:10
+msgid "File manager"
+msgstr ""
+
+#: views.py:171 templates/bitexts.html:10
+msgid "Bitext manager"
+msgstr ""
+
+#: views.py:178
+msgid "Monolingual corpora"
+msgstr ""
+
+#: views.py:185 templates/inspect.html:8
+msgid "Language models"
+msgstr ""
+
+#: views.py:195 templates/base.html:63
+msgid "Translators"
+msgstr ""
+
+#: views.py:203 templates/base.html:64 templates/index.html:66
+#: templates/index.html:71 templates/inspect.html:123 templates/test.html:18
+#: templates/translate.html:4 templates/translate.html:44
+#: templates/translate.html:82
+msgid "Translate"
+msgstr ""
+
+#: views.py:211
+msgid "Tasks"
+msgstr ""
+
+#: views.py:216
+msgid "Test"
+msgstr ""
+
+#: views.py:221
+msgid "Dashboard"
+msgstr ""
+
+#: views.py:226
+msgid "Web service"
+msgstr ""
+
+#: views.py:231
+msgid "About"
+msgstr ""
+
+#: views.py:235
+msgid "Contact"
+msgstr ""
+
+#: views.py:249 templates/base.html:65 templates/inspect.html:4
+msgid "Inspect"
+msgstr ""
+
+#: views.py:818 views.py:819 templates/translators.html:196
+msgid "Optimize"
+msgstr ""
+
+#: templates/base.html:50
+msgid "Toggle navigation"
+msgstr ""
+
+#: templates/base.html:55 templates/index.html:5
+msgid "MTradumàtica"
+msgstr ""
+
+#: templates/base.html:59 templates/bitexts.html:86
+msgid "Files"
+msgstr ""
+
+#: templates/base.html:60
+msgid "Monotexts"
+msgstr ""
+
+#: templates/base.html:61
+msgid "LMs"
+msgstr ""
+
+#: templates/base.html:62
+msgid "Bitexts"
+msgstr ""
+
+#: templates/base.html:71
+msgid "Logout"
+msgstr ""
+
+#: templates/base.html:73
+msgid "Login"
+msgstr ""
+
+#: templates/base.html:97
+msgid "Change language selection"
+msgstr ""
+
+#: templates/base.html:106 templates/bitexts.html:69 templates/bitexts.html:115
+#: templates/bitexts.html:141 templates/files.html:60
+#: templates/language-models.html:78 templates/monolingual-corpora.html:64
+#: templates/monolingual-corpora.html:105
+#: templates/monolingual-corpora.html:124 templates/translators.html:160
+#: templates/translators.html:195
+msgid "Close"
+msgstr ""
+
+#: templates/base.html:116
+msgid "Developed by Prompsit Language Engineering"
+msgstr ""
+
+#: templates/base.html:117
+msgid "Visit MTradumàtica on Github"
+msgstr ""
+
+#: templates/bitexts.html:11
+msgid ""
+"Create bilingual corpora to train SMT systems. Add as many source-target "
+"files as you want to your bitext provided that they are parallel!"
+msgstr ""
+
+#: templates/bitexts.html:18
+msgid "Bitext name"
+msgstr ""
+
+#: templates/bitexts.html:19
+msgid "Languages"
+msgstr ""
+
+#: templates/bitexts.html:20 templates/files.html:20
+#: templates/monolingual-corpora.html:21
+msgid "Lines"
+msgstr ""
+
+#: templates/bitexts.html:21 templates/files.html:23
+#: templates/language-models.html:22 templates/monolingual-corpora.html:22
+#: templates/translators.html:23
+msgid "Date"
+msgstr ""
+
+#: templates/bitexts.html:38
+msgid "Create a new bitext"
+msgstr ""
+
+#: templates/bitexts.html:70 templates/monolingual-corpora.html:65
+msgid "Create"
+msgstr ""
+
+#: templates/bitexts.html:81
+msgid "Add content to bitext"
+msgstr ""
+
+#: templates/bitexts.html:87 templates/monolingual-corpora.html:82
+msgid "TMX"
+msgstr ""
+
+#: templates/bitexts.html:116 templates/monolingual-corpora.html:106
+msgid "Add content"
+msgstr ""
+
+#: templates/bitexts.html:128 templates/files.html:54
+#: templates/monolingual-corpora.html:118
+msgid "Excerpt of"
+msgstr ""
+
+#: templates/files.html:11
+msgid ""
+"Add either text or TMX files to MTradumàtica; you will always find them "
+"all stored here."
+msgstr ""
+
+#: templates/files.html:18
+msgid "File name"
+msgstr ""
+
+#: templates/files.html:19 templates/language-models.html:20
+#: templates/monolingual-corpora.html:20
+msgid "Language"
+msgstr ""
+
+#: templates/files.html:21
+msgid "Words"
+msgstr ""
+
+#: templates/files.html:22
+msgid "Chars"
+msgstr ""
+
+#: templates/files.html:42
+msgid "Click here or drag and drop files"
+msgstr ""
+
+#: templates/files.html:43
+msgid "(you can upload more than one file at once)"
+msgstr ""
+
+#: templates/index.html:6
+msgid "Download MTradumàtica on GitHub"
+msgstr ""
+
+#: templates/index.html:6
+msgid "Download"
+msgstr ""
+
+#: templates/index.html:7
+msgid ""
+"With MTradumàtica you can train custom statistical machine\n"
+"             translation (SMT) systems. Create SMT components and "
+"understand how\n"
+"             they all interact together."
+msgstr ""
+
+#: templates/index.html:11
+msgid "Start uploading your files now"
+msgstr ""
+
+#: templates/index.html:18 templates/index.html:22
+msgid "Upload files"
+msgstr ""
+
+#: templates/index.html:19
+msgid ""
+"Start uploading files: plain text files with source and\n"
+"      target language texts or TMX translation memories. If you need some"
+"\n"
+"      more text you can find it at <a href=\"http://opus.lingfil.uu.se\" "
+"target=\"_blank\">OPUS</a>."
+msgstr ""
+
+#: templates/index.html:27 templates/index.html:32
+msgid "Create Monotexts"
+msgstr ""
+
+#: templates/index.html:28
+msgid ""
+"Create monolingual corpora from one or more of your files.\n"
+"      They will be used to train language models (LMs) for the target "
+"languages of\n"
+"    your SMT systems."
+msgstr ""
+
+#: templates/index.html:37
+msgid "Build LMs"
+msgstr ""
+
+#: templates/index.html:38
+msgid ""
+"See how different language models (LMs) can affect\n"
+"      translation quality, especially when they are similar to what you "
+"want to\n"
+"      translate."
+msgstr ""
+
+#: templates/index.html:42
+msgid "Train Language Models"
+msgstr ""
+
+#: templates/index.html:47
+msgid "Create Bitexts"
+msgstr ""
+
+#: templates/index.html:48
+msgid ""
+"Create bilingual corpora from one or more\n"
+"      paired source-target files. You can join two or more\n"
+"      bitexts together to create a bigger one."
+msgstr ""
+
+#: templates/index.html:52
+msgid "Create a Bitext"
+msgstr ""
+
+#: templates/index.html:56
+msgid "Build Translators"
+msgstr ""
+
+#: templates/index.html:57
+msgid ""
+"Build a new machine translator with bitexts and language\n"
+"      models. Create translators with different texts and see\n"
+"      the effect of optimising them."
+msgstr ""
+
+#: templates/index.html:61
+msgid "Train a Translator"
+msgstr ""
+
+#: templates/index.html:67
+msgid ""
+"See your translators in action, test and compare them.\n"
+"      Translate short texts or documents. As soon as you have a new "
+"translator, you\n"
+"      will be able to try it!"
+msgstr ""
+
+#: templates/inspect.html:5
+msgid "Query and examine components of SMT engines."
+msgstr ""
+
+#: templates/inspect.html:9
+msgid "Translation models"
+msgstr ""
+
+#: templates/inspect.html:10
+msgid "Probabilistic bilingual dictionary"
+msgstr ""
+
+#: templates/inspect.html:11 templates/inspect.html:146
+msgid "Translation details"
+msgstr ""
+
+#: templates/inspect.html:13
+msgid "Moses remote server"
+msgstr ""
+
+#: templates/inspect.html:22 templates/inspect.html:64
+#: templates/inspect.html:116 templates/test.html:8 templates/translate.html:32
+msgid "Input text"
+msgstr ""
+
+#: templates/inspect.html:23 templates/inspect.html:65
+msgid "Insert tokenized text here"
+msgstr ""
+
+#: templates/inspect.html:31
+msgid "LM / LM from translator"
+msgstr ""
+
+#: templates/inspect.html:47 templates/inspect.html:86
+msgid "Output"
+msgstr ""
+
+#: templates/inspect.html:54 templates/inspect.html:93
+#: templates/inspect.html:243
+msgid "Query"
+msgstr ""
+
+#: templates/inspect.html:72
+msgid "TM from translator"
+msgstr ""
+
+#: templates/inspect.html:103 templates/inspect.html:222
+#: templates/inspect.html:262 templates/translate.html:19
+#: templates/translate.html:69
+msgid "Translator"
+msgstr ""
+
+#: templates/inspect.html:124 templates/test.html:19
+#: templates/translate.html:45
+msgid "Clear"
+msgstr ""
+
+#: templates/inspect.html:131
+msgid "Tokenized input"
+msgstr ""
+
+#: templates/inspect.html:137
+msgid "Truecased input"
+msgstr ""
+
+#: templates/inspect.html:152
+msgid "Alignments"
+msgstr ""
+
+#: templates/inspect.html:161
+msgid "Unknown words"
+msgstr ""
+
+#: templates/inspect.html:167
+msgid "Truecased output"
+msgstr ""
+
+#: templates/inspect.html:176
+msgid "Detruecased output"
+msgstr ""
+
+#: templates/inspect.html:182 templates/test.html:12
+#: templates/translate.html:36
+msgid "Output text"
+msgstr ""
+
+#: templates/inspect.html:191
+msgid "N-best list"
+msgstr ""
+
+#: templates/inspect.html:203
+msgid "Search"
+msgstr ""
+
+#: templates/inspect.html:204
+msgid "Insert single word here"
+msgstr ""
+
+#: templates/inspect.html:211
+msgid "Query type"
+msgstr ""
+
+#: templates/inspect.html:213
+msgid "Source"
+msgstr ""
+
+#: templates/inspect.html:214
+msgid "Target"
+msgstr ""
+
+#: templates/inspect.html:236
+msgid "Resuls"
+msgstr ""
+
+#: templates/inspect.html:253
+msgid ""
+"Use the address <code>{}</code> to access the remote Moses translation "
+"service"
+msgstr ""
+
+#: templates/inspect.html:274
+msgid "Start server"
+msgstr ""
+
+#: templates/inspect.html:275
+msgid "Stop server"
+msgstr ""
+
+#: templates/inspect.html:287 templates/translate.html:94
+msgid "Please wait"
+msgstr ""
+
+#: templates/inspect.html:294 templates/translate.html:101
+msgid "Cancel translation task"
+msgstr ""
+
+#: templates/language-models.html:11
+msgid "Language model trainer"
+msgstr ""
+
+#: templates/language-models.html:12
+msgid ""
+"Train language models by selecting monotexts previously defined. The "
+"training will be automatically launched!"
+msgstr ""
+
+#: templates/language-models.html:19
+msgid "Model name"
+msgstr ""
+
+#: templates/language-models.html:21
+msgid "Monolingual corpus"
+msgstr ""
+
+#: templates/language-models.html:23 templates/translators.html:24
+msgid "Training time"
+msgstr ""
+
+#: templates/language-models.html:42
+msgid "Train a new language model"
+msgstr ""
+
+#: templates/language-models.html:79
+msgid "Train"
+msgstr ""
+
+#: templates/monolingual-corpora.html:11
+msgid "Monotext manager"
+msgstr ""
+
+#: templates/monolingual-corpora.html:12
+msgid ""
+"Create monolingual corpora to train language models. Add one or more "
+"files to each monotext provided that they are all in the same language!"
+msgstr ""
+
+#: templates/monolingual-corpora.html:19
+msgid "Monotext name"
+msgstr ""
+
+#: templates/monolingual-corpora.html:41
+msgid "Create a new monotext"
+msgstr ""
+
+#: templates/monolingual-corpora.html:76
+msgid "Add content to monotext"
+msgstr ""
+
+#: templates/monolingual-corpora.html:89
+msgid "File to append"
+msgstr ""
+
+#: templates/tasks.html:4
+msgid "Train SMT system"
+msgstr ""
+
+#: templates/tasks.html:5
+msgid ""
+"Select a parallel corpus (both source and target sides), then click the "
+"button to start training the system."
+msgstr ""
+
+#: templates/tasks.html:8 templates/translators.html:102
+msgid "Source side"
+msgstr ""
+
+#: templates/tasks.html:17 templates/translators.html:114
+msgid "Target side"
+msgstr ""
+
+#: templates/tasks.html:28
+msgid "Start training"
+msgstr ""
+
+#: templates/tasks.html:33
+msgid "Training in progress"
+msgstr ""
+
+#: templates/tasks.html:34
+msgid "You can cancel the current training by pressing the button to cancel."
+msgstr ""
+
+#: templates/tasks.html:40
+msgid "Cancel training"
+msgstr ""
+
+#: templates/tasks.html:45
+msgid "System trained"
+msgstr ""
+
+#: templates/tasks.html:46
+msgid ""
+"You can remove the current MT system by pressing the button. The MT "
+"system will be removed permanently."
+msgstr ""
+
+#: templates/tasks.html:49
+msgid "Remove system"
+msgstr ""
+
+#: templates/test.html:4
+msgid "Test SMT system"
+msgstr ""
+
+#: templates/test.html:5
+msgid ""
+"Type or paste some text in the input text area, then press 'Submit' to "
+"get the translation done."
+msgstr ""
+
+#: templates/translate.html:5
+msgid ""
+"Select a translator, input a text or a document and press 'Translate' to "
+"get the translation\n"
+"  done. Document types supported include HTML, TXT, DOCX, PPTX, XLSX, "
+"ODT, ODS and ODP."
+msgstr ""
+
+#: templates/translate.html:9
+msgid "Text"
+msgstr ""
+
+#: templates/translate.html:10
+msgid "Documents"
+msgstr ""
+
+#: templates/translate.html:57
+msgid "Select document"
+msgstr ""
+
+#: templates/translate.html:61
+msgid "Browse..."
+msgstr ""
+
+#: templates/translate.html:65
+msgid "Filetype not supported"
+msgstr ""
+
+#: templates/translators.html:10
+msgid "Translator trainer"
+msgstr ""
+
+#: templates/translators.html:11
+msgid ""
+"Train SMT systems by combining bitexts and language models for a language"
+" pair."
+msgstr ""
+
+#: templates/translators.html:12
+msgid "Optimising can take time but also bring higher quality."
+msgstr ""
+
+#: templates/translators.html:19
+msgid "Translator name"
+msgstr ""
+
+#: templates/translators.html:20
+msgid "Language pair"
+msgstr ""
+
+#: templates/translators.html:21 templates/translators.html:80
+msgid "Bitext"
+msgstr ""
+
+#: templates/translators.html:22
+msgid "Language model"
+msgstr ""
+
+#: templates/translators.html:25
+msgid "Optimization time"
+msgstr ""
+
+#: templates/translators.html:44
+msgid "Create a new translator"
+msgstr ""
+
+#: templates/translators.html:49
+msgid "Name"
+msgstr ""
+
+#: templates/translators.html:51
+msgid "Give a name to the translator"
+msgstr ""
+
+#: templates/translators.html:58
+msgid "From bitexts and LMs"
+msgstr ""
+
+#: templates/translators.html:59
+msgid "From files (no pre-built LM)"
+msgstr ""
+
+#: templates/translators.html:60
+msgid "Link existing MT"
+msgstr ""
+
+#: templates/translators.html:66
+msgid "Source language"
+msgstr ""
+
+#: templates/translators.html:68
+msgid "None"
+msgstr ""
+
+#: templates/translators.html:73
+msgid "Target language"
+msgstr ""
+
+#: templates/translators.html:89
+msgid "Laguage model"
+msgstr ""
+
+#: templates/translators.html:130
+msgid "First translator"
+msgstr ""
+
+#: templates/translators.html:142
+msgid "Second translator"
+msgstr ""
+
+#: templates/translators.html:161
+msgid "Add"
+msgstr ""
+
+#: templates/translators.html:178
+msgid "Optimize translator"
+msgstr ""
+
+#~ msgid ""
+#~ msgstr ""
+
+#~ msgid "Click here or drag and drop files*"
+#~ msgstr ""
+
+#~ msgid "*Currently, only text files (one sentence per line) are supported."
+#~ msgstr ""
+
+#~ msgid "DownloadMTradumàtica on GitHub"
+#~ msgstr ""
+

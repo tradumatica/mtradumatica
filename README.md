@@ -76,3 +76,78 @@ GOOGLE_OAUTH_CLIENT_SECRET  = 'xxxxxxxxxxxxxxx'
 ```
 The admin accounts in ADMINS will allow you to use admin features as translator optimization or the remote Moses server. You can set as many as you want.
 
+## Add new languages to the interface
+
+When you want to add a new language, follow the next procedure:
+
+#### 1. Add the new language to the LANGUAGES item in config.py
+
+You need a language code and the name of the language. The language code is
+normally an [ISO-639-1 code](https://en.wikipedia.org/wiki/List_of_ISO_639-1_codes)
+and the name should be the native language name for each code. For example,
+if we want to add Portuguese we will change this
+
+```python
+LANGUAGES = { 'ca': u'Català', 'en': u'English', 'es': u'Spanish' }
+```
+
+for this
+
+```python
+LANGUAGES = { 'ca': u'Català', 'en': u'English', 'es': u'Spanish', 'pt': u'Português'}
+```
+Note the small u BEFORE and STICKED to the quotation marks after the colons.
+
+#### 2. Get the .po file for the new language
+
+For the case of Portuguese, proceed in this way
+
+```bash
+$ source venv/bin/activate
+(venv) $ cd app
+(venv) $ pybabel extract -F babel.cfg -o messages.pot .
+(venv) $ pybabel init -i messages.pot -d translations -l pt
+```
+
+Then you will find the file at `app/translations/pt/LC_MESSAGES/messages.po`
+to translate it using your preferred tool or editor.
+
+#### 3. Deploy the translations
+
+Just restore the `messages.po` file to the very same path you found it and
+execute:
+
+```bash
+$ source venv/bin/activate
+(venv) $ cd app
+(venv) $ pybabel compile -d translations
+```
+
+Then you can restart the system and look at the new translations
+
+#### 4. Make the new translation available in the repository
+
+```bash
+$ git add app/translations/pt/LC_MESSAGES/messages.po
+$ git commit -m "New interface language Portuguese"
+$ git push
+```
+
+### Propagate source code modifications to the translations
+
+Execute
+
+```bash
+$ source venv/bin/activate
+(venv) $ cd app
+(venv) $ pybabel extract -F babel.cfg -o messages.pot .
+(venv) $ pybabel update -i messages.pot -d translations
+(venv) $ pybabel compile -d translations
+```
+
+Then edit all .po files to translate the new strings
+
+### Remove "fuzzy" marks
+
+When you find a "fuzzy" comment after a hash inside the po files, check it
+and remove this comment before compiling.

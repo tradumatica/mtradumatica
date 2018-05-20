@@ -54,6 +54,7 @@ def get_locale():
 def switch_language(langcode):
   if current_user.is_authenticated:
     current_user.lang = langcode
+    db.session.commit()
   else:
     session['lang'] = langcode
     
