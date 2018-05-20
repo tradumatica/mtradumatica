@@ -268,7 +268,7 @@ msgid ""
 "all stored here."
 msgstr ""
 "Añada ficheros de texto o memorias TMX a Mtradumàtica; siempre estarán "
-"almacenadas aquí."
+"almacenados aquí."
 
 #: templates/files.html:18
 msgid "File name"
