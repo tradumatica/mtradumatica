@@ -96,7 +96,8 @@
           </ul>
           <ul class="nav navbar-nav navbar-right">
             <li> </li>
-            {% if user_login_enabled and user.is_authenticated %}
+            {% if not user_login_enabled %}  
+            {% elif user.is_authenticated %}
             <li style="padding-top:15px; padding-bottom:15px; position:relative; line-height:20px; {% if user.admin %} color:#d00; {% else %} color:#eee; {% endif %}">{{ user.username }}</li>
             <li><a href="{{ url_for('logout') }}">{{ _('Logout') }}</a></li>
             {% else %}
