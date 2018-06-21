@@ -77,9 +77,7 @@ $('body').on('click', 'span.glyphicon-eye-open', function() {
 });
 
 $('body').on('click', 'span.glyphicon-download-alt', function() {
-  $.ajax({
-    url: "actions/file-download/" + $(this).attr("id").substring("download-".length)
-  });
+  window.location.href = "actions/file-download/" + $(this).attr("id").substring("download-".length);
 });
 
 $('body').on('change', 'input.file_checkbox', function() {
