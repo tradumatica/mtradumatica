@@ -86,13 +86,24 @@
         </div>
         <div id="navbar" class="collapse navbar-collapse">
           <ul class="nav navbar-nav">
-            <li{% if request.path == '/files' %} class="active"{% endif %}><a href="{{ url_for('files') }}">{{ _('Files') }}</a></li>
-            <li{% if request.path == '/monolingual_corpora' %} class="active"{% endif %}><a href="{{ url_for('monolingual_corpora') }}">{{ _('Monotexts') }}</a></li>
-            <li{% if request.path == '/language_models' %} class="active"{% endif %}><a href="{{ url_for('language_models') }}">{{ _('LMs') }}</a></li>	
-            <li{% if request.path == '/bitexts' %} class="active"{% endif %}><a href="{{ url_for('bitexts') }}">{{_('Bitexts') }}</a></li>
-            <li{% if request.path == '/translators' %} class="active"{% endif %}><a href="{{ url_for('translators') }}">{{ _('Translators') }}</a></li>
-            <li{% if request.path == '/translate' %} class="active" {% endif %}><a href="{{ url_for('translate_page') }}">{{ _('Translate') }}</a></li>
-            <li{% if request.path == '/inspect' %} class="active" {% endif %}><a href="{{ url_for('inspect') }}">{{ _('Inspect') }}</a></li>
+            <li class="dropdown">
+              <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">{{ _('Train') }} <span class="caret" /></a>
+              <ul class="dropdown-menu">
+                <li{% if request.path == '/files' %} class="active"{% endif %}><a href="{{ url_for('files') }}">{{ _('Files') }}</a></li>
+                <li{% if request.path == '/monolingual_corpora' %} class="active"{% endif %}><a href="{{ url_for('monolingual_corpora') }}">{{ _('Monotexts') }}</a></li>
+                <li{% if request.path == '/language_models' %} class="active"{% endif %}><a href="{{ url_for('language_models') }}">{{ _('Language models') }}</a></li>	
+                <li{% if request.path == '/bitexts' %} class="active"{% endif %}><a href="{{ url_for('bitexts') }}">{{_('Bitexts') }}</a></li>
+                <li{% if request.path == '/translators' %} class="active"{% endif %}><a href="{{ url_for('translators') }}">{{ _('Translators') }}</a></li>
+              </ul>
+            </li>
+            <li class="dropdown">
+              <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">{{ _('Translate &amp; more') }} <span class="caret" /></a>
+              <ul class="dropdown-menu">
+                <li{% if request.path == '/translate' %} class="active" {% endif %}><a href="{{ url_for('translate_page') }}">{{ _('Translate') }}</a></li>
+                <li{% if request.path == '/inspect' %} class="active" {% endif %}><a href="{{ url_for('inspect') }}">{{ _('Inspect') }}</a></li>
+                <li{% if request.path == '/dashboard' %} class="active" {% endif %}><a href="{{ url_for('dashboard') }}">{{ _('Dashboard') }}</a></li>
+              </ul>
+            </li>
           </ul>
           <ul class="nav navbar-nav navbar-right">
             <li> </li>
@@ -105,7 +116,7 @@
              
             {% if LANGUAGES != None and len(LANGUAGES) != 0 %} 
             <li class="dropdown">
-              <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">{{ get_locale().upper() }}<span class="caret" /></a>
+              <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">{{ get_locale().upper() }} <span class="caret" /></a>
               <ul class="dropdown-menu">
               {% for i in sorted(LANGUAGES.keys()) if i != get_locale() %}
                 <li><a href="{{ url_for('switch_language', langcode=i) }}">{{ LANGUAGES[i] }}</a></li>
@@ -130,7 +141,7 @@
             </div>
             <div class="modal-body">
               <div class="row">
-                {% for i in lsl %}
+                {% for i in lsl() %}
                 <div class="col-md-3 text-nowrap seleclang" lang="{{ i[0] }}">{% if i[2] %}<strong>{% endif %}{{ i[1] }}{% if i[2] %}*</strong>{% endif %}</div>
                 {% endfor %}
               </div>

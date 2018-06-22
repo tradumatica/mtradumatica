@@ -29,14 +29,17 @@ from sqlalchemy.orm.exc import NoResultFound
 from werkzeug import secure_filename
 from .models import Corpus, SMT, Translator, Bitext, AddCorpusBitext, MonolingualCorpus, AddCorpusMonoCorpus, LanguageModel, TranslatorFromBitext, Translation, User, OAuth
 
+USER_LOGIN_ENABLED =  app.config["USER_LOGIN_ENABLED"] if "USER_LOGIN_ENABLED" in app.config else False
+
 if app.config['OAUTHLIB_INSECURE_TRANSPORT']:
   os.environ['OAUTHLIB_INSECURE_TRANSPORT'] = '1'
 
 login_manager.login_view = 'google.login'
 login_manager.login_message = ''
 
+
 google_blueprint = make_google_blueprint(scope = ["profile", "email"])
-if app.config["USER_LOGIN_ENABLED"]:
+if USER_LOGIN_ENABLED:
   app.register_blueprint(google_blueprint, url_prefix = '/google_login')
   google_blueprint.backend = SQLAlchemyBackend(OAuth, db.session, user = current_user)
 
@@ -45,12 +48,12 @@ def get_locale():
   if "LANGUAGES" not in app.config:
     return "en"
   if current_user.is_authenticated and current_user.lang in app.config["LANGUAGES"].keys():
-    return current_user.lang  
+    return current_user.lang  if current_user.lang != None else "en"
   elif 'lang' in session and lang['session'] in app.config["LANGUAGES"].keys():
     return session['lang']
   else:
     result = request.accept_languages.best_match(app.config["LANGUAGES"].keys())
-  return result
+  return result if result != None else "en"
 
 @app.route('/actions/switch-language/<string:langcode>')
 def switch_language(langcode):
@@ -68,16 +71,6 @@ def switch_language(langcode):
   else:
     return redirect(url_for('index'))
 
-
-app.jinja_env.globals.update(get_locale = get_locale)
-if "LANGUAGES" in app.config:
-  app.jinja_env.globals.update(LANGUAGES = app.config["LANGUAGES"])
-else:
-  app.jinja_env.globals.update(LANGUAGES = None)
-  
-app.jinja_env.globals.update(sorted = sorted)
-app.jinja_env.globals.update(len = len)
-
 def get_uid():
   if current_user.is_authenticated:
     return current_user.id
@@ -88,6 +81,22 @@ def get_user():
     return current_user
   else:
     return None
+
+def language_list():
+  known_languages = set([c.lang for c in Corpus.query.filter(Corpus.user_id == get_uid())])
+  return [[i[0], i[1], False if i[0] not in known_languages else True] for i in languages.lang_select_list]
+
+
+app.jinja_env.globals.update(get_locale = get_locale)
+if "LANGUAGES" in app.config:
+  app.jinja_env.globals.update(LANGUAGES = app.config["LANGUAGES"])
+else:
+  app.jinja_env.globals.update(LANGUAGES = None)
+  
+app.jinja_env.globals.update(sorted = sorted)
+app.jinja_env.globals.update(len = len)
+app.jinja_env.globals.update(lsl = language_list)
+app.jinja_env.globals.update(user_login_enabled = USER_LOGIN_ENABLED)
 
 def query_order(column, type):
   if type == "asc":
@@ -102,12 +111,9 @@ def sort_language_pair(l1,l2):
   else:
     return l2,l1
     
-def language_list():
-  known_languages = set([c.lang for c in Corpus.query.filter(Corpus.user_id == get_uid())])
-  return [[i[0], i[1], False if i[0] not in known_languages else True] for i in languages.lang_select_list]
 
 
-@utils.condec(login_manager.user_loader, app.config['USER_LOGIN_ENABLED'])
+@utils.condec(login_manager.user_loader, USER_LOGIN_ENABLED)
 def load_user(user_id):
   return User.query.get(int(user_id))
 
@@ -152,7 +158,7 @@ def google_logged_in(blueprint, token):
     flash(_('You have been logged in successfully'), "success")
   
 @app.route('/logout')
-@utils.condec(login_required, app.config['USER_LOGIN_ENABLED'])
+@utils.condec(login_required, USER_LOGIN_ENABLED)
 def logout():
     logout_user()
     flash(_('You logged out successfully'), 'success')
@@ -161,93 +167,87 @@ def logout():
 
 @app.route('/')
 @app.route('/index')
-#@utils.condec(login_required, app.config['USER_LOGIN_ENABLED'])
+#@utils.condec(login_required, USER_LOGIN_ENABLED)
 def index():
   
-  return render_template("index.html", lsl = language_list(), title = _("Home"), 
-                         user_login_enabled = app.config['USER_LOGIN_ENABLED'],
-                         user = current_user)
+  return render_template("index.html", title = _("Home"), 
+                         user = get_user())
 
 
 @app.route('/files', methods=["GET","POST"])
-@utils.condec(login_required, app.config['USER_LOGIN_ENABLED'])
+@utils.condec(login_required, USER_LOGIN_ENABLED)
 def files():
-  return render_template("files.html", lsl = language_list(), title = _("File manager"),
-                         user_login_enabled = app.config['USER_LOGIN_ENABLED'],
-                         user = current_user)
+  return render_template("files.html", title = _("File manager"),
+                         user = get_user())
 
 @app.route('/bitexts', methods=["GET","POST"])
-@utils.condec(login_required, app.config['USER_LOGIN_ENABLED'])
+@utils.condec(login_required, USER_LOGIN_ENABLED)
 def bitexts():
   data = Bitext.query.filter(Bitext.user_id == get_uid()).all()
-  return render_template("bitexts.html", lsl = language_list(), title = _("Bitext manager"), data = data,
-                         user_login_enabled = app.config['USER_LOGIN_ENABLED'],
-                         user = current_user)
+  return render_template("bitexts.html", title = _("Bitext manager"), data = data,
+                         user = get_user())
 
 @app.route('/monolingual_corpora', methods=["GET","POST"])
-@utils.condec(login_required, app.config['USER_LOGIN_ENABLED'])
+@utils.condec(login_required, USER_LOGIN_ENABLED)
 def monolingual_corpora():
-  return render_template("monolingual-corpora.html", lsl = language_list(), title = _("Monolingual corpora"),
-                         user_login_enabled = app.config['USER_LOGIN_ENABLED'],
-                         user = current_user)
+  return render_template("monolingual-corpora.html", title = _("Monolingual corpora"),
+                         user = get_user())
 
 @app.route('/language_models', methods=["GET","POST"])
-@utils.condec(login_required, app.config['USER_LOGIN_ENABLED'])
+@utils.condec(login_required, USER_LOGIN_ENABLED)
 def language_models():
-  return render_template("language-models.html", lsl = language_list(), title = _("Language models"),
-                         user_login_enabled = app.config['USER_LOGIN_ENABLED'],
-                         user = current_user)
+  return render_template("language-models.html", title = _("Language models"),
+                         user = get_user())
 
 @app.route('/translators', methods=["GET","POST"])
-@utils.condec(login_required, app.config['USER_LOGIN_ENABLED'])
+@utils.condec(login_required, USER_LOGIN_ENABLED)
 def translators():
 
   data = Corpus.query.filter(Corpus.user_id == get_uid()).all()
   translators = [t for t in TranslatorFromBitext.query.filter(TranslatorFromBitext.user_id == get_uid()).all() if t.mydatefinished != None and t.exitstatus == 0]
-  return render_template("translators.html", lsl = language_list(), title = _("Translators"), data = data, translators = translators,
-                         user_login_enabled = app.config['USER_LOGIN_ENABLED'],
+  return render_template("translators.html", title = _("Translators"), data = data, translators = translators,
                          user = get_user())
 
 @app.route('/translate', methods=["GET","POST"])
-@utils.condec(login_required, app.config['USER_LOGIN_ENABLED'])
+@utils.condec(login_required, USER_LOGIN_ENABLED)
 def translate_page():
   data = [ t for t in TranslatorFromBitext.query.filter(TranslatorFromBitext.user_id == get_uid()).all() if t.mydatefinished != None and t.exitstatus == 0 ]
-  return render_template("translate.html", lsl = language_list(), title = _("Translate"), data = data,
-                         user_login_enabled = app.config['USER_LOGIN_ENABLED'],
-                         user = current_user)
+  return render_template("translate.html", title = _("Translate"), data = data,
+                         user = get_user())
 
 @app.route('/tasks', methods=["GET","POST"])
-@utils.condec(login_required, app.config['USER_LOGIN_ENABLED'])
+@utils.condec(login_required, USER_LOGIN_ENABLED)
 def tasks():
   data = Corpus.query.filter(Corpus.user_id == get_uid()).all()
-  return render_template("tasks.html", lsl = language_list(), title = _("Tasks"), data = data)
+  return render_template("tasks.html", title = _("Tasks"), data = data)
 
 @app.route('/test', methods=["GET","POST"])
-@utils.condec(login_required, app.config['USER_LOGIN_ENABLED'])
+@utils.condec(login_required, USER_LOGIN_ENABLED)
 def test():
-  return render_template("test.html", lsl = language_list(), title = _("Test"))
+  return render_template("test.html", title = _("Test"))
 
-@app.route('/dashboard', methods=["GET","POST"])
-@utils.condec(login_required, app.config['USER_LOGIN_ENABLED'])
+@app.route('/dashboard')
+@utils.condec(login_required, USER_LOGIN_ENABLED)
 def dashboard():
-  return render_template("dashboard.html", lsl = language_list(), title = _("Dashboard"))
+
+  return render_template("dashboard.html", title = _("Dashboard"), user = get_user())
 
 @app.route('/web_service', methods=["GET","POST"])
-@utils.condec(login_required, app.config['USER_LOGIN_ENABLED'])
+@utils.condec(login_required, USER_LOGIN_ENABLED)
 def web_service():
-  return render_template("web-service.html", lsl = language_list(), title = _("Web service"))
+  return render_template("web-service.html", title = _("Web service"))
 
 
 @app.route('/about', methods=["GET","POST"])
 def about():
-  return render_template("about.html", lsl = language_list(), title = _("About"))
+  return render_template("about.html", title = _("About"))
 
 @app.route('/contact', methods=["GET","POST"])
 def contact():
-  return render_template("contact.html", lsl = language_list(), title = _("Contact"))
+  return render_template("contact.html", title = _("Contact"))
 
-@app.route('/inspect', methods=["GET"])  
-@utils.condec(login_required, app.config['USER_LOGIN_ENABLED'])
+@app.route('/inspect')  
+@utils.condec(login_required, USER_LOGIN_ENABLED)
 def inspect():
   urlmoses = "http://"+("".join(url_for('index', _external=True).split(":")[0:2])).split("/")[2]+":"+str(app.config["MOSES_SERVICE_PORT"])+"/RPC2"
   moses_active = TranslatorFromBitext.query.filter(TranslatorFromBitext.moses_served == True).count() > 0
@@ -258,12 +258,12 @@ def inspect():
   translators = [ t for t in TranslatorFromBitext.query.filter(TranslatorFromBitext.user_id == get_uid()).filter(not_(TranslatorFromBitext.basename.like("%;;;;%"))) if t.mydatefinished != None and t.exitstatus == 0 ]
   all_real_translators = [t for t in TranslatorFromBitext.query.filter(not_(TranslatorFromBitext.basename.like("%;;;;%"))) if t.mydatefinished != None and t.exitstatus == 0 ]
   language_m  = [ l for l in LanguageModel.query.filter(LanguageModel.user_id == get_uid()).all() if l.mydatefinished != None and  l.exitstatus == 0]
-  return render_template("inspect.html", lsl = language_list(), title = _("Inspect"), trans = translators, lm = language_m, 
-                         all_trans = all_real_translators, user_login_enabled = app.config['USER_LOGIN_ENABLED'],
+  return render_template("inspect.html", title = _("Inspect"), trans = translators, lm = language_m, 
+                         all_trans = all_real_translators,
                          user = get_user(), urlmoses = urlmoses, moses_active = moses_active, all_users = all_users)
 
 @app.route('/actions/query-lm', methods=["GET", "POST"])
-@utils.condec(login_required, app.config['USER_LOGIN_ENABLED'])
+@utils.condec(login_required, USER_LOGIN_ENABLED)
 def query_lm():
   req_s = json.loads(request.data)
   file_lm = None
@@ -281,7 +281,7 @@ def query_lm():
     return jsonify(output="", status="Error")
 
 @app.route('/actions/query-tm', methods=["GET", "POST"])
-@utils.condec(login_required, app.config['USER_LOGIN_ENABLED'])
+@utils.condec(login_required, USER_LOGIN_ENABLED)
 def query_tm():
   req_s = json.loads(request.data)
   tobj = TranslatorFromBitext.query.get(req_s['id'])
@@ -299,7 +299,7 @@ def query_tm():
 
 
 @app.route('/actions/file-upload', methods=["POST"])
-@utils.condec(login_required, app.config['USER_LOGIN_ENABLED'])
+@utils.condec(login_required, USER_LOGIN_ENABLED)
 def file_upload():
   file     = request.files['file']
   basename = secure_filename(file.filename)
@@ -345,7 +345,7 @@ def file_upload():
   return jsonify(status = "OK")
 
 @app.route('/actions/bitext-create/<string:parname>/<string:language1>/<string:language2>')
-@utils.condec(login_required, app.config['USER_LOGIN_ENABLED'])
+@utils.condec(login_required, USER_LOGIN_ENABLED)
 def bitext_create(parname,language1,language2):
   #TODO: check existing bitext with the same name?
   language1,language2=sort_language_pair(language1,language2)
@@ -377,7 +377,7 @@ def bitext_create(parname,language1,language2):
   return jsonify(status = "OK")
 
 @app.route('/actions/monolingualcorpus-create/<string:parname>/<string:language1>')
-@utils.condec(login_required, app.config['USER_LOGIN_ENABLED'])
+@utils.condec(login_required, USER_LOGIN_ENABLED)
 def monolingualcorpus_create(parname,language1):
   #TODO: check existing monocorpus with the same name?
 
@@ -404,7 +404,7 @@ def monolingualcorpus_create(parname,language1):
   return jsonify(status = "OK")
 
 @app.route('/actions/languagemodel-create/<string:parname>/<string:language1>/<string:monocorpusid>')
-@utils.condec(login_required, app.config['USER_LOGIN_ENABLED'])
+@utils.condec(login_required, USER_LOGIN_ENABLED)
 def languagemodel_create(parname, language1, monocorpusid):
   #TODO: check existing monocorpus with the same name?
 
@@ -428,7 +428,7 @@ def languagemodel_create(parname, language1, monocorpusid):
   return jsonify(status = "OK")
 
 @app.route('/actions/translator-create/<string:parname>/<string:language1>/<string:language2>/<string:bitextid>/<string:languagemodelid>')
-@utils.condec(login_required, app.config['USER_LOGIN_ENABLED'])
+@utils.condec(login_required, USER_LOGIN_ENABLED)
 def translator_create(parname,language1, language2, bitextid, languagemodelid):
   #TODO: check existing Translator with the same name?
   #launch task, deal with filenames and so on
@@ -447,7 +447,7 @@ def translator_create(parname,language1, language2, bitextid, languagemodelid):
   return jsonify(status = "OK")
 
 @app.route('/actions/translator-createfromfiles/<string:parname>/<int:file1id>/<int:file2id>')
-@utils.condec(login_required, app.config['USER_LOGIN_ENABLED'])
+@utils.condec(login_required, USER_LOGIN_ENABLED)
 def translator_createfromfiles(parname, file1id, file2id):
   #TODO: check existing Translator with the same name?
 
@@ -475,7 +475,7 @@ def translator_createfromfiles(parname, file1id, file2id):
   return jsonify(status = "OK")
 
 @app.route('/actions/translator-createfromexisting/<string:parname>/<int:trans1id>/<int:trans2id>')
-@utils.condec(login_required, app.config['USER_LOGIN_ENABLED'])
+@utils.condec(login_required, USER_LOGIN_ENABLED)
 def translator_createfromexisting(parname, trans1id, trans2id):
   tfb1 = TranslatorFromBitext.query.get(trans1id)
   tfb2 = TranslatorFromBitext.query.get(trans2id)
@@ -504,7 +504,7 @@ def translator_createfromexisting(parname, trans1id, trans2id):
   return jsonify(status = "OK")
 
 @app.route('/actions/bitext-add-files/<int:id>/<int:idfile1>/<int:idfile2>')
-@utils.condec(login_required, app.config['USER_LOGIN_ENABLED'])
+@utils.condec(login_required, USER_LOGIN_ENABLED)
 def bitext_add_files(id,idfile1, idfile2):
   #DEBUG
   print "Appending files to bitext {0}: {1} and {2}".format(id,idfile1, idfile2)
@@ -553,7 +553,7 @@ def bitext_add_files(id,idfile1, idfile2):
 
 
 @app.route('/actions/monolingualcorpus-add-files/<int:id>/<int:idfile1>')
-@utils.condec(login_required, app.config['USER_LOGIN_ENABLED'])
+@utils.condec(login_required, USER_LOGIN_ENABLED)
 def monolingualcorpus_add_files(id,idfile1):
   b = MonolingualCorpus.query.get(id)
   c1 = Corpus.query.get(idfile1)
@@ -591,7 +591,7 @@ def monolingualcorpus_add_files(id,idfile1):
 
 @app.route('/actions/file-plainlist')
 @app.route('/actions/file-plainlist/<string:language>')
-@utils.condec(login_required, app.config['USER_LOGIN_ENABLED'])
+@utils.condec(login_required, USER_LOGIN_ENABLED)
 def file_plain_list(language=None):
   files=[]
   if language != None:
@@ -603,7 +603,7 @@ def file_plain_list(language=None):
 
 
 @app.route('/actions/file-list', methods=["POST"])
-@utils.condec(login_required, app.config['USER_LOGIN_ENABLED'])
+@utils.condec(login_required, USER_LOGIN_ENABLED)
 def file_list():
   columns = [None, Corpus.name, Corpus.lang, Corpus.nlines, Corpus.nwords, Corpus.nchars, Corpus.mydate]
  # columns   = ['','name', 'lang', 'nlines', 'nwords', 'nchars', 'mydate']
@@ -643,7 +643,7 @@ def file_list():
 
 @app.route('/actions/bitext-plainlist')
 @app.route('/actions/bitext-plainlist/<string:language1>/<string:language2>')
-@utils.condec(login_required, app.config['USER_LOGIN_ENABLED'])
+@utils.condec(login_required, USER_LOGIN_ENABLED)
 def bitext_plain_list(language1=None, language2=None):
   files=[]
   if language1 != None and language2 != None:
@@ -655,7 +655,7 @@ def bitext_plain_list(language1=None, language2=None):
   return jsonify(data=[f.__json__() for f in files])
 
 @app.route('/actions/bitext-plainlist/<int:trid>')
-@utils.condec(login_required, app.config['USER_LOGIN_ENABLED'])
+@utils.condec(login_required, USER_LOGIN_ENABLED)
 def bitext_plain_list_for_translator(trid):
   files=[]
   tr = TranslatorFromBitext.query.get(trid)
@@ -667,7 +667,7 @@ def bitext_plain_list_for_translator(trid):
 
 
 @app.route('/actions/bitext-list', methods=["POST"])
-@utils.condec(login_required, app.config['USER_LOGIN_ENABLED'])
+@utils.condec(login_required, USER_LOGIN_ENABLED)
 def bitext_list():
   columns = [None, Bitext.name, Bitext.lang1 , Bitext.nlines, Bitext.mydate]
  # columns   = ['','name', 'lang', 'nlines', 'nwords', 'nchars', 'mydate']
@@ -706,7 +706,7 @@ def bitext_list():
 
 @app.route('/actions/monolingualcorpus-plainlist')
 @app.route('/actions/monolingualcorpus-plainlist/<string:language>')
-@utils.condec(login_required, app.config['USER_LOGIN_ENABLED'])
+@utils.condec(login_required, USER_LOGIN_ENABLED)
 def monolingualCorpus_plain_list(language=None):
   files=[]
   if language != None:
@@ -717,7 +717,7 @@ def monolingualCorpus_plain_list(language=None):
 
 
 @app.route('/actions/monolingualcorpus-list', methods=["POST"])
-@utils.condec(login_required, app.config['USER_LOGIN_ENABLED'])
+@utils.condec(login_required, USER_LOGIN_ENABLED)
 def monolingualCorpus_list():
   columns = [None, MonolingualCorpus.name, MonolingualCorpus.lang , MonolingualCorpus.nlines, MonolingualCorpus.mydate]
  # columns   = ['','name', 'lang', 'nlines', 'nwords', 'nchars', 'mydate']
@@ -756,7 +756,7 @@ def monolingualCorpus_list():
 
 @app.route('/actions/languagemodel-plainlist')
 @app.route('/actions/languagemodel-plainlist/<string:language>')
-@utils.condec(login_required, app.config['USER_LOGIN_ENABLED'])
+@utils.condec(login_required, USER_LOGIN_ENABLED)
 def languageModel_plain_list(language=None):
   files=[]
   if language != None:
@@ -766,7 +766,7 @@ def languageModel_plain_list(language=None):
   return jsonify(data=[f.__json__() for f in files])
 
 @app.route('/actions/languagemodel-list', methods=["POST"])
-@utils.condec(login_required, app.config['USER_LOGIN_ENABLED'])
+@utils.condec(login_required, USER_LOGIN_ENABLED)
 def languageModel_list():
   columns = [None, LanguageModel.name, LanguageModel.lang , None, LanguageModel.mydate, None]
  # columns   = ['','name', 'lang', 'nlines', 'nwords', 'nchars', 'mydate']
@@ -846,7 +846,7 @@ def choose_optimization_cell(trobj):
         return trobj.mydateopt.strftime(date_fmt)+"#"+trobj.mydateoptfinished.strftime(date_fmt)
 
 @app.route('/actions/translator-list', methods=["POST"])
-@utils.condec(login_required, app.config['USER_LOGIN_ENABLED'])
+@utils.condec(login_required, USER_LOGIN_ENABLED)
 def translator_list():
   #columns = [None, TranslatorFromBitext.name, TranslatorFromBitext.lang1 , Bitext.name , LanguageModel.name , TranslatorFromBitext.mydate]
   columns = [None, TranslatorFromBitext.name, TranslatorFromBitext.lang1 , None , None , TranslatorFromBitext.mydate, None, None ]
@@ -883,7 +883,7 @@ def translator_list():
     return
 
 @app.route('/actions/translator-optimize/<int:translatorid>/<int:bitextid>')
-@utils.condec(login_required, app.config['USER_LOGIN_ENABLED'])
+@utils.condec(login_required, USER_LOGIN_ENABLED)
 def translator_optimize(translatorid, bitextid):
   #In order to tune, create a TMP dir with a copy of the trasnlator structure, run mert, and copy back the optimized moses.ini to
   # the translator directory
@@ -902,7 +902,7 @@ def translator_optimize(translatorid, bitextid):
   return jsonify()
 
 @app.route('/actions/file-delete/<int:id>')
-@utils.condec(login_required, app.config['USER_LOGIN_ENABLED'])
+@utils.condec(login_required, USER_LOGIN_ENABLED)
 def file_delete(id):
   corpus = Corpus.query.get(id)
   if corpus is None:
@@ -918,7 +918,7 @@ def file_delete(id):
   return jsonify(status = "OK")
 
 @app.route('/actions/bitext-delete/<int:id>')
-@utils.condec(login_required, app.config['USER_LOGIN_ENABLED'])
+@utils.condec(login_required, USER_LOGIN_ENABLED)
 def bitext_delete(id):
   bitext = Bitext.query.get(id)
   if bitext is None:
@@ -934,7 +934,7 @@ def bitext_delete(id):
   return jsonify(status = "OK")
 
 @app.route('/actions/monolingualcorpus-delete/<int:id>')
-@utils.condec(login_required, app.config['USER_LOGIN_ENABLED'])
+@utils.condec(login_required, USER_LOGIN_ENABLED)
 def monolingualcorpus_delete(id):
   monocorpus = MonolingualCorpus.query.get(id)
   if monocorpus is None:
@@ -950,7 +950,7 @@ def monolingualcorpus_delete(id):
   return jsonify(status = "OK")
 
 @app.route('/actions/languagemodel-delete/<int:id>')
-@utils.condec(login_required, app.config['USER_LOGIN_ENABLED'])
+@utils.condec(login_required, USER_LOGIN_ENABLED)
 def languagemodel_delete(id):
   lm = LanguageModel.query.get(id)
   if lm is None:
@@ -974,7 +974,7 @@ def languagemodel_delete(id):
   return jsonify(status = "OK")
 
 @app.route('/actions/translator-delete/<int:id>')
-@utils.condec(login_required, app.config['USER_LOGIN_ENABLED'])
+@utils.condec(login_required, USER_LOGIN_ENABLED)
 def translator_delete(id):
   t = TranslatorFromBitext.query.get(id)
   if t is None:
@@ -1010,7 +1010,7 @@ def translator_delete(id):
   return jsonify(status = "OK")
 
 @app.route('/actions/optimization-kill/<int:id>')
-@utils.condec(login_required, app.config['USER_LOGIN_ENABLED'])
+@utils.condec(login_required, USER_LOGIN_ENABLED)
 def optimization_kill(id):
   t = TranslatorFromBitext.query.get(id)
   if t is None:
@@ -1035,7 +1035,7 @@ def optimization_kill(id):
   
 
 @app.route('/actions/file-download/<int:id>')
-@utils.condec(login_required, app.config['USER_LOGIN_ENABLED'])
+@utils.condec(login_required, USER_LOGIN_ENABLED)
 def file_download(id):
 
   def generate(c):
@@ -1052,7 +1052,7 @@ def file_download(id):
   return Response(generate(corpus), mimetype = corpus.type, headers = {"Content-Disposition":"attachment; filename={0}".format(corpus.name)})
 
 @app.route('/actions/file-peek/<int:id>')
-@utils.condec(login_required, app.config['USER_LOGIN_ENABLED'])
+@utils.condec(login_required, USER_LOGIN_ENABLED)
 def file_peek(id):
   corpus = Corpus.query.get(id)
 
@@ -1067,7 +1067,7 @@ def file_peek(id):
   return jsonify(lines = result, filename=corpus.name)
 
 @app.route('/actions/monolingualcorpus-peek/<int:id>')
-@utils.condec(login_required, app.config['USER_LOGIN_ENABLED'])
+@utils.condec(login_required, USER_LOGIN_ENABLED)
 def monolingualcorpus_peek(id):
   corpus = MonolingualCorpus.query.get(id)
 
@@ -1082,7 +1082,7 @@ def monolingualcorpus_peek(id):
   return jsonify(lines = result, filename=corpus.name)
 
 @app.route('/actions/bitext-peek/<int:id>')
-@utils.condec(login_required, app.config['USER_LOGIN_ENABLED'])
+@utils.condec(login_required, USER_LOGIN_ENABLED)
 def bitext_peek(id):
   corpus = Bitext.query.get(id)
 
@@ -1104,7 +1104,7 @@ def bitext_peek(id):
 
 
 @app.route('/actions/file-setlang/<int:id>/<string:code>')
-@utils.condec(login_required, app.config['USER_LOGIN_ENABLED'])
+@utils.condec(login_required, USER_LOGIN_ENABLED)
 def file_setlang(id, code):
   corpus = Corpus.query.get(id)
   corpus.lang = code
@@ -1113,7 +1113,7 @@ def file_setlang(id, code):
   return jsonify(status = "OK")
 
 @app.route('/actions/status-simple')
-@utils.condec(login_required, app.config['USER_LOGIN_ENABLED'])
+@utils.condec(login_required, USER_LOGIN_ENABLED)
 def status_simple():
   if len(Translator.query.filter(Translator.user_id == get_uid()).all()) == 0:
     return jsonify(status = u"empty")
@@ -1127,7 +1127,7 @@ def status_simple():
     return jsonify(status = u"done")
 
 @app.route('/actions/status-languagemodel/<int:id>')
-@utils.condec(login_required, app.config['USER_LOGIN_ENABLED'])
+@utils.condec(login_required, USER_LOGIN_ENABLED)
 def status_languagemodel(id):
   #Get LM from DB and task from celery
   lm = LanguageModel.query.get(id)
@@ -1141,7 +1141,7 @@ def status_languagemodel(id):
     return jsonify(status = u"done")
 
 @app.route('/actions/status-translator/<int:id>')
-@utils.condec(login_required, app.config['USER_LOGIN_ENABLED'])
+@utils.condec(login_required, USER_LOGIN_ENABLED)
 def status_translator(id):
   #Get Translator from DB and task from celery
   t = TranslatorFromBitext.query.get(id)
@@ -1155,7 +1155,7 @@ def status_translator(id):
     return jsonify(status = u"done")
 
 @app.route('/actions/status-translator-optimization/<int:id>')
-@utils.condec(login_required, app.config['USER_LOGIN_ENABLED'])
+@utils.condec(login_required, USER_LOGIN_ENABLED)
 def status_translator_optimization(id):
   #Get Translator from DB and task from celery
   t = TranslatorFromBitext.query.get(id)
@@ -1170,7 +1170,7 @@ def status_translator_optimization(id):
 
 
 @app.route('/actions/cancel-simple')
-@utils.condec(login_required, app.config['USER_LOGIN_ENABLED'])
+@utils.condec(login_required, USER_LOGIN_ENABLED)
 def cancel_simple():
   t = Translator.query.one()
   task    = celerytasks.train_simple_smt.AsyncResult(t.task_id)
@@ -1186,7 +1186,7 @@ def cancel_simple():
   return jsonify(status = u"OK")
 
 @app.route('/actions/remove-simple')
-@utils.condec(login_required, app.config['USER_LOGIN_ENABLED'])
+@utils.condec(login_required, USER_LOGIN_ENABLED)
 def remove_simple():
   t = Translator.query.one()
   shutil.rmtree(t.path, ignore_errors=True)
@@ -1196,7 +1196,7 @@ def remove_simple():
   return jsonify(status = u"OK")
 
 @app.route('/actions/build-simple/<int:id1>/<int:id2>')
-@utils.condec(login_required, app.config['USER_LOGIN_ENABLED'])
+@utils.condec(login_required, USER_LOGIN_ENABLED)
 def build_simple(id1, id2):
   c1   = Corpus.query.get(id1)
   c2   = Corpus.query.get(id2)
@@ -1215,7 +1215,7 @@ def build_simple(id1, id2):
   return jsonify(status = u"OK", task_id = task.id)
 
 @app.route('/actions/translatechoose/<int:id>', methods=["POST"])
-@utils.condec(login_required, app.config['USER_LOGIN_ENABLED'])
+@utils.condec(login_required, USER_LOGIN_ENABLED)
 def translatechoose(id):
   text = json.loads(request.data)['text'] #.encode("utf-8")
   t = TranslatorFromBitext.query.get(id)
@@ -1230,7 +1230,7 @@ def translatechoose(id):
   return jsonify(status = u"Fail", message = u"Translation failed")
 
 @app.route('/actions/translate-doc/<int:id>', methods=["POST"])
-@utils.condec(login_required, app.config['USER_LOGIN_ENABLED'])
+@utils.condec(login_required, USER_LOGIN_ENABLED)
 def translate_doc(id):
   file        = request.files['file']
   doctype     = request.form['doctype'] if 'doctype' != 'htm' else "html"
@@ -1256,7 +1256,7 @@ def translate_doc(id):
   return jsonify(task_id=task.id)
 
 @app.route('/actions/translate-text/<int:id>', methods=["POST"])
-@utils.condec(login_required, app.config['USER_LOGIN_ENABLED'])
+@utils.condec(login_required, USER_LOGIN_ENABLED)
 def translate_text(id):
   file        = text = json.loads(request.data)['text']
   doctype     = "txt"
@@ -1280,8 +1280,8 @@ def translate_text(id):
     
   return jsonify(task_id=task.id)
   
-@app.route('/actions/downloadresult/<string:filename>/<string:download_as>', methods=["GET"])
-@utils.condec(login_required, app.config['USER_LOGIN_ENABLED'])
+@app.route('/actions/downloadresult/<string:filename>/<string:download_as>')
+@utils.condec(login_required, USER_LOGIN_ENABLED)
 def downloadresult(filename, download_as):
   fname = os.path.join(app.config['DOWNLOAD_FOLDER'], filename)
   retval = send_file(filename, as_attachment=True,attachment_filename=download_as)
@@ -1293,7 +1293,7 @@ def testdownload():
   return send_file("/etc/hosts", "text/plain", as_attachment=True)
   
 @app.route('/actions/translate', methods=["POST"])
-@utils.condec(login_required, app.config['USER_LOGIN_ENABLED'])
+@utils.condec(login_required, USER_LOGIN_ENABLED)
 def translate():
   text = json.loads(request.data)['text'].encode("utf-8")
   t = Translator.query.one()
@@ -1307,7 +1307,7 @@ def translate():
   return jsonify(status = u"Fail", message = u"Translation failed")
 
 @app.route('/actions/translate-inspect', methods=["POST"])
-@utils.condec(login_required, app.config['USER_LOGIN_ENABLED'])
+@utils.condec(login_required, USER_LOGIN_ENABLED)
 def translate_inspect():
   obj = request.json
   text = obj["text"]
@@ -1316,7 +1316,7 @@ def translate_inspect():
   return jsonify(mosestranslate.translate_trace(text, t.basename))
 
 @app.route('/actions/search-dictionary', methods=["POST"])
-@utils.condec(login_required, app.config['USER_LOGIN_ENABLED'])
+@utils.condec(login_required, USER_LOGIN_ENABLED)
 def search_dic():
   obj = request.json
   word = obj["word"]
@@ -1385,7 +1385,7 @@ def ws_list():
   return jsonify(list=tlist)
 
 @app.route('/actions/moses-status')
-@utils.condec(login_required, app.config['USER_LOGIN_ENABLED'])
+@utils.condec(login_required, USER_LOGIN_ENABLED)
 def moses_alive():
   if not os.path.isfile(app.config["MOSES_SERVICE_PIDFILE"]):
     return jsonify(status="off", active=[])
@@ -1407,9 +1407,9 @@ def moses_alive():
   return jsonify(status="off", active = [])
 
 @app.route('/actions/moses-activate/<int:engine_id>')
-@utils.condec(login_required, app.config['USER_LOGIN_ENABLED'])
+@utils.condec(login_required, USER_LOGIN_ENABLED)
 def moses_activate(engine_id):
-  if not app.config["USER_LOGIN_ENABLED"] or (app.config["USER_LOGIN_ENABLED"] and current_user.admin):
+  if not USER_LOGIN_ENABLED or (USER_LOGIN_ENABLED and current_user.admin):
     tfb = TranslatorFromBitext.query.get(engine_id)    
     moses_service.moses_start(tfb.basename)
     tfb.moses_served = True
@@ -1419,9 +1419,9 @@ def moses_activate(engine_id):
   return jsonify(status="OK")
 
 @app.route('/actions/moses-deactivate')
-@utils.condec(login_required, app.config['USER_LOGIN_ENABLED'])
+@utils.condec(login_required, USER_LOGIN_ENABLED)
 def moses_deactivate():
-  if not app.config["USER_LOGIN_ENABLED"] or (app.config["USER_LOGIN_ENABLED"] and current_user.admin):
+  if not USER_LOGIN_ENABLED or (USER_LOGIN_ENABLED and current_user.admin):
     moses_service.moses_stop()
     for tfb in TranslatorFromBitext.query.filter(TranslatorFromBitext.moses_served == True):
       tfb.moses_served = False

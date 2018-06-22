@@ -41,7 +41,7 @@
 		  <form class="form-horizontal" role="form" id="form-new-bitext">
                   <div class="form-group">
                     <label  class="col-sm-2 control-label"
-                              for="inputName">Name</label>
+                              for="inputName">{{ _('Name') }}</label>
                     <div class="col-sm-10">
                         <input type="text" class="form-control"
                         id="inputName" name="inputName" placeholder="Give a name to the bitext"
@@ -50,16 +50,18 @@
                   </div>
                   <div class="form-group">
                     <label class="col-sm-2 control-label"
-                          for="inputLanguage1" >Source language</label>
+                          for="inputLanguage1" >{{ _('Source language') }}</label>
                     <div class="col-sm-10">
-  						<button type="button" id="inputLanguage1" name="inputLanguage1" class="list-group-item form-control">None</button>
+  						<button type="button" id="inputLanguage1" name="inputLanguage1" class="list-group-item
+  						form-control">{{ _('None') }}</button>
                     </div>
                   </div>
 				  <div class="form-group">
                     <label class="col-sm-2 control-label"
-                          for="inputLanguage2" >Target language</label>
+                          for="inputLanguage2" >{{ _('Target language') }}</label>
                     <div class="col-sm-10">
-                        <button type="button" id="inputLanguage2" name="inputLanguage2" class="list-group-item form-control">None</button>
+                        <button type="button" id="inputLanguage2" name="inputLanguage2" class="list-group-item
+                        form-control">{{ _('None') }}</button>
                     </div>
                   </div>
 
