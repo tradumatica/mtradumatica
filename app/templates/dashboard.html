@@ -1,4 +1,23 @@
 {% extends "base.html" %}
+
 {% block content %}
-TODO
+<div class="container">
+  <h2>{{ _('Dashboard') }}</h2>
+  <p>{{ _('Check the load an health of the components of the system.') }}</p>
+
+  <ul class="nav nav-tabs">
+    <li id="system_tab" class="active"><a id="lmtab" href="#">{{ _('System') }}</a></li>
+    {% if user == None or user.admin %}
+    <li id="users_tab"><a id="tmtab" href="#">{{ _('Users') }}</a></li>
+    {% endif %}
+    <li id="queue_tab"><a id="pbdtab" href="#">{{ _('Queue') }}</a></li>
+    <li id="space_tab"><a id="mttab" href="#">{{ _('Disk space') }}</a></li>
+  </ul>
+</div>
+
+
+{% endblock %}
+
+{% block extrajs %}
+  <script src="{{ url_for('.static', filename='js/dashboard.js') }}"></script>
 {% endblock %}
