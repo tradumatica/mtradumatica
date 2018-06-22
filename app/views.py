@@ -49,7 +49,7 @@ def get_locale():
     return "en"
   if current_user.is_authenticated and current_user.lang in app.config["LANGUAGES"].keys():
     return current_user.lang  if current_user.lang != None else "en"
-  elif 'lang' in session and lang['session'] in app.config["LANGUAGES"].keys():
+  elif 'lang' in session and session['lang'] in app.config["LANGUAGES"].keys():
     return session['lang']
   else:
     result = request.accept_languages.best_match(app.config["LANGUAGES"].keys())
