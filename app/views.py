@@ -127,7 +127,7 @@ def google_logged_in(blueprint, token):
     social_id = account_info_json['id']
     email     = account_info_json['emails'][0]['value']
     lang      = get_locale()    
-    query = User.query.filter_by(social_id=social_id, username = username, email = email, lang = lang)
+    query = User.query.filter_by(social_id=social_id, username = username, email = email)
 
     try:
       user = query.one()
