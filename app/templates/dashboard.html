@@ -13,8 +13,46 @@
     <li id="queue_tab"><a id="pbdtab" href="#">{{ _('Queue') }}</a></li>
     <li id="space_tab"><a id="mttab" href="#">{{ _('Disk space') }}</a></li>
   </ul>
-</div>
+  <div id="system_tab_contents">
+    <dl class="dl-horizontal">
+      <dt>{{ _('Memory') }}<dt>
+      {% set mtotal = virtual_memory().total / (1024.0*1000.0*1000.0) %}
+      {% set mused  = mtotal - virtual_memory().free / (1024.0*1000.0*1000.0) %}
+      <dd>{{ _('%(used).2f / %(total).2f GB', used=mused, total=mtotal) }}</dd>
+      
+      {% set tdisk = disk_usage(basedir).total/ (1024.0*1000.0*1000.0) %}
+      {% set udisk = disk_usage(basedir).used/ (1024.0*1000.0*1000.0) %}
+      {% set pdisk = disk_usage(basedir).percent %}
+      {% set mt_size = get_size(translators_folder)/(1024.0*1000.0*1000.0) %}
+      {% set tc_size = get_size(upload_folder)/(1024.0*1000.0*1000.0) %}
+      {% set lm_size = get_size(lms_folder)/(1024.0*1000.0*1000.0) %}
+      {% set tmp_size = get_size(tmp_folder)/(1024.0*1000.0*1000.0) %}
+      {% set mt_dirs = count_dirs(translators_folder) %}
+      {% set tc_files = count_files(upload_folder) %}      
+      {% set lm_dirs = count_dirs(lms_folder) %}
+      
+      <dt>{{ _('Disk Space') }}</dt>
+      <dd>
+        {{ _('%(used).2f GB used (%(percent).1f%%) of %(total).2f GB in total, from which', used = udisk, percent = pdisk, total = tdisk) }}
+        <ul>
+          <li>{{ _('MT engines: %(mt_size).2f GB (%(mt_engines)d engines)', mt_size = mt_size, mt_engines= mt_dirs) }}</li>
+          <li>{{ _('Training corpora: %(tc_size).2f GB (%(tc_files)d items)', tc_size = tc_size, tc_files = tc_files) }}</li>
+          <li>{{ _('Language models: %(lm_size).2f GB (%(lm_models)d models)', lm_size = lm_size, lm_models = lm_dirs) }}</li>          
+          <li>{{ _('Temporary files: %(tmp_size).2f GB', tmp_size = tmp_size) }}</li>
+        </ul>
+      </dd>
+      <dt>{{ _('CPU cores') }}</dt>
+      <dd>{{ cpu_count }}</dd>
+      <dt>{{ _('System load') }}</dt>
+      <dd>{{ cpu_percent() }}%</dd>
+      <br/>
+      <dt></dt>
+      <dd><button id="refresh_dashboard" class="btn btn-primary"><span class="glyphicon glyphicon-refresh"></span> {{ _('Refresh') }}</button></dd>
 
+    </dl>
+    
+  </div>
+</div>
 
 {% endblock %}
 

@@ -46,3 +46,6 @@ $("#space_tab").click(function(){
   $("#space_tab").addClass("active");
 });
 
+$("#refresh_dashboard").click(function(){
+  document.location.reload();
+});

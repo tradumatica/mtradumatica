@@ -5,6 +5,7 @@ import os
 import querymodels as qm
 import magic
 import moses_service
+import psutil
 import regex
 import shutil
 import tasks as celerytasks
@@ -97,6 +98,18 @@ app.jinja_env.globals.update(sorted = sorted)
 app.jinja_env.globals.update(len = len)
 app.jinja_env.globals.update(lsl = language_list)
 app.jinja_env.globals.update(user_login_enabled = USER_LOGIN_ENABLED)
+app.jinja_env.globals.update(cpu_count = psutil.cpu_count())
+app.jinja_env.globals.update(cpu_percent = psutil.cpu_percent)
+app.jinja_env.globals.update(virtual_memory = psutil.virtual_memory)
+app.jinja_env.globals.update(disk_usage = psutil.disk_usage)
+app.jinja_env.globals.update(basedir = app.config['BASEDIR'])
+app.jinja_env.globals.update(tmp_folder = app.config['TMP_FOLDER'])
+app.jinja_env.globals.update(lms_folder = app.config['LMS_FOLDER'])
+app.jinja_env.globals.update(translators_folder = app.config['TRANSLATORS_FOLDER'])
+app.jinja_env.globals.update(upload_folder = app.config['UPLOAD_FOLDER'])
+app.jinja_env.globals.update(get_size = utils.get_size)
+app.jinja_env.globals.update(count_files = utils.count_files)
+app.jinja_env.globals.update(count_dirs = utils.count_dirs)
 
 def query_order(column, type):
   if type == "asc":
