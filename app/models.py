@@ -59,6 +59,7 @@ class LanguageModel(db.Model):
   translatorsfrombitext = db.relationship('TranslatorFromBitext',backref=db.backref('languagemodel', lazy='joined'), lazy='dynamic')
   generated_id = db.Column(db.String(128))
   user_id = db.Column(db.Integer, db.ForeignKey('users.id'))
+  size_mb = db.Column(db.Integer)
 
   def __json__(self):
     return {
@@ -155,8 +156,12 @@ class TranslatorFromBitext(db.Model):
   exitstatus        = db.Column(db.Integer)
   moses_served      = db.Column(db.Boolean, default=False)
   moses_served_port = db.Column(db.Integer)
+  size_mb           = db.Column(db.Integer)
   user_id           = db.Column(db.Integer, db.ForeignKey('users.id'))
-
+  
+  def get_user(self):
+    return User.query.get(self.user_id)
+    
   def get_path(self):
     result = []
     for i in self.basename.split(";;;;"):
@@ -213,6 +218,7 @@ class User(UserMixin, db.Model):
   social_id       = db.Column(db.String(250))
   email           = db.Column(db.String(60), unique=True)
   admin           = db.Column(db.Boolean, default=False)
+  banned          = db.Column(db.Boolean, default=False)
   lang            = db.Column(db.String(32))
   corpora         = db.relationship("Corpus")
   language_models = db.relationship("LanguageModel")
@@ -222,7 +228,19 @@ class User(UserMixin, db.Model):
   translation     = db.relationship("Translation")
   translators     = db.relationship("Translator")
 
+  def size_mb(self):
+    return sum([t.size_mb for t in self.tfbitexts]) + sum([l.size_mb for l in self.language_models])
+  def n_engines(self):
+    return len(self.tfbitexts)    
+
 class OAuth(OAuthConsumerMixin, db.Model):
   __tablename__ = "flask_dance_oauth"
   user_id = db.Column(db.Integer, db.ForeignKey(User.id))
   user    = db.relationship("User")  
+
+
+class Properties(db.Model):
+  __tablename__ = "properties"
+  property_id = db.Column(db.Integer, primary_key = True)
+  name        = db.Column(db.String(250))
+  value       = db.Column(db.String(250))

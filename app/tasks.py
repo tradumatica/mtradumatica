@@ -6,7 +6,7 @@ import shutil
 from .models import LanguageModel, TranslatorFromBitext, Corpus, Bitext, MonolingualCorpus
 import time
 import os
-
+from utils import get_size
 
 celery = Celery(app.name, broker = app.config['CELERY_BROKER_URL'])
 celery.conf.update(app.config)
@@ -26,6 +26,7 @@ def train_simple_smt(self, c1_id, c2_id, translator_id):
     
     t.mydatefinished = datetime.utcnow()
     t.exitstatus     = proc.returncode
+    t.size_mb = sum([get_size(i)/1000000 for i in t.get_path()])
     db.session.commit()
 
 @celery.task(bind=True)
@@ -51,6 +52,7 @@ def train_smt(self, l1, l2, bitext_id, languagemodel_id, translator_id):
     tr=trobjs[0]
     tr.mydatefinished=datetime.utcnow()
     tr.exitstatus=proc.returncode
+    tr.size_mb = sum([get_size(i)/1000000 for i in tr.get_path()])
     db.session.commit()
   else:
     print "WARNING: "+str(len(trobjs))+" with same tr_id"
@@ -95,6 +97,7 @@ def train_lm(self, lm_id):
     #add finished date to LM object
 
     languagemodel.mydatefinished = datetime.utcnow()
+    languagemodel.size_mb = get_size(languagemodel.path) / 1000000
     languagemodel.exitstatus     = proc.returncode
     db.session.commit()
 

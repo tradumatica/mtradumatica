@@ -39,7 +39,9 @@ login_manager.login_view = 'google.login'
 login_manager.login_message = ''
 
 
-google_blueprint = make_google_blueprint(scope = ["profile", "email"])
+#google_blueprint = make_google_blueprint(scope = ["profile", "email"])
+google_blueprint = make_google_blueprint(scope = ["https://www.googleapis.com/auth/userinfo.email",
+                                                  "https://www.googleapis.com/auth/userinfo.profile"])
 if USER_LOGIN_ENABLED:
   app.register_blueprint(google_blueprint, url_prefix = '/google_login')
   google_blueprint.backend = SQLAlchemyBackend(OAuth, db.session, user = current_user)
@@ -1441,3 +1443,71 @@ def moses_deactivate():
       tfb.moses_served_port = None
     db.session.commit()
   return jsonify(status="OK")
+
+
+@app.route('/actions/user-list', methods=["POST"])
+@utils.condec(login_required, USER_LOGIN_ENABLED)
+def user_list():
+  columns = [None, User.username, User.email, None, None, User.admin, User.banned]
+
+  try:
+    start     = int(request.form['start'])
+    length    = int(request.form['length'])
+    draw      = int(request.form['draw'])
+    order_col = int(request.form['order[0][column]'])
+
+    order_dir = request.form['order[0][dir]']
+    if order_dir not in ['asc', 'desc']:
+      raise ValueError('order[0][dir] must be "asc" or "desc"')
+
+    search     = request.form['search[value]']
+    search_str = u'%{0}%'.format(search)
+
+    checkbox   = u'<span class="checkbox"><input class="file_checkbox" type="checkbox" id="ul-checkbox-{0}"/></div>'
+    toggle = u'<button type="button" id="button-toggle-{0}" class="btn btn-default btn-sm">'+_('Toggle')+'</button>'
+    date_fmt   = u'%Y-%m-%d %H:%M:%S'
+
+
+    data = [[checkbox.format(u.id), u.username, u.email, u.n_engines(), u.size_mb(), u.admin, u.banned, toggle.format(u.id) if u.id != current_user.id else ""]
+            for u in User.query.filter(User.username.like(search_str)).order_by(query_order(columns[order_col], order_dir))][start:start+length]
+    return jsonify(draw            = draw,
+                   data            = data,
+                   recordsTotal    = User.query.count(),
+                   recordsFiltered = User.query.filter(User.username.like(search_str)).count())
+
+  except ValueError:
+    abort(401)
+    return
+
+@app.route('/actions/mt-list', methods=["POST"])
+@utils.condec(login_required, USER_LOGIN_ENABLED)
+def mt_list():
+  columns = [None, TranslatorFromBitext.name, TranslatorFromBitext.lang1, TranslatorFromBitext.size_mb, TranslatorFromBitext.mydate, User.email]
+
+  try:
+    start     = int(request.form['start'])
+    length    = int(request.form['length'])
+    draw      = int(request.form['draw'])
+    order_col = int(request.form['order[0][column]'])
+
+    order_dir = request.form['order[0][dir]']
+    if order_dir not in ['asc', 'desc']:
+      raise ValueError('order[0][dir] must be "asc" or "desc"')
+
+    search     = request.form['search[value]']
+    search_str = u'%{0}%'.format(search)
+    checkbox   = u'<span class="checkbox"><input class="file_checkbox" type="checkbox" id="ml-checkbox-{0}"/></div>'
+    date_fmt   = u'%Y-%m-%d %H:%M:%S'
+
+
+    data = [[checkbox.format(t.id), t.name, t.lang1+u"-"+t.lang2, t.size_mb, t.mydate.strftime(date_fmt), t.get_user().email, ""]
+            for t in db.session.query(TranslatorFromBitext).join(User, User.id == TranslatorFromBitext.user_id).filter(TranslatorFromBitext.name.like(search_str)).order_by(query_order(columns[order_col], order_dir))][start:start+length]
+    return jsonify(draw            = draw,
+                   data            = data,
+                   recordsTotal    = User.query.count(),
+                   recordsFiltered = User.query.filter(User.username.like(search_str)).count())
+
+  except ValueError:
+    abort(401)
+    return
+
