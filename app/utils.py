@@ -4,6 +4,34 @@ import os
 import psutil
 import socket
 
+def count_files(path = '.'):
+  try:
+    res = len([name for name in os.listdir(path) if os.path.isfile(os.path.join(path,name))])
+    return res
+  except:
+    return 0
+
+def count_dirs(path = '.'):
+  try:
+    res = len([name for name in os.listdir(path) if os.path.isdir(os.path.join(path,name))])
+    return res
+  except:
+    return 0
+
+def get_size(start_path = '.'):
+  total_size = 0
+  try:
+    if os.path.isdir(start_path):
+      for dirpath, dirnames, filenames in os.walk(start_path):
+        for f in filenames:
+          fp = os.path.join(dirpath, f)
+          total_size += os.path.getsize(fp)
+      return total_size
+    elif os.path.isfile(start_path):
+      return os.path.getsize(start_path)
+  except:
+    return 0
+
 class condec(object):
   def __init__(self, dec, condition):
     self.decorator = dec

@@ -1,9 +1,13 @@
 {% extends "base.html" %}
 
+{% block extracss %}
+<link href="{{ url_for('.static', filename='css/datatables.min.css') }}" rel="stylesheet">
+{% endblock %}
+
 {% block content %}
 <div class="container">
   <h2>{{ _('Dashboard') }}</h2>
-  <p>{{ _('Check the load an health of the components of the system.') }}</p>
+  <p>{{ _('Check the load and health of the components of the system.') }}</p>
 
   <ul class="nav nav-tabs">
     <li id="system_tab" class="active"><a id="lmtab" href="#">{{ _('System') }}</a></li>
@@ -11,13 +15,120 @@
     <li id="users_tab"><a id="tmtab" href="#">{{ _('Users') }}</a></li>
     {% endif %}
     <li id="queue_tab"><a id="pbdtab" href="#">{{ _('Queue') }}</a></li>
-    <li id="space_tab"><a id="mttab" href="#">{{ _('Disk space') }}</a></li>
+    <li id="space_tab"><a id="mttab" href="#">{{ _('Translators') }}</a></li>
   </ul>
-</div>
+  <div id="system_tab_contents">
+    <dl class="dl-horizontal">
+      <dt>{{ _('Memory') }}<dt>
+      {% set mtotal = virtual_memory().total / (1024.0*1000.0*1000.0) %}
+      {% set mused  = mtotal - virtual_memory().free / (1024.0*1000.0*1000.0) %}
+      <dd>{{ _('%(used).2f / %(total).2f GB', used=mused, total=mtotal) }}</dd>
+      
+      {% set tdisk = disk_usage(basedir).total/ (1024.0*1000.0*1000.0) %}
+      {% set udisk = disk_usage(basedir).used/ (1024.0*1000.0*1000.0) %}
+      {% set pdisk = disk_usage(basedir).percent %}
+      {% set mt_size = get_size(translators_folder)/(1024.0*1000.0*1000.0) %}
+      {% set tc_size = get_size(upload_folder)/(1024.0*1000.0*1000.0) %}
+      {% set lm_size = get_size(lms_folder)/(1024.0*1000.0*1000.0) %}
+      {% set tmp_size = get_size(tmp_folder)/(1024.0*1000.0*1000.0) %}
+      {% set mt_dirs = count_dirs(translators_folder) %}
+      {% set tc_files = count_files(upload_folder) %}      
+      {% set lm_dirs = count_dirs(lms_folder) %}
+      
+      <dt>{{ _('Disk Space') }}</dt>
+      <dd>
+        {{ _('%(used).2f GB used (%(percent).1f%%) of %(total).2f GB in total, from which', used = udisk, percent = pdisk, total = tdisk) }}
+        <ul>
+          <li>{{ _('MT engines: %(mt_size).2f GB (%(mt_engines)d engines)', mt_size = mt_size, mt_engines= mt_dirs) }}</li>
+          <li>{{ _('Training corpora: %(tc_size).2f GB (%(tc_files)d items)', tc_size = tc_size, tc_files = tc_files) }}</li>
+          <li>{{ _('Language models: %(lm_size).2f GB (%(lm_models)d models)', lm_size = lm_size, lm_models = lm_dirs) }}</li>          
+          <li>{{ _('Temporary files: %(tmp_size).2f GB', tmp_size = tmp_size) }}</li>
+        </ul>
+      </dd>
+      <dt>{{ _('CPU cores') }}</dt>
+      <dd>{{ cpu_count }}</dd>
+      <dt>{{ _('System load') }}</dt>
+      <dd>{{ cpu_percent() }}%</dd>
+      <br/>
+      <dt></dt>
+      <dd><button id="refresh_dashboard" class="btn btn-primary"><span class="glyphicon glyphicon-refresh"></span> {{ _('Refresh') }}</button></dd>
 
+    </dl>
+    
+  </div>
+
+  <div id="users_tab_contents" class="hidden">
+    <table id="userlist" class="table table-striped table-bordered">
+      <thead>
+        <tr>
+          <th><input class="checkbox" id="checkbox_all" type="checkbox"/></th>
+          <th>{{ _('Name') }}</th>
+          <th>{{ _('E-mail') }}</th>
+          <th>{{ _('MT engines') }}</th>
+          <th>{{ _('Disk space (Mb)') }}</th>
+          <th>{{ _('Admin') }}</th>
+          <th>{{ _('Banned') }}</th>
+          <th>
+            <span id="ul_delete_all" class="glyphicon glyphicon-trash" aria-hidden="true"></span>
+          </th>
+        </tr>
+      </thead>
+      <tbody>
+      </tbody>
+    </table>
+    
+    <div>
+      <input type="checkbox" id="disable_newusers"> <label for="disable_newusers">{{ _('Disable registration of new users') }}</label>
+    </div>
+  </div>
+
+  <div id="queue_tab_contents" class="hidden">
+    <table id="tasklist" class="table table-striped table-bordered">
+      <thead>
+        <tr>
+          <th><input class="checkbox" id="checkbox_all" type="checkbox"/></th>
+          <th>{{ _('Task ID') }}</th>
+          <th>{{ _('Task type') }}</th>
+          <th>{{ _('User e-mail') }}</th>
+          <th>{{ _('Status') }}</th>
+          <th>{{ _('Creation date') }}</th>
+          <th>{{ _('Time') }}</th>
+          <th>
+            <span id="tl_delete_all" class="glyphicon glyphicon-trash" aria-hidden="true"></span>
+          </th>
+        </tr>
+      </thead>
+      <tbody>
+      </tbody>
+    </table>
+    
+  </div>
+
+  <div id="space_tab_contents" class="hidden">
+    <table id="mtlist" class="table table-striped table-bordered">
+      <thead>
+        <tr>
+          <th><input class="checkbox" id="checkbox_all" type="checkbox"/></th>
+          <th>{{ _('Name') }}</th>
+          <th>{{ _('Language pair') }}</th>
+          <th>{{ _('Size (Mb)') }}</th>
+          <th>{{ _('Creation date') }}</th>
+          <th>{{ _('User e-mail') }}</th>
+          <th>
+            <span id="ml_delete_all" class="glyphicon glyphicon-trash" aria-hidden="true"></span>
+          </th>
+        </tr>
+      </thead>
+      <tbody>
+      </tbody>
+    </table>    
+  </div>
+
+</div>
 
 {% endblock %}
 
 {% block extrajs %}
+  <script src="{{ url_for('.static', filename='js/datatables.min.js') }}"></script>
   <script src="{{ url_for('.static', filename='js/dashboard.js') }}"></script>
 {% endblock %}
