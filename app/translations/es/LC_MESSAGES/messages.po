@@ -8,7 +8,7 @@ msgstr ""
 "Project-Id-Version: PROJECT VERSION\n"
 "Report-Msgid-Bugs-To: EMAIL@ADDRESS\n"
 "POT-Creation-Date: 2018-07-26 03:22+0000\n"
-"PO-Revision-Date: 2018-07-26 05:43+0200\n"
+"PO-Revision-Date: 2018-07-26 05:48+0200\n"
 "Language: es\n"
 "Language-Team: es <LL@li.org>\n"
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
@@ -188,7 +188,7 @@ msgstr "Bitextos"
 
 #: templates/base.html:100
 msgid "Translate &amp; more"
-msgstr "Tradudir y más"
+msgstr "Traducir y más"
 
 #: templates/base.html:113
 msgid "Logout"
@@ -329,17 +329,17 @@ msgstr ""
 #: templates/dashboard.html:42
 #, python-format
 msgid "MT engines: %(mt_size).2f GB (%(mt_engines)d engines)"
-msgstr "Motores de traducción: %(mt_size).2f GB (%(mt_engines)d engines)"
+msgstr "Motores de traducción: %(mt_size).2f GB (%(mt_engines)d motores)"
 
 #: templates/dashboard.html:43
 #, python-format
 msgid "Training corpora: %(tc_size).2f GB (%(tc_files)d items)"
-msgstr "Corpus de entrenamiento: %(tc_size).2f GB (%(tc_files)d items)"
+msgstr "Corpus de entrenamiento: %(tc_size).2f GB (%(tc_files)d elementos)"
 
 #: templates/dashboard.html:44
 #, python-format
 msgid "Language models: %(lm_size).2f GB (%(lm_models)d models)"
-msgstr "Modelos de lengua: %(lm_size).2f GB (%(lm_models)d models)"
+msgstr "Modelos de lengua: %(lm_size).2f GB (%(lm_models)d modelos)"
 
 #: templates/dashboard.html:45
 #, python-format
