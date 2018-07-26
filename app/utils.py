@@ -29,6 +29,8 @@ def get_size(start_path = '.'):
       return total_size
     elif os.path.isfile(start_path):
       return os.path.getsize(start_path)
+    else:
+      return 0
   except:
     return 0
 
