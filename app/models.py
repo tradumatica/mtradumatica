@@ -229,7 +229,7 @@ class User(UserMixin, db.Model):
   translators     = db.relationship("Translator")
 
   def size_mb(self):
-    return sum([t.size_mb for t in self.tfbitexts]) + sum([l.size_mb for l in self.language_models])
+    return sum([t.size_mb for t in self.tfbitexts if t.size_mb != None]) + sum([l.size_mb for l in self.language_models if l.size_mb != None])
   def n_engines(self):
     return len(self.tfbitexts)    
 

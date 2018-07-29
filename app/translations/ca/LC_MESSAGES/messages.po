@@ -3,37 +3,37 @@
 # This file is distributed under the same license as the PROJECT project.
 # FIRST AUTHOR <EMAIL@ADDRESS>, 2018.
 #
-#, fuzzy
 msgid ""
 msgstr ""
 "Project-Id-Version: PROJECT VERSION\n"
 "Report-Msgid-Bugs-To: EMAIL@ADDRESS\n"
 "POT-Creation-Date: 2018-07-26 03:22+0000\n"
-"PO-Revision-Date: 2018-05-20 04:18+0000\n"
-"Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
+"PO-Revision-Date: 2018-07-26 14:53+0200\n"
 "Language: ca\n"
 "Language-Team: ca <LL@li.org>\n"
-"Plural-Forms: nplurals=2; plural=(n != 1)\n"
+"Plural-Forms: nplurals=2; plural=(n != 1);\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=utf-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Generated-By: Babel 2.1.1\n"
+"Last-Translator: \n"
+"X-Generator: Poedit 2.1\n"
 
 #: views.py:151
 msgid "New user logging is temporary disabled"
-msgstr ""
+msgstr "El registre de nous usuaris està temporalment deshabilitat"
 
 #: views.py:169
 msgid "User temporary banned"
-msgstr ""
+msgstr "Usuari temporalment expulsat"
 
 #: views.py:173
 msgid "You have been logged in successfully"
-msgstr ""
+msgstr "Heu accedit al sistema"
 
 #: views.py:179
 msgid "You logged out successfully"
-msgstr ""
+msgstr "Heu sortit del sistema"
 
 #: views.py:188
 msgid "Home"
@@ -220,9 +220,7 @@ msgid "Visit MTradumàtica on Github"
 msgstr ""
 
 #: templates/bitexts.html:11
-msgid ""
-"Create bilingual corpora to train SMT systems. Add as many source-target "
-"files as you want to your bitext provided that they are parallel!"
+msgid "Create bilingual corpora to train SMT systems. Add as many source-target files as you want to your bitext provided that they are parallel!"
 msgstr ""
 
 #: templates/bitexts.html:18
@@ -320,9 +318,7 @@ msgstr ""
 
 #: templates/dashboard.html:40
 #, python-format
-msgid ""
-"%(used).2f GB used (%(percent).1f%%) of %(total).2f GB in total, from "
-"which"
+msgid "%(used).2f GB used (%(percent).1f%%) of %(total).2f GB in total, from which"
 msgstr ""
 
 #: templates/dashboard.html:42
@@ -414,9 +410,7 @@ msgid "Size (Mb)"
 msgstr ""
 
 #: templates/files.html:11
-msgid ""
-"Add either text or TMX files to MTradumàtica; you will always find them "
-"all stored here."
+msgid "Add either text or TMX files to MTradumàtica; you will always find them all stored here."
 msgstr ""
 
 #: templates/files.html:18
@@ -454,10 +448,8 @@ msgid "Download"
 msgstr ""
 
 #: templates/index.html:7
-msgid ""
-"With MTradumàtica you can train custom statistical machine\n"
-"             translation (SMT) systems. Create SMT components and "
-"understand how\n"
+msgid "With MTradumàtica you can train custom statistical machine\n"
+"             translation (SMT) systems. Create SMT components and understand how\n"
 "             they all interact together."
 msgstr ""
 
@@ -470,12 +462,9 @@ msgid "Upload files"
 msgstr ""
 
 #: templates/index.html:19
-msgid ""
-"Start uploading files: plain text files with source and\n"
-"      target language texts or TMX translation memories. If you need some"
-"\n"
-"      more text you can find it at <a href=\"http://opus.lingfil.uu.se\" "
-"target=\"_blank\">OPUS</a>."
+msgid "Start uploading files: plain text files with source and\n"
+"      target language texts or TMX translation memories. If you need some\n"
+"      more text you can find it at <a href=\"http://opus.lingfil.uu.se\" target=\"_blank\">OPUS</a>."
 msgstr ""
 
 #: templates/index.html:27 templates/index.html:32
@@ -483,10 +472,8 @@ msgid "Create Monotexts"
 msgstr ""
 
 #: templates/index.html:28
-msgid ""
-"Create monolingual corpora from one or more of your files.\n"
-"      They will be used to train language models (LMs) for the target "
-"languages of\n"
+msgid "Create monolingual corpora from one or more of your files.\n"
+"      They will be used to train language models (LMs) for the target languages of\n"
 "    your SMT systems."
 msgstr ""
 
@@ -495,10 +482,8 @@ msgid "Build LMs"
 msgstr ""
 
 #: templates/index.html:38
-msgid ""
-"See how different language models (LMs) can affect\n"
-"      translation quality, especially when they are similar to what you "
-"want to\n"
+msgid "See how different language models (LMs) can affect\n"
+"      translation quality, especially when they are similar to what you want to\n"
 "      translate."
 msgstr ""
 
@@ -511,8 +496,7 @@ msgid "Create Bitexts"
 msgstr ""
 
 #: templates/index.html:48
-msgid ""
-"Create bilingual corpora from one or more\n"
+msgid "Create bilingual corpora from one or more\n"
 "      paired source-target files. You can join two or more\n"
 "      bitexts together to create a bigger one."
 msgstr ""
@@ -526,8 +510,7 @@ msgid "Build Translators"
 msgstr ""
 
 #: templates/index.html:57
-msgid ""
-"Build a new machine translator with bitexts and language\n"
+msgid "Build a new machine translator with bitexts and language\n"
 "      models. Create translators with different texts and see\n"
 "      the effect of optimising them."
 msgstr ""
@@ -537,10 +520,8 @@ msgid "Train a Translator"
 msgstr ""
 
 #: templates/index.html:67
-msgid ""
-"See your translators in action, test and compare them.\n"
-"      Translate short texts or documents. As soon as you have a new "
-"translator, you\n"
+msgid "See your translators in action, test and compare them.\n"
+"      Translate short texts or documents. As soon as you have a new translator, you\n"
 "      will be able to try it!"
 msgstr ""
 
@@ -659,9 +640,7 @@ msgid "Resuls"
 msgstr ""
 
 #: templates/inspect.html:253
-msgid ""
-"Use the address <code>{}</code> to access the remote Moses translation "
-"service"
+msgid "Use the address <code>{}</code> to access the remote Moses translation service"
 msgstr ""
 
 #: templates/inspect.html:274
@@ -685,9 +664,7 @@ msgid "Language model trainer"
 msgstr ""
 
 #: templates/language-models.html:12
-msgid ""
-"Train language models by selecting monotexts previously defined. The "
-"training will be automatically launched!"
+msgid "Train language models by selecting monotexts previously defined. The training will be automatically launched!"
 msgstr ""
 
 #: templates/language-models.html:19
@@ -715,9 +692,7 @@ msgid "Monotext manager"
 msgstr ""
 
 #: templates/monolingual-corpora.html:12
-msgid ""
-"Create monolingual corpora to train language models. Add one or more "
-"files to each monotext provided that they are all in the same language!"
+msgid "Create monolingual corpora to train language models. Add one or more files to each monotext provided that they are all in the same language!"
 msgstr ""
 
 #: templates/monolingual-corpora.html:19
@@ -741,9 +716,7 @@ msgid "Train SMT system"
 msgstr ""
 
 #: templates/tasks.html:5
-msgid ""
-"Select a parallel corpus (both source and target sides), then click the "
-"button to start training the system."
+msgid "Select a parallel corpus (both source and target sides), then click the button to start training the system."
 msgstr ""
 
 #: templates/tasks.html:8 templates/translators.html:103
@@ -775,9 +748,7 @@ msgid "System trained"
 msgstr ""
 
 #: templates/tasks.html:46
-msgid ""
-"You can remove the current MT system by pressing the button. The MT "
-"system will be removed permanently."
+msgid "You can remove the current MT system by pressing the button. The MT system will be removed permanently."
 msgstr ""
 
 #: templates/tasks.html:49
@@ -789,17 +760,12 @@ msgid "Test SMT system"
 msgstr ""
 
 #: templates/test.html:5
-msgid ""
-"Type or paste some text in the input text area, then press 'Submit' to "
-"get the translation done."
+msgid "Type or paste some text in the input text area, then press 'Submit' to get the translation done."
 msgstr ""
 
 #: templates/translate.html:5
-msgid ""
-"Select a translator, input a text or a document and press 'Translate' to "
-"get the translation\n"
-"  done. Document types supported include HTML, TXT, DOCX, PPTX, XLSX, "
-"ODT, ODS and ODP."
+msgid "Select a translator, input a text or a document and press 'Translate' to get the translation\n"
+"  done. Document types supported include HTML, TXT, DOCX, PPTX, XLSX, ODT, ODS and ODP."
 msgstr ""
 
 #: templates/translate.html:9
@@ -827,9 +793,7 @@ msgid "Translator trainer"
 msgstr ""
 
 #: templates/translators.html:11
-msgid ""
-"Train SMT systems by combining bitexts and language models for a language"
-" pair."
+msgid "Train SMT systems by combining bitexts and language models for a language pair."
 msgstr ""
 
 #: templates/translators.html:12
@@ -890,7 +854,7 @@ msgstr ""
 
 #: templates/translators.html:179
 msgid "Optimize translator"
-msgstr ""
+msgstr "Optimitzar traductor"
 
 #~ msgid ""
 #~ msgstr ""
@@ -915,4 +879,3 @@ msgstr ""
 
 #~ msgid "Item size"
 #~ msgstr ""
-
