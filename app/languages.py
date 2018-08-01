@@ -13,7 +13,7 @@ lang_select_list = [(u"af", u"Afrikaans"),        (u"sq", u"Shqip"),           (
                     (u"hi", u"हिन्दी"),             (u"hu", u"Magyar"),          (u"id", u"Bahasa Indonesia"), (u"ga", u"Gaeilge"),
                     (u"is", u"Íslenska"),         (u"it", u"Italiano"),        (u"ja", u"日本語"),           (u"jv", u"Basa Jawa"), 
                     (u"kk", u"Қазақ тілі"),       (u"ky", u"Кыргызча"),        (u"kv", u"Коми кыв"),         (u"kg", u"Kikongo"), 
-                    (u"kj", u"Kuanyama"),         (u"la", u"Latine"),          (u"lg", u"Luganda"),          (u"ln", u"Lingála"),
+                    (u"kj", u"Kuanyama"),         (u"ku", u"Kurdî"),           (u"la", u"Latine"),           (u"ln", u"Lingála"),
                     (u"lo", u"ພາສາລາວ"),          (u"lt", u"Lietuvių kalba"),  (u"lv", u"Latviešu valoda"),  (u"gv", u"Gaelg"), 
                     (u"mk", u"Македонски јазик"), (u"mg", u"Fiteny malagasy"), (u"ml", u"മലയാളം"),           (u"mt", u"Malti"), 
                     (u"mi", u"Te reo Māori"),     (u"mn", u"Монгол хэл"),      (u"nv", u"Diné bizaad"),      (u"nd", u"IsiNdebele"), 
