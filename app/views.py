@@ -219,14 +219,14 @@ def language_models():
 def translators():
 
   data = Corpus.query.filter(Corpus.user_id == get_uid()).all()
-  translators = [t for t in TranslatorFromBitext.query.filter(TranslatorFromBitext.user_id == get_uid()).all() if t.mydatefinished != None and t.exitstatus == 0]
+  translators = [t for t in TranslatorFromBitext.query.filter(TranslatorFromBitext.user_id == get_uid()).all() if t.mydatefinished != None]
   return render_template("translators.html", title = _("Translators"), data = data, translators = translators,
                          user = get_user())
 
 @app.route('/translate', methods=["GET","POST"])
 @utils.condec(login_required, USER_LOGIN_ENABLED)
 def translate_page():
-  data = [ t for t in TranslatorFromBitext.query.filter(TranslatorFromBitext.user_id == get_uid()).all() if t.mydatefinished != None and t.exitstatus == 0 ]
+  data = [ t for t in TranslatorFromBitext.query.filter(TranslatorFromBitext.user_id == get_uid()).all() if t.mydatefinished != None]
   return render_template("translate.html", title = _("Translate"), data = data,
                          user = get_user())
 
@@ -270,9 +270,9 @@ def inspect():
   for i in User.query.all():
     all_users[i.id] = i.email
   all_users[None]=""
-  translators = [ t for t in TranslatorFromBitext.query.filter(TranslatorFromBitext.user_id == get_uid()).filter(not_(TranslatorFromBitext.basename.like("%;;;;%"))) if t.mydatefinished != None and t.exitstatus == 0 ]
-  all_real_translators = [t for t in TranslatorFromBitext.query.filter(not_(TranslatorFromBitext.basename.like("%;;;;%"))) if t.mydatefinished != None and t.exitstatus == 0 ]
-  language_m  = [ l for l in LanguageModel.query.filter(LanguageModel.user_id == get_uid()).all() if l.mydatefinished != None and  l.exitstatus == 0]
+  translators = [ t for t in TranslatorFromBitext.query.filter(TranslatorFromBitext.user_id == get_uid()).filter(not_(TranslatorFromBitext.basename.like("%;;;;%"))) if t.mydatefinished != None]
+  all_real_translators = [t for t in TranslatorFromBitext.query.filter(not_(TranslatorFromBitext.basename.like("%;;;;%"))) if t.mydatefinished != None]
+  language_m  = [ l for l in LanguageModel.query.filter(LanguageModel.user_id == get_uid()).all() if l.mydatefinished != None]
   return render_template("inspect.html", title = _("Inspect"), trans = translators, lm = language_m, 
                          all_trans = all_real_translators,
                          user = get_user(), urlmoses = urlmoses, moses_active = moses_active, all_users = all_users)
