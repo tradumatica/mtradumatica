@@ -101,7 +101,10 @@
               <ul class="dropdown-menu">
                 <li{% if request.path == '/translate' %} class="active" {% endif %}><a href="{{ url_for('translate_page') }}">{{ _('Translate') }}</a></li>
                 <li{% if request.path == '/inspect' %} class="active" {% endif %}><a href="{{ url_for('inspect') }}">{{ _('Inspect') }}</a></li>
+
+                {% if not user_login_enabled  or (user.is_authenticated and user.admin) %}
                 <li{% if request.path == '/dashboard' %} class="active" {% endif %}><a href="{{ url_for('dashboard') }}">{{ _('Dashboard') }}</a></li>
+                {% endif %}
               </ul>
             </li>
           </ul>
