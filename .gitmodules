@@ -10,3 +10,6 @@
 [submodule "software/mosesdecoder"]
 	path = software/mosesdecoder
 	url = https://github.com/moses-smt/mosesdecoder
+[submodule "software/multeval"]
+	path = software/multeval
+	url = https://github.com/jhclark/multeval.git

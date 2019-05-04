@@ -53,3 +53,4 @@ vine==1.1.4
 Werkzeug==0.10.4
 Whoosh==2.7.0
 WTForms==2.0.2
+python-Levenshtein==0.12.0

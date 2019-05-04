@@ -31,7 +31,9 @@ RUN apt-get update -q --fix-missing && \
                        build-essential \
                        libboost-all-dev \
                        software-properties-common \
-                       redis && \
+                       redis \
+                       curl \
+                       default-jdk && \
     /opt/mtradumatica/scripts/install.sh && \
     rm -Rf /opt/mtradumatica/software && \  
     apt-get autoremove -y && \

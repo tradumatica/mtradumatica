@@ -244,9 +244,12 @@ def test():
 @app.route('/dashboard')
 @utils.condec(login_required, USER_LOGIN_ENABLED)
 def dashboard():
-
-  return render_template("dashboard.html", title = _("Dashboard"), user = get_user())
-
+  u = get_user()
+  if u == None or u.admin:
+    return render_template("dashboard.html", title = _("Dashboard"), user = u)
+  else:
+    return redirect("/")
+  
 @app.route('/web_service', methods=["GET","POST"])
 @utils.condec(login_required, USER_LOGIN_ENABLED)
 def web_service():
