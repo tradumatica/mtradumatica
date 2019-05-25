@@ -1,9 +1,12 @@
+from __future__ import division
 import base64
 import json
 import languages
+import locale
 import os
 import querymodels as qm
 import magic
+import metrics
 import moses_service
 import psutil
 import regex
@@ -280,6 +283,11 @@ def inspect():
                          all_trans = all_real_translators,
                          user = get_user(), urlmoses = urlmoses, moses_active = moses_active, all_users = all_users)
 
+@app.route('/evaluate')
+def evaluate():
+  return render_template("evaluate.html", title = _("Evaluate"), user = get_user())
+  
+
 @app.route('/actions/query-lm', methods=["GET", "POST"])
 @utils.condec(login_required, USER_LOGIN_ENABLED)
 def query_lm():
@@ -336,32 +344,136 @@ def file_upload():
   mime     = magic.Magic(mime=True)
   mimetype = mime.from_file(filename)
   
+  
   if mimetype in ["application/xml", "text/xml"] and filename[-4:].lower() == ".tmx":
     for i in tmxdigest.tmx2txt_filelist(filename, filename):
       sz, nc, nw, nl, lang = utils.file_properties(i)
       mime     = magic.Magic(mime=True)
       mimetype = mime.from_file(i)
       basename = "-".join(secure_filename(os.path.basename(i)).split("-")[1:])
+      uw = metrics.count_unique_words(i)
       c = Corpus(name = basename, mydate = datetime.utcnow(),
                lang = lang if mimetype[0:4] == u"text" else u'<binary>', nlines = nl, nwords = nw,
                nchars = nc, size = sz, path = i,
-               type = mimetype, user_id = get_uid())
+               type = mimetype, user_id = get_uid(), uwords = uw)
 
       db.session.add(c)
     db.session.commit()
     os.unlink(filename)
   else:
-      
+    uw = metrics.count_unique_words(filename)    
     c = Corpus(name = basename, mydate = datetime.utcnow(),
                lang = lang if mimetype[0:4] == u"text" else u'<binary>', nlines = nl, nwords = nw,
                nchars = nc, size = sz, path = filename,
-               type = mimetype, user_id = get_uid())
+               type = mimetype, user_id = get_uid(), uwords = uw)
 
     db.session.add(c)
     db.session.commit()
 
   return jsonify(status = "OK")
+  
+@app.route('/actions/perform-evaluation', methods = ["POST"])
+def perform_evaluation():
+    reftemp = tempfile.NamedTemporaryFile(delete=False)
+    reffile = request.files["htrans"]
+    reforig = request.files["htrans"].filename
+    refname = reftemp.name
+    
+    for i in reffile:
+        reftemp.write(i)
+    reftemp.close()
 
+    records = []
+    
+    for mt in request.files.getlist("mt[]"):
+        mttemp = tempfile.NamedTemporaryFile(delete=False)
+        mtorig = mt.filename
+        mtname = mttemp.name
+        for i in mt:
+            mttemp.write(i)
+        mttemp.close()
+        n1 = tempfile.NamedTemporaryFile(delete=False)
+        n2 = tempfile.NamedTemporaryFile(delete=False)
+        l1 = n1.name
+        l2 = n2.name
+        n1.close()
+        n2.close()
+        metrics.prepare_files(refname, mtname, l1, l2)
+        try:
+            records.append({"name": mtorig,
+                            "bleu": metrics.bleu(l1,l2), 
+                            "ter": metrics.ter(l1,l2), 
+                            "wer": metrics.wer(l1,l2), 
+                            "chrf3":metrics.chrF3(l1,l2),
+                            "beer":metrics.beer(l1,l2)})
+        except:
+            return jsonify({"error":_("Invalid input files")})
+        os.unlink(l1)
+        os.unlink(l2)
+        os.unlink(mtname)
+        
+    os.unlink(refname)
+
+    return jsonify({"records":records})
+    
+@app.route('/actions/perform-evaluation-translator/<int:id>', methods=["POST"])
+@utils.condec(login_required, USER_LOGIN_ENABLED)
+def perform_eval_translator(id):
+    t = TranslatorFromBitext.query.get(id)
+    
+    reftemp = tempfile.NamedTemporaryFile(delete=False)
+    reffile = request.files["htrans"]
+    reforig = request.files["htrans"].filename
+    refname = reftemp.name
+    
+    for i in reffile:
+        reftemp.write(i)
+    reftemp.close()
+  
+  
+    text = request.files["src"].read()
+
+    t = TranslatorFromBitext.query.get(id)
+    if t is None:
+      return jsonify(status = u"Fail", message = u"Translator not available")
+    try:
+      result = mosestranslate.translate(text.decode("utf-8"), t.basename)
+    except Exception as e:
+      print(e)
+      result = ""
+    
+    
+    mttemp = tempfile.NamedTemporaryFile(delete=False)
+    mtname = mttemp.name
+    mttemp.write(result.encode("utf-8"))
+    mttemp.close()
+    
+    n1 = tempfile.NamedTemporaryFile(delete=False)
+    n2 = tempfile.NamedTemporaryFile(delete=False)
+    l1 = n1.name
+    l2 = n2.name
+    n1.close()
+    n2.close()
+
+    metrics.prepare_files(refname, mtname, l1, l2)        
+    os.unlink(refname)
+    os.unlink(mtname)
+   
+    t.bleu  = metrics.bleu(l1,l2)
+    t.ter   = metrics.ter(l1,l2)
+    t.wer   = metrics.wer(l1,l2)
+    t.chrf3 = metrics.chrF3(l1,l2)
+    t.beer  = metrics.beer(l1,l2)
+    
+    os.unlink(l1)
+    os.unlink(l2)
+    
+    db.session.add(t)
+    db.session.commit()
+    
+    return jsonify(status=u"OK")
+
+    
 @app.route('/actions/bitext-create/<string:parname>/<string:language1>/<string:language2>')
 @utils.condec(login_required, USER_LOGIN_ENABLED)
 def bitext_create(parname,language1,language2):
@@ -646,7 +758,7 @@ def file_list():
     icons      = u'<span id="peek-{0}" class="glyphicon glyphicon-eye-open" aria-hidden="true"></span> <span id="download-{0}" class="glyphicon glyphicon-download-alt" aria-hidden="true"></span>'
 
     data = [[checkbox.format(c.id),
-             c.name, c.lang, c.nlines, c.nwords, c.nchars,
+             c.name, c.lang, c.nlines, "{} ({})".format(c.nwords, c.uwords), c.nchars,
              c.mydate.strftime(date_fmt), icons.format(c.id)]
             for c in Corpus.query.filter(Corpus.user_id == get_uid()).filter(Corpus.name.like(search_str)).order_by(query_order(columns[order_col], order_dir))][start:start+length]
 #             for c in Corpus.query.filter(Corpus.name.like(search_str)).order_by(order_str)][start:start+length]
@@ -845,8 +957,8 @@ def choose_optimization_icons(trobj):
 
 def choose_optimization_cell(trobj):
   date_fmt   = u'%Y-%m-%d %H:%M:%S'
-  optimizeButtonDisabled= u'<button type="button" id="button-optimize-{0}" class="btn btn-default btn-sm" disabled="disabled"> <span class="glyphicon glyphicon-wrench" aria-hidden="true"></span>'.format(trobj.id)+_('Optimize')+'</button>'
-  optimizeButtonEnabled = u'<button type="button" id="button-optimize-{0}" class="btn btn-default btn-sm"><span class="glyphicon glyphicon-wrench" aria-hidden="true"></span>'.format(trobj.id)+_('Optimize')+'</button>'
+  optimizeButtonDisabled= u'<button type="button" id="button-optimize-{0}" class="btn btn-default btn-sm" disabled="disabled"> <span class="glyphicon glyphicon-wrench" aria-hidden="true"></span> '.format(trobj.id)+_('Optimize')+'</button>'
+  optimizeButtonEnabled = u'<button type="button" id="button-optimize-{0}" class="btn btn-default btn-sm"><span class="glyphicon glyphicon-wrench" aria-hidden="true"></span> '.format(trobj.id)+_('Optimize')+'</button>'
   optimizeButtonHidden  = u''
   if get_user() != None and not current_user.admin:
     return optimizeButtonHidden
@@ -863,6 +975,19 @@ def choose_optimization_cell(trobj):
       else:
         return trobj.mydateopt.strftime(date_fmt)+"#"+trobj.mydateoptfinished.strftime(date_fmt)
 
+def evaluation_cell(trobj):
+  evaluateButtonDisabled = u'<button type="button" id="button-evaluate-{}" class="btn btn-default btn-sm" disabled="disabled"><span class="glyphicon glyphicon-check" aria-hidden="true"></span> '.format(trobj.id)+_('Evaluate')+'</button>'
+  evaluateButtonEnabled = u'<button type="button" id="button-evaluate-{}" class="btn btn-default btn-sm"><span class="glyphicon glyphicon-check" aria-hidden="true"></span> '.format(trobj.id)+_('Evaluate')+'</button>'
+  evaluateButtonHidden  = u''
+  
+  return evaluateButtonEnabled + ("" if trobj.bleu == None else "<br/><small>BLEU: {:.2f}; chrF3: {:.2f};</small><br/> <small>TER: {:.2f}; WER: {:.2f};</small><br/><small>BEER: {:.2f}</small>".format(trobj.bleu,trobj.chrf3,trobj.ter,trobj.wer, trobj.beer))
+  if get_user() != None:
+    return evaluateButtonHidden
+  if trobj.task_id != None and celerytasks.train_smt.AsyncResult(trobj.task_id.state) in ['PENDING', 'PROGRESS']:
+    return evaluateButtonDisabled
+  else:
+    return evaluateButtonEnabled + ("" if trobj.bleu == None else "<br/><small>BLEU: {:.2f}; chrF3: {:.2f};</small><br/> <small>TER: {:.2f}; WER: {:.2f};</small><br/><small>BEER: {:.2f}</small>".format(trobj.bleu,trobj.chrf3,trobj.ter,trobj.wer, trobj.beer))
+    
 @app.route('/actions/translator-list', methods=["POST"])
 @utils.condec(login_required, USER_LOGIN_ENABLED)
 def translator_list():
@@ -888,7 +1013,7 @@ def translator_list():
     checkbox   = u'<span class="checkbox"><input class="file_checkbox" type="checkbox" id="checkbox-{0}"/></div>'
     date_fmt   = u'%Y-%m-%d %H:%M:%S'
 
-    data = [[checkbox.format(c.id),c.name, c.lang1+"-"+c.lang2, c.bitext.name if c.bitext != None else "", c.languagemodel.name if c.languagemodel != None else "" , c.mydate.strftime(date_fmt) , c.mydatefinished.strftime(date_fmt) if c.mydatefinished != None else "" , choose_optimization_cell(c) ,  choose_optimization_icons(c)  ]
+    data = [[checkbox.format(c.id),c.name, c.lang1+"-"+c.lang2, c.bitext.name if c.bitext != None else "", c.languagemodel.name if c.languagemodel != None else "" , c.mydate.strftime(date_fmt) , c.mydatefinished.strftime(date_fmt) if c.mydatefinished != None else "" , choose_optimization_cell(c) ,  evaluation_cell(c), choose_optimization_icons(c)  ]
             for c in TranslatorFromBitext.query.filter(TranslatorFromBitext.user_id == get_uid()).filter(TranslatorFromBitext.name.like(search_str)).order_by(query_order(columns[order_col], order_dir))][start:start+length]
 #             for c in Corpus.query.filter(Corpus.name.like(search_str)).order_by(order_str)][start:start+length]
     return jsonify(draw            = draw,
@@ -1256,7 +1381,7 @@ def translate_doc(id):
   basename    = secure_filename(file.filename)
   translator  = TranslatorFromBitext.query.get(id)
 
-  tmpdir      = translate.translate_dir_setup(file)
+  tmpdir      = mosestranslate.translate_dir_setup(file)
   task        = celerytasks.translate.apply_async(args=[tmpdir, translator.basename, doctype])
   
   translation = Translation(t_name   = translator.name, 
@@ -1269,7 +1394,7 @@ def translate_doc(id):
                             task_id  = task.id,
                             user_id  = get_uid())
   db.session.add(translation)
-  db.commit()
+  db.session.commit()
     
   return jsonify(task_id=task.id)
 

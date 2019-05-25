@@ -1,5 +1,7 @@
 $('body .dropdown-toggle').dropdown(); 
 
+translator_id = "";
+
 table=$('#translatorlist').DataTable({
 
   serverSide: true,
@@ -7,7 +9,7 @@ table=$('#translatorlist').DataTable({
           url: "actions/translator-list",
           type: "POST"},
   columnDefs: [{ orderable:false,
-                 targets:[0,6,7,8]}],
+                 targets:[0,6,7,8,9]}],
   order : [[5, "desc"]],
   createdRow : function ( row, data, index ) {
 
@@ -148,6 +150,7 @@ $('body').on('click', 'span.glyphicon-remove', function(){
 //Manage optimization modal
 var idOfTranslatorToOptimize = -1;
 $('tbody').on('click', 'button', function() {
+    if($(this).attr("id").startsWith("button-optimize-")){
 	domidparts=$(this).attr("id").split("-");
 	//asign id to global variable
 	idOfTranslatorToOptimize=domidparts[2];
@@ -169,7 +172,21 @@ $('tbody').on('click', 'button', function() {
 	    //SHow modal
 	    $('#modal-optimize').modal("show");
 	});
-
+    }
+    else if($(this).attr("id").startsWith("button-evaluate-"))
+    {  
+        $('#src').val('');
+        $('#htrans').val('');
+        $('#translator_name').html($(this).closest("tr").find("td:nth-child(2)").text());
+        langpair = $(this).closest("tr").find("td:nth-child(3)").text().split("-");
+        
+        $('#src_lang_indication').html("["+langpair[0]+"]");
+        $('#trg_lang_indication').html("["+langpair[1]+"]");
+        $('#modal-evaluate').modal("show");
+    	domidparts=$(this).attr("id").split("-");
+	//asign id to global variable
+	translator_id=domidparts[2];
+    }
 });
 
 //submit optimize form
@@ -185,6 +202,56 @@ $('#buttonOptimize').click(function(){
 	console.log( "error" );
   })
 });
+
+$("#evalform").submit(function(e){
+  return false;
+});
+
+
+$('#button_evaluate').click(function(){
+  var form = $("#evalform")[0];
+  var data = new FormData(form);
+  
+  $('#modal-evaluate').modal("hide");
+  
+  $("#my-please-wait").modal("show");
+
+  $.ajax({
+    type: "POST",
+    enctype: "multipart/form-data",
+    url: "actions/perform-evaluation-translator/"+translator_id,
+    cache: false,
+    contentType: false,
+    processData: false,
+    data: data,
+    success: function(result){
+      /* Update table */
+      table.ajax.reload();
+      $("#my-please-wait").modal("hide");
+    }
+  });
+});
+
+function refreshSubmitEvaluate(){
+  if ($("#htrans").val().trim() == "" || $("#src").val().trim() == "")
+  {
+    $("#button_evaluate").addClass("disabled");
+  }
+  else
+  {
+    $("#button_evaluate").removeClass("disabled");
+  }
+}
+
+
+$("#htrans").change(function(){
+  refreshSubmitEvaluate();
+});
+
+$("#src").change(function(){
+  refreshSubmitEvaluate();
+});
+
 
 
 //Put selected language in form, list monolingual corpora

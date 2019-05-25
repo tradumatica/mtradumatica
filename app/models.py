@@ -25,9 +25,11 @@ class Corpus(db.Model):
   nlines  = db.Column(db.Integer)
   nwords  = db.Column(db.Integer)
   nchars  = db.Column(db.Integer)
+  uwords  = db.Column(db.Integer)
   size    = db.Column(db.Integer)
-  path    = db.Column(db.String(256))
+  path    = db.Column(db.String(256))  
   user_id = db.Column(db.Integer, db.ForeignKey('users.id'))
+  
   
   def __repr__(self):
     return "<Corpus {0} {1} {2} {3} {4}>".format(self.name, self.nlines, self.nwords, self.nchars, self.lang)
@@ -39,7 +41,7 @@ class Corpus(db.Model):
             'mydate': self.mydate,
 	    'type': self.type,
 	    'lang': self.lang,
-	    'nlines': self.nlines,
+  	    'nlines': self.nlines,
 	    'nwords': self.nwords,
 	    'nchars': self.nchars,
 	    'size': self.size,
@@ -157,6 +159,11 @@ class TranslatorFromBitext(db.Model):
   moses_served      = db.Column(db.Boolean, default=False)
   moses_served_port = db.Column(db.Integer)
   size_mb           = db.Column(db.Integer)
+  bleu              = db.Column(db.Float)
+  chrf3             = db.Column(db.Float)
+  wer               = db.Column(db.Float)
+  ter               = db.Column(db.Float)
+  beer              = db.Column(db.Float)
   user_id           = db.Column(db.Integer, db.ForeignKey('users.id'))
   
   def get_user(self):

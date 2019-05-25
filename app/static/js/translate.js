@@ -65,7 +65,7 @@ $("#form-doctrans").submit(function(e){
 //  $("#my-please-wait").modal("show");
   
   $.ajax({
-    url: "actions/translatedoc/"+$("#translatorsel2").val(),
+    url: "actions/translate-doc/"+$("#translatorsel2").val(),
     data: data,
     cache: false,
     contentType: false,

@@ -87,34 +87,47 @@
         <div id="navbar" class="collapse navbar-collapse">
           <ul class="nav navbar-nav">
             <li class="dropdown">
-              <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">{{ _('Train') }} <span class="caret" /></a>
+              <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">{{ _('Data') }} <span class="caret"/></a>
               <ul class="dropdown-menu">
                 <li{% if request.path == '/files' %} class="active"{% endif %}><a href="{{ url_for('files') }}">{{ _('Files') }}</a></li>
-                <li{% if request.path == '/monolingual_corpora' %} class="active"{% endif %}><a href="{{ url_for('monolingual_corpora') }}">{{ _('Monotexts') }}</a></li>
-                <li{% if request.path == '/language_models' %} class="active"{% endif %}><a href="{{ url_for('language_models') }}">{{ _('Language models') }}</a></li>	
+                <li{% if request.path == '/monolingual_corpora' %} class="active"{% endif %}><a href="{{ url_for('monolingual_corpora') }}">{{ _('Monotexts') }}</a></li>              
                 <li{% if request.path == '/bitexts' %} class="active"{% endif %}><a href="{{ url_for('bitexts') }}">{{_('Bitexts') }}</a></li>
+              </ul>
+            </li>
+            <li class="dropdown">
+              <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">{{ _('Train') }} <span class="caret" /></a>
+              <ul class="dropdown-menu">
+                <li{% if request.path == '/language_models' %} class="active"{% endif %}><a href="{{ url_for('language_models') }}">{{ _('Language models') }}</a></li>	
                 <li{% if request.path == '/translators' %} class="active"{% endif %}><a href="{{ url_for('translators') }}">{{ _('Translators') }}</a></li>
               </ul>
             </li>
             <li class="dropdown">
-              <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">{{ _('Translate &amp; more') }} <span class="caret" /></a>
+              <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">{{ _('Translate') }} <span class="caret" /></a>
               <ul class="dropdown-menu">
                 <li{% if request.path == '/translate' %} class="active" {% endif %}><a href="{{ url_for('translate_page') }}">{{ _('Translate') }}</a></li>
                 <li{% if request.path == '/inspect' %} class="active" {% endif %}><a href="{{ url_for('inspect') }}">{{ _('Inspect') }}</a></li>
-                <li{% if request.path == '/evaluate' %} class="active" {% endif %}><a href="{#{{ url_for('evaluate') }}#}">{{ _('Evaluate') }}</a></li>
-
-                {% if not user_login_enabled  or (user.is_authenticated and user.admin) %}
-                <li{% if request.path == '/dashboard' %} class="active" {% endif %}><a href="{{ url_for('dashboard') }}">{{ _('Dashboard') }}</a></li>
-                {% endif %}
               </ul>
             </li>
+            <li{% if request.path == '/evaluate' %} class="active" {% endif %}><a href="{{ url_for('evaluate') }}">{{ _('Evaluate') }}</a></li>
           </ul>
           <ul class="nav navbar-nav navbar-right">
             <li> </li>
             {% if not user_login_enabled %}  
+            {% elif user.is_authenticated and user.admin %}
+            <li class="dropdown">
+              <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false" style="padding-top:15px; padding-bottom:15px; position:relative; line-height:20px; color:#d00;">{{ user.username }} <span class="caret"/></a>
+              <ul class="dropdown-menu">
+                <li{% if request.path == '/dashboard' %} class="active" {% endif %}><a href="{{ url_for('dashboard') }}">{{ _('Dashboard') }}</a></li>
+                <li><a href="{{ url_for('logout') }}">{{ _('Logout') }}</a></li>            
+              </ul>
+            </li>
             {% elif user.is_authenticated %}
-            <li style="padding-top:15px; padding-bottom:15px; position:relative; line-height:20px; {% if user.admin %} color:#d00; {% else %} color:#eee; {% endif %}">{{ user.username }}</li>
-            <li><a href="{{ url_for('logout') }}">{{ _('Logout') }}</a></li>
+            <li class="dropdown">
+              <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false" style="color: #eee;">{{ user.username }} <span class="caret"/></a>
+              <ul class="dropdown-menu">
+                <li><a href="{{ url_for('logout') }}">{{ _('Logout') }}</a></li>            
+              </ul>
+            </li>           
             {% else %}
             <li><a href="{{ url_for('google.login') }}">{{ _('Login') }}</a></li>
             {% endif %}

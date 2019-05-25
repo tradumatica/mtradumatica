@@ -19,13 +19,13 @@ def explore(filename):
     def se(name, attrs):
       if name == u"tuv":
         if u"xml:lang" in attrs:
-          if attrs[u"xml:lang"] not in langset:
-            langlist.append(attrs[u"xml:lang"])
-            langset.add(attrs[u"xml:lang"])
+          if attrs[u"xml:lang"].lower() not in langset:
+            langlist.append(attrs[u"xml:lang"].lower())
+            langset.add(attrs[u"xml:lang"].lower())
         elif u"lang" in attrs:
           if attrs[u"lang"] not in langset:
-            langlist.append(attrs[u"lang"])
-            langset.add(attrs[u"lang"])
+            langlist.append(attrs[u"lang"].lower())
+            langset.add(attrs[u"lang"].lower())
     
     p = xml.parsers.expat.ParserCreate()
     p.StartElementHandler = se
@@ -43,9 +43,9 @@ def tmx2txt(fd, output, langlist):
       tu = {i:u'' for i in langlist}
     elif name == u"tuv":
       if u"xml:lang" in attrs:
-        curlang = attrs[u"xml:lang"]
+        curlang = attrs[u"xml:lang"].lower()
       elif u"lang" in attrs:
-        curlang = attrs[u"lang"]      
+        curlang = attrs[u"lang"].lower()
     elif name == u"seg":
       curtuv = []
       intuv = True

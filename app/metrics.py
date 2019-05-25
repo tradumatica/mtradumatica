@@ -11,7 +11,7 @@ def count_unique_words(myfile):
     cmd = 'grep -o "\\b[[:alnum:]]\\+\\b" {} |sort -f -u|wc -l'.format(myfile)
     p = subprocess.Popen(cmd, shell=True, stdout=subprocess.PIPE)
     out = p.communicate()
-    return int(out)
+    return int(out[0])
 
 # Based on Rico Sennrich's implementation of chrF3 with fixed parameters
 # Spaces, Beta = 3, ngram_size = 6
@@ -50,8 +50,8 @@ def chrF3(reference, hypothesis):
                 precision += (correct[i] + smooth) / (total_hyp[i] + smooth)
                 recall += (correct[i] + smooth) / (total_ref[i] + smooth)
 
-        precision /= max_length
-        recall /= max_length
+        precision /= float(max_length)
+        recall /= float(max_length)
 
         return (1 + beta**2) * (precision*recall) / ((beta**2 * precision) + recall), precision, recall
 
@@ -93,6 +93,14 @@ def ter(reference, hypothesis):
     p = subprocess.Popen(cmd.format(reference, hypothesis), shell=True, stdout=subprocess.PIPE, cwd=wd)
     out = p.communicate()
     return min(100.0,float(out[0]))
+
+def beer(reference, hypothesis):
+    cmd = "./beer -r {} -s {}"
+    wd = os.path.join(os.path.dirname(os.path.dirname(os.path.realpath(__file__))), "beer-lite")
+    p = subprocess.Popen(cmd.format(reference, hypothesis), shell=True, stdout=subprocess.PIPE, cwd=wd)
+    out = p.communicate()
+    return min(100.0, 100*float(out[0].split(" ")[-1]))
+    
 
 def wer(reference, hypothesis):
     def word_to_char(mystr1, mystr2):
@@ -161,7 +169,6 @@ def prepare_files(refi, hypi, refo, hypo, max_lines = 3000):
     fro.close()
     fho.close()
 
-
 if __name__ == '__main__':
     import tempfile
     import sys
@@ -180,3 +187,5 @@ if __name__ == '__main__':
     print("TER {:2.2f}".format(ter(l1,l2)))
     print("WER {:2.2f}".format(wer(l1,l2)))
     print("chrF3 {:2.2f}".format(chrF3(l1,l2)))
+    print("BEER {:2.2f}".format(beer(l1,l2)))
+    print(count_unique_words(sys.argv[1]))

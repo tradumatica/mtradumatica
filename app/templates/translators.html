@@ -19,10 +19,11 @@
         <th>{{ _('Translator name') }}</th>
         <th>{{ _('Language pair') }}</th>
 	<th>{{ _('Bitext') }}</th>
-        <th>{{ _('Language model') }}</th>
+        <th>{{ _('LM') }}</th>
         <th>{{ _('Date') }}</th>
-	<th>{{ _('Training time') }}</th>
-	<th>{% if user == None or user.admin %} {{ _('Optimization time') }} {% endif %}</th>
+	<th>{{ _('Training') }}</th>
+	<th>{% if user == None or user.admin %} {{ _('Optimization') }} {% endif %}</th>
+	<th>{{ _('Evaluation') }}</th>
         <th>
           <span id="delete_all" class="glyphicon glyphicon-trash" aria-hidden="true"></span> 
           <span id="addbutton" class="glyphicon glyphicon-plus-sign" aria-hidden="true"></span>
@@ -201,6 +202,51 @@
 </div>
 
 
+<div class="modal fade" id="modal-evaluate" role="dialog">
+  <div class="modal-dialog">
+	<div class="modal-content">
+	  <div class="modal-header">
+		<button type="button" class="close" data-dismiss="modal">&times;</button>
+		<h4 class="modal-title">{{ _('Evaluate translator') }} '<span id="translator_name"></span>'</h4>
+	  </div>
+	  <div class="modal-body">
+	  
+              <form class="form-horizontal" id="evalform" method="POST" enctype="multipart/form-data">
+              <fieldset>
+                <div class="form-group">
+                  <label class="col-md-5 control-label" for="src">{{ _('Original language text') }} <span id="src_lang_indication"></span></label>
+                  <div class="col-md-5"> <input id="src" name="src" class="input-file" type="file"/></div>
+                </div>
+                <div class="form-group">
+                  <label class="col-md-5 control-label" for="htrans">{{ _('Human translation') }} <span id="trg_lang_indication"></span></label>
+                  <div class="col-md-5"> <input id="htrans" name="htrans" class="input-file" type="file"/></div>
+                </div>
+              </fieldset>
+              </form>
+          </div>
+	  <div class="modal-footer">
+		<button type="button" class="btn btn-default" data-dismiss="modal">{{ _('Close') }}</button>
+		<button type="button" id="button_evaluate" class="btn btn-primary disabled">{{ _('Evaluate') }}</button>
+	  </div>
+	</div>
+  </div>
+</div>
+
+<div class="modal fade bs-example-modal-sm" id="my-please-wait" tabindex="-1"
+    role="dialog" aria-hidden="true" data-backdrop="static">
+  <div class="modal-dialog modal-sm">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h4 class="modal-title"><span class="glyphicon glyphicon-time"></span> {{ _('Please wait') }}</h4>
+      </div>
+      <div class="modal-body">
+        <div class="progress">
+          <div class="progress-bar progress-bar-info progress-bar-striped active" style="width:100%"></div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
 
 
 
