@@ -139,8 +139,8 @@ def wer(reference, hypothesis):
     return min(100.0,sum(res)*100/float(sum(lens)))
         
 def prepare_files(refi, hypi, refo, hypo, max_lines = 3000):
-    fri = io.open(refi, "r")
-    fhi = io.open(hypi, "r")
+    fri = io.open(refi, "r", errors="ignore")
+    fhi = io.open(hypi, "r", errors="ignore")
     fro = io.open(refo, "w")
     fho = io.open(hypo, "w")
     

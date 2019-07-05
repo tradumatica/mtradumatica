@@ -19,8 +19,12 @@ EXECUTABLE_FOLDER     = os.path.join(os.path.join(basedir, "venv"), "bin")
 PROC_FOLDER           = os.path.join(basedir, "proc")
 TRANSLATION_PROGRAM   = os.path.join(SCRIPTS_FOLDER, "translate-docs.sh")
 TRANSLATION_PROGRAM_TRACE = os.path.join(SCRIPTS_FOLDER, "translate-trace.sh")
+REBUNDLE_PROGRAM      = os.path.join(SCRIPTS_FOLDER, "rebundle.sh")
 QUERY_LM_PROGRAM      = os.path.join(EXECUTABLE_FOLDER, "query")
 QUERY_TM_PROGRAM      = os.path.join(EXECUTABLE_FOLDER, "queryPhraseTableMin")
+TMX_UNFORMAT_SCRIPT   = os.path.join(SCRIPTS_FOLDER, "tmx-unformat.py")
+TMX_REFORMAT_SCRIPT   = os.path.join(SCRIPTS_FOLDER, "tmx-reformat.py")
+
 CELERY_BROKER_URL     = 'redis://localhost:6379/0'
 CELERY_RESULT_BACKEND = 'redis://localhost:6379/0'
 CELERYD_CONCURRENCY   = 4

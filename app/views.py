@@ -31,6 +31,7 @@ from random import randint
 from sqlalchemy import asc, desc, not_
 from sqlalchemy.orm.exc import NoResultFound
 from werkzeug import secure_filename
+from werkzeug.datastructures import ImmutableMultiDict
 from .models import Corpus, SMT, Translator, Bitext, AddCorpusBitext, MonolingualCorpus, AddCorpusMonoCorpus, LanguageModel, TranslatorFromBitext, Translation, User, OAuth
 
 USER_LOGIN_ENABLED =  app.config["USER_LOGIN_ENABLED"] if "USER_LOGIN_ENABLED" in app.config else False
@@ -42,8 +43,16 @@ login_manager.login_view = 'google.login'
 login_manager.login_message = ''
 
 
-#google_blueprint = make_google_blueprint(scope = ["profile", "email"])
-google_blueprint = make_google_blueprint(scope = ["https://www.googleapis.com/auth/userinfo.email",
+## History of scope changes:
+# Before 2018
+# google_blueprint = make_google_blueprint(scope = ["profile", "email"])
+
+# 2018
+# google_blueprint = make_google_blueprint(scope = ["https://www.googleapis.com/auth/userinfo.email",
+#                                                   "https://www.googleapis.com/auth/userinfo.profile"])
+# Since June 2019
+google_blueprint = make_google_blueprint(scope = ["openid",
+                                                  "https://www.googleapis.com/auth/userinfo.email",
                                                   "https://www.googleapis.com/auth/userinfo.profile"])
 if USER_LOGIN_ENABLED:
   app.register_blueprint(google_blueprint, url_prefix = '/google_login')
@@ -1372,6 +1381,7 @@ def translatechoose(id):
 
   return jsonify(status = u"Fail", message = u"Translation failed")
 
+"""
 @app.route('/actions/translate-doc/<int:id>', methods=["POST"])
 @utils.condec(login_required, USER_LOGIN_ENABLED)
 def translate_doc(id):
@@ -1383,7 +1393,6 @@ def translate_doc(id):
 
   tmpdir      = mosestranslate.translate_dir_setup(file)
   task        = celerytasks.translate.apply_async(args=[tmpdir, translator.basename, doctype])
-  
   translation = Translation(t_name   = translator.name, 
                             lang1    = translator.lang1, 
                             lang2    = translator.lang2,
@@ -1397,6 +1406,64 @@ def translate_doc(id):
   db.session.commit()
     
   return jsonify(task_id=task.id)
+"""
+
+@app.route('/actions/translate-doc', methods=["POST"])
+@utils.condec(login_required, USER_LOGIN_ENABLED)
+def translate_doc():
+  file        = request.files['file']
+  filename    = file.filename
+  doctype     = file.filename.split(".")[-1]
+  id          = request.form['translatorsel2']
+  tmx         = 'tmxDownload' in request.form
+  mimetype    = file.content_type
+  basename    = secure_filename(file.filename)
+  
+  srcfile = tempfile.NamedTemporaryFile(delete=False)
+  srcfile.close()
+  file.save(srcfile.name)
+
+  translator  = TranslatorFromBitext.query.get(id)  
+  
+  bname = ".".join(basename.split(".")[:-1])
+  if tmx:  
+    fname = mosestranslate.translate_document_tmx(srcfile.name, translator.basename, doctype, bname, translator.lang1, translator.lang2)
+    retval = send_file(fname, as_attachment=True, attachment_filename="{}-{}-{}.zip".format(bname , translator.lang1, translator.lang2))
+      
+    os.unlink(fname)
+    os.unlink(srcfile.name)
+    return retval    
+  else:
+    fname = mosestranslate.translate_document(srcfile.name, translator.basename, doctype)
+    retval = send_file(fname, as_attachment=True, attachment_filename="{}-{}-{}.{}".format(bname, translator.lang1, translator.lang2, doctype))
+  
+    os.unlink(fname)
+    os.unlink(srcfile.name)
+    return retval
+
+@app.route('/actions/translate-tmx', methods=["POST"])
+@utils.condec(login_required, USER_LOGIN_ENABLED)
+def translate_tmx():
+  file        = request.files['file']
+  filename    = file.filename
+  doctype     = file.filename.split(".")[-1]
+  id          = request.form['translatorsel3']
+  mimetype    = file.content_type
+  basename    = secure_filename(file.filename)
+  
+  srcfile = tempfile.NamedTemporaryFile(delete=False)
+  srcfile.close()
+  file.save(srcfile.name)
+
+  translator  = TranslatorFromBitext.query.get(id)  
+  
+  bname = ".".join(basename.split(".")[:-1])
+  
+  fname = mosestranslate.translate_tmx(srcfile.name, translator.basename, translator.lang1, translator.lang2)
+  retval = send_file(fname, as_attachment=True, attachment_filename="{}-{}-{}.tmx".format(bname , translator.lang1, translator.lang2))
+  os.unlink(fname)
+  os.unlink(srcfile.name)
+  return retval    
 
 @app.route('/actions/translate-text/<int:id>', methods=["POST"])
 @utils.condec(login_required, USER_LOGIN_ENABLED)
@@ -1422,6 +1489,20 @@ def translate_text(id):
   db.commit()
     
   return jsonify(task_id=task.id)
+
+@app.route('/actions/status-translate/<int:id>')
+@utils.condec(login_required, USER_LOGIN_ENABLED)
+def status_translate(id):
+  #Get Translation from DB and task from celery
+  trans = Translation.query.get(id)
+  if trans is None:
+    return jsonify(status = u"not found")
+  t = celerytasks.translate.AsyncResult(trans.task_id)
+  if t.state in ['PENDING','PROGRESS']:
+    return jsonify(status = u"translating")
+  else:
+    return jsonify(status = u"done")
+
   
 @app.route('/actions/downloadresult/<string:filename>/<string:download_as>')
 @utils.condec(login_required, USER_LOGIN_ENABLED)

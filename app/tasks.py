@@ -1,9 +1,10 @@
 import train
+import translate as mosestranslate
 from celery import Celery
 from datetime import datetime
 from app import app, db
 import shutil
-from .models import LanguageModel, TranslatorFromBitext, Corpus, Bitext, MonolingualCorpus
+from .models import LanguageModel, TranslatorFromBitext, Corpus, Bitext, MonolingualCorpus, Translation
 import time
 import os
 from utils import get_size
@@ -103,8 +104,8 @@ def train_lm(self, lm_id):
 
 @celery.task(bind=True)
 def translate(self, path, translator, doctype):
-  proc   = translate.translate_dir(path, translator, doctype)
-  self.update_state(state="PROGRESS", meta={'proc_id': proc.pid, 'tmpdir': tmpdir})
+  proc   = mosestranslate.translate_dir(path, translator, doctype)
+  self.update_state(state="PROGRESS", meta={'proc_id': proc.pid, 'tmpdir': path})
   proc.communicate()
   
   tobjs          = [t for t in Translation.query.filter(Translation.task_id == self.request.id)]

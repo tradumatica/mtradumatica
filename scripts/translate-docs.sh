@@ -4,6 +4,10 @@ CORES=$(getconf _NPROCESSORS_ONLN)
 
 export PATH=$ROOT/venv/local/bin:$PATH
 export LD_LIBRARY_PATH=$ROOT/venv/local/lib
+
+GENERATE_TMX=0
+GLOBAL_TMX_DIR=$(mktemp -d)
+
 TOK=$ROOT/venv/local/scripts/tokenizer/tokenizer.perl
 DETOK=$ROOT/venv/local/scripts/tokenizer/detokenizer.perl
 TRU=$ROOT/venv/local/scripts/recaser/truecase.perl
@@ -128,6 +132,45 @@ HERE
 )
 }
 
+create_tmx ()
+{
+L1=$1
+L2=$2
+python <(cat <<HERE
+import sys
+from xml.sax.saxutils import escape
+
+
+print('<?xml version="1.0" encoding="utf-8"?>')
+print('<tmx version="1.4">')
+print('<header creationtool="mtradumatica" creationtoolversion="1.0" datatype="xml" segtype="sentence" creationid="anonymous">')
+print('</header>')
+print('<body>')
+
+
+l1 = sys.argv[1]
+l2 = sys.argv[2]
+
+for i in sys.stdin:
+    parts = i.strip().split("\\t")
+    if len(parts) == 2:
+        print('  <tu>')
+        print('    <tuv xml:lang="{}">'.format(l1))
+        print('      <seg>{}</seg>'.format(escape(parts[0])))
+        print('    </tuv>')
+        print('    <tuv xml:lang="{}">'.format(l2))
+        print('      <seg>{}</seg>'.format(escape(parts[1])))
+        print('    </tuv>')
+        print('  </tu>')
+
+print('</body>')
+print('</tmx>')
+
+HERE
+) $L1 $L2
+}
+
+
 get_translators()
 {
   PARAM=$1
@@ -144,10 +187,16 @@ translate()
 {
   MYTMPDIR=$(mktemp -d)
   cat >$MYTMPDIR/gen_input
-
+  
+  L1F=""
   for TRANS in $(get_translators $ENGINE); do
     L1=$(python -c 'print "'$TRANS'".split("-")[1]')
-    L2=$(python -c 'print "'$TRANS'".split("-")[2]')
+    L2=$(python -c 'print "'$TRANS'".split("-")[2]')    
+
+    if [ "$L1F" = "" ]; then
+      L1F=$L1
+    fi
+    
     if [[ -e $MYTMPDIR/gen_output ]]; then
       mv $MYTMPDIR/gen_output $MYTMPDIR/gen_input
       #cat $MYTMPDIR/gen_input
@@ -155,12 +204,16 @@ translate()
     translate_chain $MYTMPDIR $TRANS
   done
 
+  if [ $GENERATE_TMX = "1" ]; then
+    paste $MYTMPDIR/cleansrc_0 $MYTMPDIR/detok | create_tmx $L1F $L2 > "$GLOBAL_TMX_DIR/tmx"
+  fi
+
   if [[ -e $MYTMPDIR/gen_output ]]; then
     cat $MYTMPDIR/gen_output
   else
     cat $MYTMPDIR/gen_input
   fi
-
+  
   rm -Rf $MYTMPDIR
 }
 
@@ -179,7 +232,13 @@ cd $ROOT/translators/$ENGINE
 
 cat $MYTMPDIR/gen_input | \
 f2p | \
-unbraid $MYTMPDIR/unb | \
+unbraid $MYTMPDIR/unb >$MYTMPDIR/cleansrc
+
+if [[ ! -e $MYTMPDIR/cleansrc_0 ]]; then
+  cp $MYTMPDIR/cleansrc $MYTMPDIR/cleansrc_0
+fi
+
+cat $MYTMPDIR/cleansrc | \
 $TOK -q -l $L1 2>/dev/null | \
 $TRU --model sl.tcm | \
 moses -monotone-at-punctuation -v 0 -f $INIFILE --threads $CORES | \
@@ -189,6 +248,10 @@ $DETOK -q -l $L2 2>/dev/null > $MYTMPDIR/detok
 braid $MYTMPDIR/unb <$MYTMPDIR/detok | \
 p2f >$MYTMPDIR/gen_output
 
+
+if [ $GENERATE_TMX = "1" ]
+then paste $MYTMPDIR/cleansrc $MYTMPDIR/detok >>$GLOBAL_TMX_DIR/tmx
+fi
 }
 
 message ()
@@ -197,7 +260,9 @@ message ()
   echo " -f format        one of: txt (default), html, rtf, odt, docx, wxml, xlsx, pptx,"
   echo "                  xpresstag, html-noent, latex, latex-raw"
   echo " -n               don't insert period before possible sentence-ends"
+  echo " -t               generate a tar bundle with the file and a TMX"
   echo " -h               display this help"
+
   echo " direction        String of the form L1-L2[;;;;L2-L3]+"
   echo " in               input file (stdin by default)"
   echo " out              output file (stdout by default)"
@@ -260,6 +325,7 @@ translate_latex()
   else locale_utf8
   fi
 
+  ST=$(mktemp)
   "$APERTIUM_PATH/apertium-prelatex" "$INFILE" | \
     "$APERTIUM_PATH/apertium-utils-fixlatex" | \
     "$APERTIUM_PATH/apertium-deslatex" ${FORMAT_OPTIONS} | \
@@ -270,7 +336,31 @@ translate_latex()
       translate | \
       "$APERTIUM_PATH/apertium-relatex"| \
       awk '{gsub("</CONTENTS-noeos>", "</CONTENTS>"); print;}' | \
-      if [ "$REDIR" == "" ]; then "$APERTIUM_PATH/apertium-postlatex-raw"; else "$APERTIUM_PATH/apertium-postlatex-raw" > "$SALIDA"; fi
+      "$APERTIUM_PATH/apertium-postlatex-raw" >"$ST"
+      
+    if [ "$REDIR" == ""]; then
+      if [ "$GENERATE_TMX" = "0" ]; then
+        cat "$ST"
+      else         
+        cat "$ST" > "$GLOBAL_TMX_DIR/document"
+        tar cf "$GLOBAL_TMX_DIR/bundle.tar" --directory="$GLOBAL_TMX_DIR" document tmx
+        cat "$GLOBAL_TMX_DIR/bundle.tar"
+      fi
+    else
+      if [ "$GENERATE_TMX" = "0" ]; then
+        cat "$ST" > "$SALIDA"
+      else
+        cat "$ST" > "$GLOBAL_TMX_DIR/document"
+        tar cf "$GLOBAL_TMX_DIR/bundle.tar" --directory="$GLOBAL_TMX_DIR" document tmx
+        cat "$GLOBAL_TMX_DIR/bundle.tar" > "$SALIDA"
+      fi
+    fi
+    
+    rm -Rf $ST
+    
+    if [ "$GENERATE_TMX" = "1" ]; then
+      rm -Rf $GLOBAL_TMX_DIR
+    fi
 
     if [ "$BORRAFICHERO" = "true" ]; then
       rm -Rf "$INFILE"
@@ -293,6 +383,7 @@ translate_latex_raw()
   else locale_utf8
   fi
 
+  ST=$(mktemp)
   "$APERTIUM_PATH/apertium-prelatex" "$INFILE" | \
     "$APERTIUM_PATH/apertium-utils-fixlatex" | \
     "$APERTIUM_PATH/apertium-deslatex" ${FORMAT_OPTIONS} | \
@@ -303,7 +394,32 @@ translate_latex_raw()
       translate | \
       "$APERTIUM_PATH/apertium-relatex"| \
       awk '{gsub("</CONTENTS-noeos>", "</CONTENTS>"); print;}' | \
-      if [ "$REDIR" == "" ]; then "$APERTIUM_PATH/apertium-postlatex-raw"; else "$APERTIUM_PATH/apertium-postlatex-raw" > "$SALIDA"; fi
+      "$APERTIUM_PATH/apertium-postlatex-raw" > "$ST"
+      
+    
+    if [ "$REDIR" == ""]; then
+      if [ "$GENERATE_TMX" = "0" ]; then
+        cat "$ST"
+      else         
+        cat "$ST" > "$GLOBAL_TMX_DIR/document"
+        tar cf "$GLOBAL_TMX_DIR/bundle.tar" --directory="$GLOBAL_TMX_DIR" document tmx
+        cat "$GLOBAL_TMX_DIR/bundle.tar"
+      fi
+    else
+      if [ "$GENERATE_TMX" = "0" ]; then
+        cat "$ST" > "$SALIDA"
+      else
+        cat "$ST" > "$GLOBAL_TMX_DIR/document"
+        tar cf "$GLOBAL_TMX_DIR/bundle.tar" --directory="$GLOBAL_TMX_DIR" document tmx
+        cat "$GLOBAL_TMX_DIR/bundle.tar" > "$SALIDA"
+      fi
+    fi
+    
+    rm -Rf $ST
+    
+    if [ "$GENERATE_TMX" = "1" ]; then
+      rm -Rf $GLOBAL_TMX_DIR
+    fi
 }
 
 
@@ -343,7 +459,28 @@ translate_odt ()
     rm -Rf "$INFILE";
   fi
 
-  if [ "$REDIR" == "" ]; then cat "$OTRASALIDA"; else cat "$OTRASALIDA" > "$SALIDA"; fi
+  if [ "$REDIR" == "" ]; then
+      if [ "$GENERATE_TMX" = "0" ]; then
+        cat "$OTRASALIDA"
+      else         
+        cat "$OTRASALIDA" > "$GLOBAL_TMX_DIR/document"
+        tar cf "$GLOBAL_TMX_DIR/bundle.tar" --directory="$GLOBAL_TMX_DIR" document tmx
+        cat "$GLOBAL_TMX_DIR/bundle.tar"
+      fi
+    else
+      if [ "$GENERATE_TMX" = "0" ]; then
+        cat "$OTRASALIDA" > "$SALIDA"
+      else
+        cat "$OTRASALIDA" > "$GLOBAL_TMX_DIR/document"
+        tar cf "$GLOBAL_TMX_DIR/bundle.tar" --directory="$GLOBAL_TMX_DIR" document tmx
+        cat "$GLOBAL_TMX_DIR/bundle.tar" > "$SALIDA"
+      fi
+    fi
+    
+    if [ "$GENERATE_TMX" = "1" ]; then
+      rm -Rf $GLOBAL_TMX_DIR
+    fi
+
   rm -Rf "$OTRASALIDA"
   rm -Rf "$TMCOMPFILE"
 }
@@ -392,7 +529,28 @@ translate_docx ()
     rm -Rf "$INFILE";
   fi
 
-  if [ "$REDIR" == "" ]; then cat "$OTRASALIDA"; else cat "$OTRASALIDA" > "$SALIDA"; fi
+  if [ "$REDIR" == "" ]; then
+      if [ "$GENERATE_TMX" = "0" ]; then
+        cat "$OTRASALIDA"
+      else         
+        cat "$OTRASALIDA" > "$GLOBAL_TMX_DIR/document"
+        tar cf "$GLOBAL_TMX_DIR/bundle.tar" --directory="$GLOBAL_TMX_DIR" document tmx
+        cat "$GLOBAL_TMX_DIR/bundle.tar"
+      fi
+    else
+      if [ "$GENERATE_TMX" = "0" ]; then
+        cat "$OTRASALIDA" > "$SALIDA"
+      else
+        cat "$OTRASALIDA" > "$GLOBAL_TMX_DIR/document"
+        tar cf "$GLOBAL_TMX_DIR/bundle.tar" --directory="$GLOBAL_TMX_DIR" document tmx
+        cat "$GLOBAL_TMX_DIR/bundle.tar" > "$SALIDA"
+      fi
+    fi
+    
+    if [ "$GENERATE_TMX" = "1" ]; then
+      rm -Rf $GLOBAL_TMX_DIR
+    fi
+
   rm -Rf "$OTRASALIDA"
   rm -Rf "$TMCOMPFILE"
 }
@@ -441,7 +599,28 @@ translate_pptx ()
     rm -Rf "$INFILE";
   fi
 
-  if [ "$REDIR" == "" ]; then cat "$OTRASALIDA"; else cat "$OTRASALIDA" > "$SALIDA"; fi
+  if [ "$REDIR" == "" ]; then
+      if [ "$GENERATE_TMX" = "0" ]; then
+        cat "$OTRASALIDA"
+      else         
+        cat "$OTRASALIDA" > "$GLOBAL_TMX_DIR/document"
+        tar cf "$GLOBAL_TMX_DIR/bundle.tar" --directory="$GLOBAL_TMX_DIR" document tmx
+        cat "$GLOBAL_TMX_DIR/bundle.tar"
+      fi
+    else
+      if [ "$GENERATE_TMX" = "0" ]; then
+        cat "$OTRASALIDA" > "$SALIDA"
+      else
+        cat "$OTRASALIDA" > "$GLOBAL_TMX_DIR/document"
+        tar cf "$GLOBAL_TMX_DIR/bundle.tar" --directory="$GLOBAL_TMX_DIR" document tmx
+        cat "$GLOBAL_TMX_DIR/bundle.tar" > "$SALIDA"
+      fi
+    fi
+    
+    if [ "$GENERATE_TMX" = "1" ]; then
+      rm -Rf $GLOBAL_TMX_DIR
+    fi
+
   rm -Rf "$OTRASALIDA"
   rm -Rf "$TMCOMPFILE"
 }
@@ -482,24 +661,65 @@ translate_xlsx ()
     rm -Rf "$INFILE";
   fi
 
-  if [ "$REDIR" == "" ]; then cat "$OTRASALIDA"; else cat "$OTRASALIDA" > "$SALIDA"; fi
+  if [ "$REDIR" == "" ]; then
+      if [ "$GENERATE_TMX" = "0" ]; then
+        cat "$OTRASALIDA"
+      else         
+        cat "$OTRASALIDA" > "$GLOBAL_TMX_DIR/document"
+        tar cf "$GLOBAL_TMX_DIR/bundle.tar" --directory="$GLOBAL_TMX_DIR" document tmx
+        cat "$GLOBAL_TMX_DIR/bundle.tar"
+      fi
+    else
+      if [ "$GENERATE_TMX" = "0" ]; then
+        cat "$OTRASALIDA" > "$SALIDA"
+      else
+        cat "$OTRASALIDA" > "$GLOBAL_TMX_DIR/document"
+        tar cf "$GLOBAL_TMX_DIR/bundle.tar" --directory="$GLOBAL_TMX_DIR" document tmx
+        cat "$GLOBAL_TMX_DIR/bundle.tar" > "$SALIDA"
+      fi
+    fi
+    
+    if [ "$GENERATE_TMX" = "1" ]; then
+      rm -Rf $GLOBAL_TMX_DIR
+    fi    
   rm -Rf "$OTRASALIDA"
   rm -Rf "$TMCOMPFILE"
 }
 
 translate_htmlnoent ()
 {
+  OTRASALIDA=$(mktemp "$TMPDIR/apertium.XXXXXXXX")
+
   "$APERTIUM_PATH/apertium-deshtml" ${FORMAT_OPTIONS} "$INFILE" | \
     if [ "$TRANSLATION_MEMORY_FILE" = "" ]; then
     cat
   else "$APERTIUM_PATH/lt-tmxproc" "$TMCOMPFILE";
   fi | \
   translate | \
-  if [ "$FORMAT" = "none" ]; then
-    if [ "$REDIR" == "" ]; then cat; else cat > "$SALIDA"; fi
-  else if [ "$REDIR" == "" ]; then "$APERTIUM_PATH/apertium-rehtml-noent"; else "$APERTIUM_PATH/apertium-rehtml-noent" > "$SALIDA"; fi
-  fi
+  if [ "$FORMAT" = "none" ]; then cat; else "$APERTIUM_PATH/apertium-rehtml-noent"; fi > "$OTRASALIDA"
 
+  if [ "$REDIR" == "" ]; then
+      if [ "$GENERATE_TMX" = "0" ]; then
+        cat "$OTRASALIDA"
+      else         
+        cat "$OTRASALIDA" > "$GLOBAL_TMX_DIR/document"
+        tar cf "$GLOBAL_TMX_DIR/bundle.tar" --directory="$GLOBAL_TMX_DIR" document tmx
+        cat "$GLOBAL_TMX_DIR/bundle.tar"
+      fi
+    else
+      if [ "$GENERATE_TMX" = "0" ]; then
+        cat "$OTRASALIDA" > "$SALIDA"
+      else
+        cat "$OTRASALIDA" > "$GLOBAL_TMX_DIR/document"
+        tar cf "$GLOBAL_TMX_DIR/bundle.tar" --directory="$GLOBAL_TMX_DIR" document tmx
+        cat "$GLOBAL_TMX_DIR/bundle.tar" > "$SALIDA"
+      fi
+    fi
+    
+    if [ "$GENERATE_TMX" = "1" ]; then
+      rm -Rf $GLOBAL_TMX_DIR
+    fi    
+  rm -Rf "$OTRASALIDA"  
   rm -Rf "$TMCOMPFILE"
 }
 
@@ -530,10 +750,11 @@ while [[ $OPTIND -le $# ]]; do
 done
 
 
-while getopts ":hf:n" opt; do
+while getopts ":hf:tn" opt; do
   case "$opt" in
     f) FORMAT=$OPTARG ;;
     n) FORMAT_OPTIONS="-n" ;;
+    t) GENERATE_TMX=1 ;;
     h) message ;;
     \?) echo "ERROR: Unknown option $OPTARG"; message ;;
     :) echo "ERROR: $OPTARG requires an argument"; message ;;
@@ -681,20 +902,33 @@ fi
 
 set -e -o pipefail
 
+OTRASALIDA=$(mktemp "$TMPDIR/apertium.XXXXXXXX")
+
 if [ "$FORMAT" = "none" ]; then
     cat "$INFILE"
 else
   "$APERTIUM_PATH/apertium-des$FORMAT" ${FORMAT_OPTIONS} "$INFILE"
-fi | translate | if [ "$FORMAT" = "none" ]; then
-                   if [ "$REDIR" = "" ]; then
-                       cat
-                   else
-                     cat > "$SALIDA"
-                   fi
-               else
-                 if [ "$REDIR" = "" ]; then
-                     "$APERTIUM_PATH/apertium-re$FORMAT"
-                 else
-                   "$APERTIUM_PATH/apertium-re$FORMAT" > "$SALIDA"
-                 fi
-               fi
+fi | translate | if [ "$FORMAT" = "none" ]; then cat; else "$APERTIUM_PATH/apertium-re$FORMAT"; fi > "$OTRASALIDA"
+
+if [ "$REDIR" == "" ]; then
+      if [ "$GENERATE_TMX" = "0" ]; then
+        cat "$OTRASALIDA"
+      else         
+        cat "$OTRASALIDA" > "$GLOBAL_TMX_DIR/document"
+        tar cf "$GLOBAL_TMX_DIR/bundle.tar" --directory="$GLOBAL_TMX_DIR" document tmx
+        cat "$GLOBAL_TMX_DIR/bundle.tar"
+      fi
+    else
+      if [ "$GENERATE_TMX" = "0" ]; then
+        cat "$OTRASALIDA" > "$SALIDA"
+      else
+        cat "$OTRASALIDA" > "$GLOBAL_TMX_DIR/document"
+        tar cf "$GLOBAL_TMX_DIR/bundle.tar" --directory="$GLOBAL_TMX_DIR" document tmx
+        cat "$GLOBAL_TMX_DIR/bundle.tar" > "$SALIDA"
+      fi
+    fi
+    
+    if [ "$GENERATE_TMX" = "1" ]; then
+      rm -Rf $GLOBAL_TMX_DIR
+    fi    
+      rm -Rf "$OTRASALIDA"

@@ -20,7 +20,10 @@ nlblank  = regex.compile(ur"\n[ ]+", regex.MULTILINE)
 
 from app import app
 tp       = app.config['TRANSLATION_PROGRAM']
+rp       = app.config['REBUNDLE_PROGRAM']
 tp_trace = app.config['TRANSLATION_PROGRAM_TRACE']
+tmx_unf  = app.config['TMX_UNFORMAT_SCRIPT']
+tmx_ref  = app.config['TMX_REFORMAT_SCRIPT']
 
 def translate(text, translator, doctype="txt"):
   text = nl.sub(u"\n\n", text)  
@@ -63,11 +66,42 @@ def translate_document(document_name, translator, doctype="txt"):
   proc.communicate();
   return output.name
 
+def translate_document_tmx(document_name, translator, doctype, filename, lang1, lang2):
+  # Translate with -t
+  output = tempfile.NamedTemporaryFile(delete = False)
+  output.close()
+  translation_command = '{0} -t -f {1} "{2}" {3} {4}'.format(tp, doctype, translator, document_name, output.name)
+  proc = subprocess.Popen(translation_command, shell = True, preexec_fn = os.setsid, close_fds = True)
+  proc.communicate();
+  
+  # Rebundle tar to zip using the rebundle.sh script
+  output2 = tempfile.NamedTemporaryFile(delete = False, suffix=".zip")
+  output2.close()
+  rebundle_command = "{} {} {} {}-{} {} {}".format(rp, filename, doctype, lang1, lang2, output.name, output2.name)
+  proc = subprocess.Popen(rebundle_command, shell = True, preexec_fn = os.setsid, close_fds = True)
+  proc.communicate()
+  
+  os.unlink(output.name)
+  
+  return output2.name
+
+def translate_tmx(document_name, translator, lang1, lang2):
+  output = tempfile.NamedTemporaryFile(delete=False)
+  output.close()
+  translation_command = "python3 {} {} {} <{} | {} -f html-noent {} | python3 {} >{}".format(tmx_unf, lang1, lang2, document_name, tp, translator, tmx_ref, output.name)
+  proc = subprocess.Popen(translation_command, shell = True, preexec_fn = os.setsid, close_fds = True)
+  proc.communicate();
+  return output.name
+
 def translate_dir(temporary_dir, translator, doctype):
+  #f = open("/opt/status", "a+")
+  #f.write("Esto es una verguenza")
+  #f.close()
   source_file = os.path.join(temporary_dir, "source")
   target_file = os.path.join(temporary_dir, "target")
     
   translation_command = '{0} -f {1} "{2}" {3} {4}'.format(tp, doctype, translator, source_file, target_file)
+  print(translation_command)
   return subprocess.Popen(translation_command, shell = True, preexec_fn = os.setsid, close_fds = True)
 #  proc.communicate();
 
@@ -75,14 +109,8 @@ def translate_dir_setup(obj):
   mydir = tempfile.mkdtemp()
   source_file = os.path.join(mydir, "source")
   
-  with open(source_file, "w") as output:
-    if type(obj) is file:  
-      for i in obj:
-        output.write(i)
-    elif type(obj) is unicode:
-      output.write(obj.encode("utf8"))
-    elif type(obj) is str:
-      output.write(obj)
+  with open(source_file, "w+b") as output:
+    output.write(obj.read())
   
   return mydir
 
