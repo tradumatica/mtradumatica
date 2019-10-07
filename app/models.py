@@ -3,8 +3,8 @@ from app import app
 import train
 import datetime
 import os
-from flask.ext.login import UserMixin
-from flask_dance.consumer.backend.sqla import OAuthConsumerMixin, SQLAlchemyBackend
+from flask_login import UserMixin
+from flask_dance.consumer.storage.sqla import OAuthConsumerMixin, SQLAlchemyStorage
 
 # Many to many relationships
 

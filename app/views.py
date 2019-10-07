@@ -23,10 +23,10 @@ from datetime import datetime
 from dictionaries import search_dictionary
 from flask import abort, flash, g, jsonify, redirect, render_template, request, Response, send_file, session, url_for
 from flask_dance.contrib.google import make_google_blueprint, google
-from flask_dance.consumer.backend.sqla import SQLAlchemyBackend
+from flask_dance.consumer.storage.sqla import SQLAlchemyStorage
 from flask_dance.consumer import oauth_authorized
 from flask_login import login_user, logout_user, login_required, current_user
-from flask.ext.babel import refresh, _
+from flask_babel import refresh, _
 from random import randint
 from sqlalchemy import asc, desc, not_
 from sqlalchemy.orm.exc import NoResultFound
@@ -56,7 +56,7 @@ google_blueprint = make_google_blueprint(scope = ["openid",
                                                   "https://www.googleapis.com/auth/userinfo.profile"])
 if USER_LOGIN_ENABLED:
   app.register_blueprint(google_blueprint, url_prefix = '/google_login')
-  google_blueprint.backend = SQLAlchemyBackend(OAuth, db.session, user = current_user)
+  google_blueprint.backend = SQLAlchemyStorage(OAuth, db.session, user = current_user)
 
 @babel.localeselector
 def get_locale():

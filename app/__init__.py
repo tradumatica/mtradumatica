@@ -1,6 +1,6 @@
 from flask import Flask
-from flask.ext.babel import Babel
-from flask.ext.sqlalchemy import SQLAlchemy
+from flask_babel import Babel
+from flask_sqlalchemy import SQLAlchemy
 from flask_login import LoginManager
 import os
 
