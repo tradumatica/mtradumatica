@@ -12,10 +12,6 @@ services:
             - mtrad
         volumes:
             - .:/opt/mtradumatica
-        deploy:
-            resources:
-                reservations:
-                    memory: 6G
 
 networks:
     mtrad:

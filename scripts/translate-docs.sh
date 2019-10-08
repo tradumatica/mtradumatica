@@ -190,8 +190,8 @@ translate()
   
   L1F=""
   for TRANS in $(get_translators $ENGINE); do
-    L1=$(python -c 'print "'$TRANS'".split("-")[1]')
-    L2=$(python -c 'print "'$TRANS'".split("-")[2]')    
+    L1=$(python -c 'print("'$TRANS'".split("-")[1])')
+    L2=$(python -c 'print("'$TRANS'".split("-")[2])')    
 
     if [ "$L1F" = "" ]; then
       L1F=$L1
