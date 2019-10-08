@@ -45,3 +45,4 @@ OAUTHLIB_INSECURE_TRANSPORT = True # True also behind firewall,  False -> requir
 GOOGLE_OAUTH_CLIENT_ID      = ''
 GOOGLE_OAUTH_CLIENT_SECRET  = ''
 
+# CELERY_ALWAYS_EAGER = 1 # debug

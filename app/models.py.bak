@@ -1,6 +1,6 @@
 from app import db
 from app import app
-from . import train
+import train
 import datetime
 import os
 from flask_login import UserMixin

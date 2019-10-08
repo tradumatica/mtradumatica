@@ -11,12 +11,12 @@ from app import app
 tempfile.tempdir = app.config['TMP_FOLDER']
 doctypes = ["txt", "odt", "ods", "odp", "docx", "xlsx", "pptx", "html", "xml"]
 
-nl       = regex.compile(r"[\n]", regex.MULTILINE)
-doublenl = regex.compile(r"[\n][\n]", regex.MULTILINE)
-vt       = regex.compile(r"\v")
-splitter = regex.compile(r"(?<!\w\.\w.)(?<![[:upper:]][[:lower:]]\.)(?<=\.|\?)[ \\t\\f\\v]")
-blanknl  = regex.compile(r"[ ]+\n", regex.MULTILINE)
-nlblank  = regex.compile(r"\n[ ]+", regex.MULTILINE)
+nl       = regex.compile(ur"[\n]", regex.MULTILINE)
+doublenl = regex.compile(ur"[\n][\n]", regex.MULTILINE)
+vt       = regex.compile(ur"\v")
+splitter = regex.compile(ur"(?<!\w\.\w.)(?<![[:upper:]][[:lower:]]\.)(?<=\.|\?)[ \\t\\f\\v]")
+blanknl  = regex.compile(ur"[ ]+\n", regex.MULTILINE)
+nlblank  = regex.compile(ur"\n[ ]+", regex.MULTILINE)
 
 from app import app
 tp       = app.config['TRANSLATION_PROGRAM']
@@ -26,8 +26,8 @@ tmx_unf  = app.config['TMX_UNFORMAT_SCRIPT']
 tmx_ref  = app.config['TMX_REFORMAT_SCRIPT']
 
 def translate(text, translator, doctype="txt"):
-  text = nl.sub("\n\n", text)  
-  text = splitter.sub("\n", text)
+  text = nl.sub(u"\n\n", text)  
+  text = splitter.sub(u"\n", text)
   
   input = tempfile.NamedTemporaryFile(delete = False)
   input.write(text.encode("utf8"))
@@ -44,13 +44,13 @@ def translate(text, translator, doctype="txt"):
     for i in f:
       list.append(i)
   
-  result = "".join(list)
+  result = u"".join(list)
 
-  result = doublenl.sub("\v", result)
-  result = nl.sub(" ", result)
-  result = vt.sub("\n", result)
-  result = blanknl.sub("\n", result)
-  result = nlblank.sub("\n", result)
+  result = doublenl.sub(u"\v", result)
+  result = nl.sub(u" ", result)
+  result = vt.sub(u"\n", result)
+  result = blanknl.sub(u"\n", result)
+  result = nlblank.sub(u"\n", result)
   
   os.unlink(input.name);
   os.unlink(output.name);
@@ -115,8 +115,8 @@ def translate_dir_setup(obj):
   return mydir
 
 def translate_trace(text, translator):
-  text = nl.sub("\n\n", text)  
-  text = splitter.sub("\n", text)
+  text = nl.sub(u"\n\n", text)  
+  text = splitter.sub(u"\n", text)
   
   input = tempfile.TemporaryFile()
   input.write(text.encode("utf8"))
@@ -133,11 +133,11 @@ def translate_trace(text, translator):
 
   with codecs.open(os.path.join(tempdir,"output"), "r", "utf-8") as f:
     output = f.read()
-    output = doublenl.sub("\v", output)
-    output = nl.sub(" ", output)
-    output = vt.sub("\n", output)
-    output = blanknl.sub("\n", output)
-    output = nlblank.sub("\n", output)
+    output = doublenl.sub(u"\v", output)
+    output = nl.sub(u" ", output)
+    output = vt.sub(u"\n", output)
+    output = blanknl.sub(u"\n", output)
+    output = nlblank.sub(u"\n", output)
     trace["output"] = output
   
   with open(os.path.join(tempdir,"input"), "r") as f:

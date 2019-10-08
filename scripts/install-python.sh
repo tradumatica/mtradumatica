@@ -13,7 +13,7 @@ command -v virtualenv >/dev/null 2>&1 || { echo >&2 "Required program virtualenv
 
 cd $ROOT
 
-virtualenv venv
+python3 -m venv venv
 
 cd -
 

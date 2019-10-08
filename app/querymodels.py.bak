@@ -10,24 +10,24 @@ from app import app
 tempfile.tempdir = app.config['TMP_FOLDER']
 
 
-nl       = regex.compile(r"[\n]", regex.MULTILINE)
-doublenl = regex.compile(r"[\n][\n]", regex.MULTILINE)
-vt       = regex.compile(r"\v")
-splitter = regex.compile(r"(?<!\w\.\w.)(?<![[:upper:]][[:lower:]]\.)(?<=\.|\?)[ \\t\\f\\v]")
-blanknl  = regex.compile(r"[ ]+\n", regex.MULTILINE)
-nlblank  = regex.compile(r"\n[ ]+", regex.MULTILINE)
+nl       = regex.compile(ur"[\n]", regex.MULTILINE)
+doublenl = regex.compile(ur"[\n][\n]", regex.MULTILINE)
+vt       = regex.compile(ur"\v")
+splitter = regex.compile(ur"(?<!\w\.\w.)(?<![[:upper:]][[:lower:]]\.)(?<=\.|\?)[ \\t\\f\\v]")
+blanknl  = regex.compile(ur"[ ]+\n", regex.MULTILINE)
+nlblank  = regex.compile(ur"\n[ ]+", regex.MULTILINE)
 
 from app import app
 qlm = app.config['QUERY_LM_PROGRAM']
 qtm = app.config['QUERY_TM_PROGRAM']
 
 def query_lm(text, model):
-  text = nl.sub("\n\n", text)  
-  text = splitter.sub("\n", text)
+  text = nl.sub(u"\n\n", text)  
+  text = splitter.sub(u"\n", text)
   
   input = tempfile.NamedTemporaryFile(delete = False)
   input.write(text.encode("utf8"))
-  input.write("\n".encode("utf-8"))
+  input.write("\n")
   input.close()
   
   output= tempfile.NamedTemporaryFile(delete = False)
@@ -47,8 +47,8 @@ def query_lm(text, model):
   return list
 
 def query_tm(text, model):
-  text = nl.sub("\n\n", text)  
-  text = splitter.sub("\n", text)
+  text = nl.sub(u"\n\n", text)  
+  text = splitter.sub(u"\n", text)
   
   input = tempfile.NamedTemporaryFile(delete = False)
   input.write(text.encode("utf8"))

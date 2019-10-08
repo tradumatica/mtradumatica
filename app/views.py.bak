@@ -1,26 +1,26 @@
-
+from __future__ import division
 import base64
 import json
-from . import languages
+import languages
 import locale
 import os
-from . import querymodels as qm
+import querymodels as qm
 import magic
-from . import metrics
-from . import moses_service
+import metrics
+import moses_service
 import psutil
 import regex
 import shutil
-from . import tasks as celerytasks
+import tasks as celerytasks
 import tempfile
-from . import tmxdigest
-from . import train
-from . import translate as mosestranslate
-from . import utils
+import tmxdigest
+import train
+import translate as mosestranslate
+import utils
 
 from app import app, db, login_manager, babel
 from datetime import datetime
-from .dictionaries import search_dictionary
+from dictionaries import search_dictionary
 from flask import abort, flash, g, jsonify, redirect, render_template, request, Response, send_file, session, url_for
 from flask_dance.contrib.google import make_google_blueprint, google
 from flask_dance.consumer.storage.sqla import SQLAlchemyStorage
@@ -62,12 +62,12 @@ if USER_LOGIN_ENABLED:
 def get_locale():
   if "LANGUAGES" not in app.config:
     return "en"
-  if current_user.is_authenticated and current_user.lang in list(app.config["LANGUAGES"].keys()):
+  if current_user.is_authenticated and current_user.lang in app.config["LANGUAGES"].keys():
     return current_user.lang  if current_user.lang != None else "en"
-  elif 'lang' in session and session['lang'] in list(app.config["LANGUAGES"].keys()):
+  elif 'lang' in session and session['lang'] in app.config["LANGUAGES"].keys():
     return session['lang']
   else:
-    result = request.accept_languages.best_match(list(app.config["LANGUAGES"].keys()))
+    result = request.accept_languages.best_match(app.config["LANGUAGES"].keys())
   return result if result != None else "en"
 
 @app.route('/actions/switch-language/<string:langcode>')
@@ -362,7 +362,7 @@ def file_upload():
       basename = "-".join(secure_filename(os.path.basename(i)).split("-")[1:])
       uw = metrics.count_unique_words(i)
       c = Corpus(name = basename, mydate = datetime.utcnow(),
-               lang = lang if mimetype[0:4] == "text" else '<binary>', nlines = nl, nwords = nw,
+               lang = lang if mimetype[0:4] == u"text" else u'<binary>', nlines = nl, nwords = nw,
                nchars = nc, size = sz, path = i,
                type = mimetype, user_id = get_uid(), uwords = uw)
 
@@ -372,7 +372,7 @@ def file_upload():
   else:
     uw = metrics.count_unique_words(filename)    
     c = Corpus(name = basename, mydate = datetime.utcnow(),
-               lang = lang if mimetype[0:4] == "text" else '<binary>', nlines = nl, nwords = nw,
+               lang = lang if mimetype[0:4] == u"text" else u'<binary>', nlines = nl, nwords = nw,
                nchars = nc, size = sz, path = filename,
                type = mimetype, user_id = get_uid(), uwords = uw)
 
@@ -444,7 +444,7 @@ def perform_eval_translator(id):
 
     t = TranslatorFromBitext.query.get(id)
     if t is None:
-      return jsonify(status = "Fail", message = "Translator not available")
+      return jsonify(status = u"Fail", message = u"Translator not available")
     try:
       result = mosestranslate.translate(text.decode("utf-8"), t.basename)
     except Exception as e:
@@ -480,7 +480,7 @@ def perform_eval_translator(id):
     db.session.add(t)
     db.session.commit()
     
-    return jsonify(status="OK")
+    return jsonify(status=u"OK")
 
     
 @app.route('/actions/bitext-create/<string:parname>/<string:language1>/<string:language2>')
@@ -646,7 +646,7 @@ def translator_createfromexisting(parname, trans1id, trans2id):
 @utils.condec(login_required, USER_LOGIN_ENABLED)
 def bitext_add_files(id,idfile1, idfile2):
   #DEBUG
-  print("Appending files to bitext {0}: {1} and {2}".format(id,idfile1, idfile2))
+  print "Appending files to bitext {0}: {1} and {2}".format(id,idfile1, idfile2)
   b = Bitext.query.get(id)
   c1 = Corpus.query.get(idfile1)
   c2 = Corpus.query.get(idfile2)
@@ -759,12 +759,12 @@ def file_list():
 
     search     = request.form['search[value]']
 #    order_str  = u'{0} {1}'.format(columns[order_col], order_dir)
-    search_str = '%{0}%'.format(search)
+    search_str = u'%{0}%'.format(search)
 
-    checkbox   = '<span class="checkbox"><input class="file_checkbox" type="checkbox" id="checkbox-{0}"/></div>'
-    date_fmt   = '%Y-%m-%d %H:%M:%S'
+    checkbox   = u'<span class="checkbox"><input class="file_checkbox" type="checkbox" id="checkbox-{0}"/></div>'
+    date_fmt   = u'%Y-%m-%d %H:%M:%S'
 
-    icons      = '<span id="peek-{0}" class="glyphicon glyphicon-eye-open" aria-hidden="true"></span> <span id="download-{0}" class="glyphicon glyphicon-download-alt" aria-hidden="true"></span>'
+    icons      = u'<span id="peek-{0}" class="glyphicon glyphicon-eye-open" aria-hidden="true"></span> <span id="download-{0}" class="glyphicon glyphicon-download-alt" aria-hidden="true"></span>'
 
     data = [[checkbox.format(c.id),
              c.name, c.lang, c.nlines, "{} ({})".format(c.nwords, c.uwords), c.nchars,
@@ -823,12 +823,12 @@ def bitext_list():
 
     search     = request.form['search[value]']
 #    order_str  = u'{0} {1}'.format(columns[order_col], order_dir)
-    search_str = '%{0}%'.format(search)
+    search_str = u'%{0}%'.format(search)
 
-    checkbox   = '<span class="checkbox"><input class="file_checkbox" type="checkbox" id="checkbox-{0}"/></div>'
-    date_fmt   = '%Y-%m-%d %H:%M:%S'
+    checkbox   = u'<span class="checkbox"><input class="file_checkbox" type="checkbox" id="checkbox-{0}"/></div>'
+    date_fmt   = u'%Y-%m-%d %H:%M:%S'
 
-    icons      = '<span id="peek-{0}" class="glyphicon glyphicon-eye-open" aria-hidden="true"></span> <span id="addtobitext-{0}-{1}-{2}" class="glyphicon glyphicon-plus-sign" aria-hidden="true"></span>'
+    icons      = u'<span id="peek-{0}" class="glyphicon glyphicon-eye-open" aria-hidden="true"></span> <span id="addtobitext-{0}-{1}-{2}" class="glyphicon glyphicon-plus-sign" aria-hidden="true"></span>'
 
     data = [[checkbox.format(c.id),
              c.name, c.lang1 +"-"+ c.lang2, c.nlines, c.mydate.strftime(date_fmt) ,  icons.format(c.id,c.lang1,c.lang2)]
@@ -873,12 +873,12 @@ def monolingualCorpus_list():
 
     search     = request.form['search[value]']
 #    order_str  = u'{0} {1}'.format(columns[order_col], order_dir)
-    search_str = '%{0}%'.format(search)
+    search_str = u'%{0}%'.format(search)
 
-    checkbox   = '<span class="checkbox"><input class="file_checkbox" type="checkbox" id="checkbox-{0}"/></div>'
-    date_fmt   = '%Y-%m-%d %H:%M:%S'
+    checkbox   = u'<span class="checkbox"><input class="file_checkbox" type="checkbox" id="checkbox-{0}"/></div>'
+    date_fmt   = u'%Y-%m-%d %H:%M:%S'
 
-    icons      = '<span id="peek-{0}" class="glyphicon glyphicon-eye-open" aria-hidden="true"></span> <span id="addtomonocorpus-{0}-{1}" class="glyphicon glyphicon-plus-sign" aria-hidden="true"></span>'
+    icons      = u'<span id="peek-{0}" class="glyphicon glyphicon-eye-open" aria-hidden="true"></span> <span id="addtomonocorpus-{0}-{1}" class="glyphicon glyphicon-plus-sign" aria-hidden="true"></span>'
 
     data = [[checkbox.format(c.id),
              c.name, c.lang, c.nlines, c.mydate.strftime(date_fmt) ,  icons.format(c.id,c.lang)]
@@ -922,14 +922,14 @@ def languageModel_list():
 
     search     = request.form['search[value]']
 #    order_str  = u'{0} {1}'.format(columns[order_col], order_dir)
-    search_str = '%{0}%'.format(search)
+    search_str = u'%{0}%'.format(search)
 
-    checkbox   = '<span class="checkbox"><input class="file_checkbox" type="checkbox" id="checkbox-{0}"/></div>'
-    date_fmt   = '%Y-%m-%d %H:%M:%S'
+    checkbox   = u'<span class="checkbox"><input class="file_checkbox" type="checkbox" id="checkbox-{0}"/></div>'
+    date_fmt   = u'%Y-%m-%d %H:%M:%S'
 
-    icons_running      = '<span id="running-{0}" class="glyphicon glyphicon-hourglass" aria-hidden="true"></span>'
-    icons_finished      = '<span id="finished-{0}" class="glyphicon glyphicon-ok text-success" aria-hidden="true"></span>'
-    icons_error      = '<span id="exiterror-{0}" class="glyphicon glyphicon-remove" aria-hidden="true"></span>'
+    icons_running      = u'<span id="running-{0}" class="glyphicon glyphicon-hourglass" aria-hidden="true"></span>'
+    icons_finished      = u'<span id="finished-{0}" class="glyphicon glyphicon-ok text-success" aria-hidden="true"></span>'
+    icons_error      = u'<span id="exiterror-{0}" class="glyphicon glyphicon-remove" aria-hidden="true"></span>'
 
 
     data = [[checkbox.format(c.id), c.name, c.lang, c.monocorpus.name if c.monocorpus != None else "", c.mydate.strftime(date_fmt) , c.mydatefinished.strftime(date_fmt) if c.mydatefinished != None else "" , icons_running.format(c.id) if celerytasks.train_lm.AsyncResult(c.task_id).state in ['PENDING', 'PROGRESS' ] else (icons_finished.format(c.id) if c.exitstatus == 0 else icons_error.format(c.id) )] 
@@ -945,9 +945,9 @@ def languageModel_list():
     return
 
 def choose_optimization_icons(trobj):
-  icons_running  = '<span id="running-{0}" class="glyphicon glyphicon-hourglass" aria-hidden="true"></span>'
-  icons_finished = '<span id="finished-{0}" class="glyphicon glyphicon-ok text-success" aria-hidden="true"></span>'
-  icons_hidden   = ''
+  icons_running  = u'<span id="running-{0}" class="glyphicon glyphicon-hourglass" aria-hidden="true"></span>'
+  icons_finished = u'<span id="finished-{0}" class="glyphicon glyphicon-ok text-success" aria-hidden="true"></span>'
+  icons_hidden   = u''
 
   if get_user() != None and not current_user.admin:
     return icons_hidden
@@ -965,10 +965,10 @@ def choose_optimization_icons(trobj):
         return icons_finished.format(trobj.id)
 
 def choose_optimization_cell(trobj):
-  date_fmt   = '%Y-%m-%d %H:%M:%S'
-  optimizeButtonDisabled= '<button type="button" id="button-optimize-{0}" class="btn btn-default btn-sm" disabled="disabled"> <span class="glyphicon glyphicon-wrench" aria-hidden="true"></span> '.format(trobj.id)+_('Optimize')+'</button>'
-  optimizeButtonEnabled = '<button type="button" id="button-optimize-{0}" class="btn btn-default btn-sm"><span class="glyphicon glyphicon-wrench" aria-hidden="true"></span> '.format(trobj.id)+_('Optimize')+'</button>'
-  optimizeButtonHidden  = ''
+  date_fmt   = u'%Y-%m-%d %H:%M:%S'
+  optimizeButtonDisabled= u'<button type="button" id="button-optimize-{0}" class="btn btn-default btn-sm" disabled="disabled"> <span class="glyphicon glyphicon-wrench" aria-hidden="true"></span> '.format(trobj.id)+_('Optimize')+'</button>'
+  optimizeButtonEnabled = u'<button type="button" id="button-optimize-{0}" class="btn btn-default btn-sm"><span class="glyphicon glyphicon-wrench" aria-hidden="true"></span> '.format(trobj.id)+_('Optimize')+'</button>'
+  optimizeButtonHidden  = u''
   if get_user() != None and not current_user.admin:
     return optimizeButtonHidden
   if trobj.task_id != None and celerytasks.train_smt.AsyncResult(trobj.task_id).state in ['PENDING','PROGRESS']:
@@ -985,9 +985,9 @@ def choose_optimization_cell(trobj):
         return trobj.mydateopt.strftime(date_fmt)+"#"+trobj.mydateoptfinished.strftime(date_fmt)
 
 def evaluation_cell(trobj):
-  evaluateButtonDisabled = '<button type="button" id="button-evaluate-{}" class="btn btn-default btn-sm" disabled="disabled"><span class="glyphicon glyphicon-check" aria-hidden="true"></span> '.format(trobj.id)+_('Evaluate')+'</button>'
-  evaluateButtonEnabled = '<button type="button" id="button-evaluate-{}" class="btn btn-default btn-sm"><span class="glyphicon glyphicon-check" aria-hidden="true"></span> '.format(trobj.id)+_('Evaluate')+'</button>'
-  evaluateButtonHidden  = ''
+  evaluateButtonDisabled = u'<button type="button" id="button-evaluate-{}" class="btn btn-default btn-sm" disabled="disabled"><span class="glyphicon glyphicon-check" aria-hidden="true"></span> '.format(trobj.id)+_('Evaluate')+'</button>'
+  evaluateButtonEnabled = u'<button type="button" id="button-evaluate-{}" class="btn btn-default btn-sm"><span class="glyphicon glyphicon-check" aria-hidden="true"></span> '.format(trobj.id)+_('Evaluate')+'</button>'
+  evaluateButtonHidden  = u''
   
   return evaluateButtonEnabled + ("" if trobj.bleu == None else "<br/><small>BLEU: {:.2f}; chrF3: {:.2f};</small><br/> <small>TER: {:.2f}; WER: {:.2f};</small><br/><small>BEER: {:.2f}</small>".format(trobj.bleu,trobj.chrf3,trobj.ter,trobj.wer, trobj.beer))
   if get_user() != None:
@@ -1017,10 +1017,10 @@ def translator_list():
 
     search     = request.form['search[value]']
 #    order_str  = u'{0} {1}'.format(columns[order_col], order_dir)
-    search_str = '%{0}%'.format(search)
+    search_str = u'%{0}%'.format(search)
 
-    checkbox   = '<span class="checkbox"><input class="file_checkbox" type="checkbox" id="checkbox-{0}"/></div>'
-    date_fmt   = '%Y-%m-%d %H:%M:%S'
+    checkbox   = u'<span class="checkbox"><input class="file_checkbox" type="checkbox" id="checkbox-{0}"/></div>'
+    date_fmt   = u'%Y-%m-%d %H:%M:%S'
 
     data = [[checkbox.format(c.id),c.name, c.lang1+"-"+c.lang2, c.bitext.name if c.bitext != None else "", c.languagemodel.name if c.languagemodel != None else "" , c.mydate.strftime(date_fmt) , c.mydatefinished.strftime(date_fmt) if c.mydatefinished != None else "" , choose_optimization_cell(c) ,  evaluation_cell(c), choose_optimization_icons(c)  ]
             for c in TranslatorFromBitext.query.filter(TranslatorFromBitext.user_id == get_uid()).filter(TranslatorFromBitext.name.like(search_str)).order_by(query_order(columns[order_col], order_dir))][start:start+length]
@@ -1079,7 +1079,7 @@ def bitext_delete(id):
   try:
     shutil.rmtree(bitext.path)
   except OSError as e:
-    print(e)
+    print  e
 
   db.session.delete(bitext)
   db.session.commit()
@@ -1095,7 +1095,7 @@ def monolingualcorpus_delete(id):
   try:
     os.unlink(monocorpus.path)
   except OSError as e:
-    print(e)
+    print  e
 
   db.session.delete(monocorpus)
   db.session.commit()
@@ -1268,15 +1268,15 @@ def file_setlang(id, code):
 @utils.condec(login_required, USER_LOGIN_ENABLED)
 def status_simple():
   if len(Translator.query.filter(Translator.user_id == get_uid()).all()) == 0:
-    return jsonify(status = "empty")
+    return jsonify(status = u"empty")
 
   t    = Translator.query.filter(Translator.user_id == get_uid()).one()
   task = celerytasks.train_simple_smt.AsyncResult(t.task_id)
   if task.state == 'PROGRESS':
-    return jsonify(status = "training", year = t.start.year, month = t.start.month, day = t.start.day,
+    return jsonify(status = u"training", year = t.start.year, month = t.start.month, day = t.start.day,
                    hours = t.start.hour, minutes = t.start.minute, seconds = t.start.second)
   else:
-    return jsonify(status = "done")
+    return jsonify(status = u"done")
 
 @app.route('/actions/status-languagemodel/<int:id>')
 @utils.condec(login_required, USER_LOGIN_ENABLED)
@@ -1284,13 +1284,13 @@ def status_languagemodel(id):
   #Get LM from DB and task from celery
   lm = LanguageModel.query.get(id)
   if lm is None:
-    return jsonify(status = "not found")
+    return jsonify(status = u"not found")
   t = celerytasks.train_lm.AsyncResult(lm.task_id)
   if t.state in ['PENDING','PROGRESS']:
     #date is currently ignored
-    return jsonify(status = "training")
+    return jsonify(status = u"training")
   else:
-    return jsonify(status = "done")
+    return jsonify(status = u"done")
 
 @app.route('/actions/status-translator/<int:id>')
 @utils.condec(login_required, USER_LOGIN_ENABLED)
@@ -1298,13 +1298,13 @@ def status_translator(id):
   #Get Translator from DB and task from celery
   t = TranslatorFromBitext.query.get(id)
   if t is None:
-    return jsonify(status = "not found")
+    return jsonify(status = u"not found")
   t = celerytasks.train_smt.AsyncResult(t.task_id)
   if t.state in ['PENDING','PROGRESS']:
     #date is currently ignored
-    return jsonify(status = "training")
+    return jsonify(status = u"training")
   else:
-    return jsonify(status = "done")
+    return jsonify(status = u"done")
 
 @app.route('/actions/status-translator-optimization/<int:id>')
 @utils.condec(login_required, USER_LOGIN_ENABLED)
@@ -1312,13 +1312,13 @@ def status_translator_optimization(id):
   #Get Translator from DB and task from celery
   t = TranslatorFromBitext.query.get(id)
   if t is None:
-    return jsonify(status = "not found")
+    return jsonify(status = u"not found")
   t = celerytasks.tune_smt.AsyncResult(t.task_opt_id)
   if t.state in ['PENDING','PROGRESS']:
     #date is currently ignored
-    return jsonify(status = "training")
+    return jsonify(status = u"training")
   else:
-    return jsonify(status = "done")
+    return jsonify(status = u"done")
 
 
 @app.route('/actions/cancel-simple')
@@ -1335,7 +1335,7 @@ def cancel_simple():
   if train.is_proc_running(pid):
     train.kill_execution(pid, tmpdir)
 
-  return jsonify(status = "OK")
+  return jsonify(status = u"OK")
 
 @app.route('/actions/remove-simple')
 @utils.condec(login_required, USER_LOGIN_ENABLED)
@@ -1345,7 +1345,7 @@ def remove_simple():
   Translator.query.delete()
   db.session.commit()
   # Directory cleanup
-  return jsonify(status = "OK")
+  return jsonify(status = u"OK")
 
 @app.route('/actions/build-simple/<int:id1>/<int:id2>')
 @utils.condec(login_required, USER_LOGIN_ENABLED)
@@ -1364,7 +1364,7 @@ def build_simple(id1, id2):
   Translator.query.delete()
   db.session.add(t)
   db.session.commit()
-  return jsonify(status = "OK", task_id = task.id)
+  return jsonify(status = u"OK", task_id = task.id)
 
 @app.route('/actions/translatechoose/<int:id>', methods=["POST"])
 @utils.condec(login_required, USER_LOGIN_ENABLED)
@@ -1372,14 +1372,14 @@ def translatechoose(id):
   text = json.loads(request.data)['text'] #.encode("utf-8")
   t = TranslatorFromBitext.query.get(id)
   if t is None:
-    return jsonify(status = "Fail", message = "Translator not available")
+    return jsonify(status = u"Fail", message = u"Translator not available")
   try:
     result = mosestranslate.translate(text, t.basename)
-    return jsonify(status = "OK", text = result)
+    return jsonify(status = u"OK", text = result)
   except:
     pass
 
-  return jsonify(status = "Fail", message = "Translation failed")
+  return jsonify(status = u"Fail", message = u"Translation failed")
 
 """
 @app.route('/actions/translate-doc/<int:id>', methods=["POST"])
@@ -1496,12 +1496,12 @@ def status_translate(id):
   #Get Translation from DB and task from celery
   trans = Translation.query.get(id)
   if trans is None:
-    return jsonify(status = "not found")
+    return jsonify(status = u"not found")
   t = celerytasks.translate.AsyncResult(trans.task_id)
   if t.state in ['PENDING','PROGRESS']:
-    return jsonify(status = "translating")
+    return jsonify(status = u"translating")
   else:
-    return jsonify(status = "done")
+    return jsonify(status = u"done")
 
   
 @app.route('/actions/downloadresult/<string:filename>/<string:download_as>')
@@ -1522,13 +1522,13 @@ def translate():
   text = json.loads(request.data)['text'].encode("utf-8")
   t = Translator.query.one()
   if t is None:
-    return jsonify(status = "Fail", message = "Translator not available")
+    return jsonify(status = u"Fail", message = u"Translator not available")
   try:
     result = mosestranslate.translate(text, t.name)
-    return jsonify(status = "OK", text = result)
+    return jsonify(status = u"OK", text = result)
   except:
     pass
-  return jsonify(status = "Fail", message = "Translation failed")
+  return jsonify(status = u"Fail", message = u"Translation failed")
 
 @app.route('/actions/translate-inspect', methods=["POST"])
 @utils.condec(login_required, USER_LOGIN_ENABLED)
@@ -1555,7 +1555,7 @@ def search_dic():
   t = TranslatorFromBitext.query.get(translator)  
   filename = os.path.dirname(os.path.dirname(__file__)) + "/translators/" + t.basename + "/lex." + extension
   
-  return jsonify(translations=search_dictionary(filename, word))
+  return jsonify(translations=search_dictionary(filename, word.encode("utf-8")))
 
 
 @app.route('/ws/translate', methods=["POST"])
@@ -1670,11 +1670,11 @@ def user_list():
       raise ValueError('order[0][dir] must be "asc" or "desc"')
 
     search     = request.form['search[value]']
-    search_str = '%{0}%'.format(search)
+    search_str = u'%{0}%'.format(search)
 
-    checkbox   = '<span class="checkbox"><input class="file_checkbox" type="checkbox" id="ul-checkbox-{0}"/></div>'
-    toggle = '<button type="button" id="button-toggle-{0}" class="btn btn-default btn-sm">'+_('Toggle')+'</button>'
-    date_fmt   = '%Y-%m-%d %H:%M:%S'
+    checkbox   = u'<span class="checkbox"><input class="file_checkbox" type="checkbox" id="ul-checkbox-{0}"/></div>'
+    toggle = u'<button type="button" id="button-toggle-{0}" class="btn btn-default btn-sm">'+_('Toggle')+'</button>'
+    date_fmt   = u'%Y-%m-%d %H:%M:%S'
 
 
     data = [[checkbox.format(u.id), u.username, u.email, u.n_engines(), u.size_mb(), u.admin, u.banned, toggle.format(u.id) if u.id != current_user.id else ""]
@@ -1704,12 +1704,12 @@ def mt_list():
       raise ValueError('order[0][dir] must be "asc" or "desc"')
 
     search     = request.form['search[value]']
-    search_str = '%{0}%'.format(search)
-    checkbox   = '<span class="checkbox"><input class="file_checkbox" type="checkbox" id="ml-checkbox-{0}"/></div>'
-    date_fmt   = '%Y-%m-%d %H:%M:%S'
+    search_str = u'%{0}%'.format(search)
+    checkbox   = u'<span class="checkbox"><input class="file_checkbox" type="checkbox" id="ml-checkbox-{0}"/></div>'
+    date_fmt   = u'%Y-%m-%d %H:%M:%S'
 
 
-    data = [[checkbox.format(t.id), t.name, t.lang1+"-"+t.lang2, t.size_mb, t.mydate.strftime(date_fmt), t.get_user().email, ""]
+    data = [[checkbox.format(t.id), t.name, t.lang1+u"-"+t.lang2, t.size_mb, t.mydate.strftime(date_fmt), t.get_user().email, ""]
             for t in db.session.query(TranslatorFromBitext).join(User, User.id == TranslatorFromBitext.user_id).filter(TranslatorFromBitext.name.like(search_str)).order_by(query_order(columns[order_col], order_dir))][start:start+length]
     return jsonify(draw            = draw,
                    data            = data,

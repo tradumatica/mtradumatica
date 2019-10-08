@@ -1,4 +1,4 @@
-
+from __future__ import division
 
 from collections import defaultdict
 import io
@@ -111,16 +111,16 @@ def wer(reference, hypothesis):
            if i not in index:
                index[i] = base
                base += 1 
-           res1.append(chr(index[i]))
+           res1.append(unichr(index[i]))
 
        res2 = []
        for i in mystr2.split():
            if i not in index:
                index[i] = base
                base += 1 
-           res2.append(chr(index[i]))
+           res2.append(unichr(index[i]))
 
-       return "a"+"".join(res1), "a"+"".join(res2)
+       return u"a"+u"".join(res1), u"a"+u"".join(res2)
 
     fo = io.open(reference, "r")
     fh = io.open(hypothesis, "r")
@@ -156,13 +156,13 @@ def prepare_files(refi, hypi, refo, hypo, max_lines = 3000):
             if nlines < 0:
                 break
                 
-            i = regex.sub(r"[^\p{Alpha}0-9 ]", " \g<0> ", i)
-            i = regex.sub(r"[ ]+", " ", i)
-            j = regex.sub(r"[^\p{Alpha}0-9 ]", " \g<0> ", j)
-            j = regex.sub(r"[ ]+", " ", j)
+            i = regex.sub(ur"[^\p{Alpha}0-9 ]", u" \g<0> ", i)
+            i = regex.sub(ur"[ ]+", u" ", i)
+            j = regex.sub(ur"[^\p{Alpha}0-9 ]", u" \g<0> ", j)
+            j = regex.sub(ur"[ ]+", u" ", j)
 
-            fro.write("{}\n".format(i))
-            fho.write("{}\n".format(j))
+            fro.write(u"{}\n".format(i))
+            fho.write(u"{}\n".format(j))
     
     fri.close()
     fhi.close()
@@ -183,9 +183,9 @@ if __name__ == '__main__':
 
     prepare_files(sys.argv[1], sys.argv[2], l1, l2)
     locale.setlocale(locale.LC_ALL, 'C.UTF-8')
-    print(("BLEU {:2.2f}".format(bleu(l1,l2))))
-    print(("TER {:2.2f}".format(ter(l1,l2))))
-    print(("WER {:2.2f}".format(wer(l1,l2))))
-    print(("chrF3 {:2.2f}".format(chrF3(l1,l2))))
-    print(("BEER {:2.2f}".format(beer(l1,l2))))
-    print((count_unique_words(sys.argv[1])))
+    print("BLEU {:2.2f}".format(bleu(l1,l2)))
+    print("TER {:2.2f}".format(ter(l1,l2)))
+    print("WER {:2.2f}".format(wer(l1,l2)))
+    print("chrF3 {:2.2f}".format(chrF3(l1,l2)))
+    print("BEER {:2.2f}".format(beer(l1,l2)))
+    print(count_unique_words(sys.argv[1]))

@@ -110,6 +110,7 @@ corpus.$(L2).tok: corpus.$(L2)
 clean:
 	rm -Rf $(objs)
 """
+
   return makefile.format("l1", l1, rootdir, destprefix)
 
 def get_makefile(l1, l2, destprefix, trainLM=True):
@@ -262,6 +263,7 @@ LM.arpa: corpus.$(L2).true
 
   if trainLM:
     makefile+=makefileTrainLM
+
   return makefile.format(l1, l2, rootdir, destprefix)
 
 ## Set-up training of translation model ##
