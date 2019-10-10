@@ -35,3 +35,4 @@ cd $ROOT/software/apertium
 make -j$CORES 
 make install || exit 1
 
+cp $ROOT/venv/local/bin/* $ROOT/venv/bin/
