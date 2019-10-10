@@ -30,7 +30,7 @@ with open(sys.argv[1], "w") as other:
     if i.startswith('<b c="') and i.endswith('"/>\\n'):
       other.write("{0}\\t{1}".format(nline, i))
     else:
-      sys.stdout.write(i)
+      sys.stdout.write(i.decode('utf-8') if type(i) is bytes else i)
 HERE
 ) $1
 }
@@ -55,7 +55,7 @@ for i in sys.stdin:
     sys.stdout.write(dicblocks[str(nline)])
     nline += 1
 
-  sys.stdout.write(i)
+  sys.stdout.write(i.decode('utf-8') if type(i) is bytes else i)
 else:
   if str(nline+1) in dicblocks:
     sys.stdout.write(dicblocks[str(nline+1)])
@@ -76,7 +76,7 @@ def next_df_token(input):
     a = i.rstrip("\\n")
     if preline and a.startswith('<b c="') and a.endswith('"/>'):
       preline = False
-      yield base64.b64decode(a[6:-3])
+      yield base64.b64decode(a[6:-3].encode("utf-8"))
     elif preline:
       yield "\\n"
       yield a
@@ -86,7 +86,7 @@ def next_df_token(input):
       preline = True
 
 for i in next_df_token(sys.stdin):
-  sys.stdout.write(i)
+  sys.stdout.write(i.decode('utf-8') if type(i) is bytes else i)
 HERE
 )
 }
@@ -124,10 +124,10 @@ def next_df_token(input):
 for i in next_df_token(sys.stdin):
   if len(i) > 1:
     sys.stdout.write('\\n<b c="')
-    sys.stdout.write(base64.b64encode(i))
+    sys.stdout.write(base64.b64encode(i.encode('utf-8')).decode('utf-8'))
     sys.stdout.write('"/>\\n')
   else:
-    sys.stdout.write(i)
+    sys.stdout.write(i.decode('utf-8') if type(i) is bytes else i)
 HERE
 )
 }
