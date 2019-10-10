@@ -99,7 +99,7 @@ def beer(reference, hypothesis):
     wd = os.path.join(os.path.dirname(os.path.dirname(os.path.realpath(__file__))), "beer-lite")
     p = subprocess.Popen(cmd.format(reference, hypothesis), shell=True, stdout=subprocess.PIPE, cwd=wd)
     out = p.communicate()
-    return min(100.0, 100*float(out[0].split(" ")[-1]))
+    return min(100.0, 100*float(out[0].decode('utf-8').split(" ")[-1]))
     
 
 def wer(reference, hypothesis):
