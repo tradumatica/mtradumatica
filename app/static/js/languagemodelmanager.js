@@ -20,9 +20,7 @@ table=$('#languagemodellist').DataTable({
 		//Show if training has not finished yet
 		$('td', row).eq(5).html('<span class="label label-primary" id="'+spanid+'"></span>');
 
-		updater = init_clock(startDateTimeStr,spanid,id);
-		timerid = setInterval(updater,500);
-		running_intervals.push(timerid);
+		init_clock(startDateTimeStr,spanid,id);
 
 		init_status_checker("actions/status-languagemodel",id);
 	}
@@ -33,7 +31,6 @@ table=$('#languagemodellist').DataTable({
 		diffStr=formatDateDiff(startDate,endDate);
 
 		//If we have an error icon, label will be "danger"
-
 		if($('td', row).eq(6).find('span').attr('id').split("-")[0] === "exiterror"){
 			labeltype="danger"
 		}else{
@@ -42,11 +39,10 @@ table=$('#languagemodellist').DataTable({
 		$('td', row).eq(5).html('<span class="label label-'+labeltype+'" id="'+spanid+'">'+diffStr+'</span>');
 	}
 	//Once counters are initialized, display the date according to client's locale
-	timestamp=parseDate(startDateTimeStr);
-	date = new Date(timestamp);
+	date = new Date(new Date(startDateTimeStr).getTime() - (new Date().getTimezoneOffset() * 60000))
 	$('td', row).eq(4).text(date.toLocaleDateString()+" "+date.toLocaleTimeString());
-
-        },
+	console.log(date)
+  },
   language: datatables_lang
 });
 
@@ -127,7 +123,7 @@ $('#delete_all').click(function() {
 $('.seleclang').click(function() {
   seleclang_lang = $(this).attr("lang");
   $('#inputLanguage'+languagenumber).text(seleclang_lang);
-  $.ajax( "actions/monolingualcorpus-plainlist/"+seleclang_lang )
+  $.ajax("/actions/monolingualcorpus-plainlist/"+seleclang_lang )
      .done(function(data) {
    		 //fill select with monolingual corpora
 		 $('#selMonolingualCorpus').empty();

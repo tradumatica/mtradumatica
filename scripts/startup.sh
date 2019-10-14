@@ -57,7 +57,7 @@ fi
 redis-server $ROOT/conf/redis.conf # as a daemon, with pidfile
 sleep 2
 nohup celery worker --workdir $ROOT \
-                    -A app.tasks.celery --loglevel=info \
+                    -A app.utils.tasks.celery --loglevel=info \
                     --logfile=$ROOT/logs/celery-worker.log &
 
 echo $! >$ROOT/proc/celery.pid

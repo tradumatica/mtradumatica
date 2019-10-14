@@ -1,27 +1,32 @@
 
+$(document).ready(function() {
+  $('body .dropdown-toggle').dropdown(); // avoid dropdown problems (bootstrap/datatables conflict)
 
-$('body .dropdown-toggle').dropdown(); // avoid dropdown problems (bootstrap/datatables conflict)
+  var table_ul = $('#userlist').DataTable({
+    serverSide: true,
+    ajax: { url: "actions/user-list",
+            type: "POST" },
+    columnDefs: [{ orderable: false,
+                  targets:[0, 7] }],
+    order: [[6, "desc"]],
+    language: datatables_lang
+  });
 
-var table_ul = $('#userlist').DataTable({
-  serverSide: true,
-  ajax: { url: "actions/user-list",
-          type: "POST" },
-  columnDefs: [{ orderable: false,
-                 targets:[0, 7] }],
-  order: [[6, "desc"]],
-  language: datatables_lang
+  var table_mt = $('#mtlist').DataTable({
+    serverSide: true,
+    ajax: { url: "actions/mt-list",
+            type: "POST" },
+    columnDefs: [{ orderable: false,
+                  targets:[0, 6] }],
+    order: [[5, "desc"]],
+    language: datatables_lang
+  });
+
+  $('.nav-tabs a').click(function (e) {
+    e.preventDefault()
+    $(this).tab('show')
+  })
 });
-
-var table_mt = $('#mtlist').DataTable({
-  serverSide: true,
-  ajax: { url: "actions/mt-list",
-          type: "POST" },
-  columnDefs: [{ orderable: false,
-                targets:[0, 6] }],
-  order: [[5, "desc"]],
-  language: datatables_lang
-});
-
 
 $("#system_tab").click(function(){
   $("#system_tab_contents").removeClass("hidden");

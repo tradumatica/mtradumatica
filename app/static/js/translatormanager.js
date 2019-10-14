@@ -39,10 +39,8 @@ table=$('#translatorlist').DataTable({
 		$('td', row).eq(6).html('<span class="label label-success" id="'+spanid+'">'+diffStr+'</span>');
 	}
 	//Once counters are initialized, display the date according to client's locale
-	timestamp=parseDate(startDateTimeStr);
-	date = new Date(timestamp);
+	date = new Date(new Date(startDateTimeStr).getTime() - (new Date().getTimezoneOffset() * 60000))
 	$('td', row).eq(5).text(date.toLocaleDateString()+" "+date.toLocaleTimeString());
-
 
 	/***** Enable optimization counter  *********/
 	spanid="optimization-time-"+id;
@@ -157,7 +155,7 @@ $('tbody').on('click', 'button', function() {
 
 	//get list of compatible bitexts, populate modal and show it
 	//fill select with bitexts
-	$.ajax( "actions/bitext-plainlist/"+idOfTranslatorToOptimize)
+	$.ajax("/actions/bitext-plainlist/"+idOfTranslatorToOptimize)
 	  .done(function(data) {
 	    $('#selBitextOptimize').empty();
 	    if(data.data.length  > 0)
@@ -275,7 +273,7 @@ $('.seleclang').click(function() {
 			}
 
 			//fill select with bitexts
-			$.ajax( "actions/bitext-plainlist/"+$('#inputLanguage1').text()+"/"+$('#inputLanguage2').text())
+			$.ajax("/actions/bitext-plainlist/"+$('#inputLanguage1').text()+"/"+$('#inputLanguage2').text())
 			   .done(function(data) {
 				   $('#selBitext').empty();
 		  			if(data.data.length  > 0){
