@@ -1,0 +1,97 @@
+{% extends "base.html" %}
+
+{% block content %}
+<div class="container">
+  <h2>{{ _('Evaluate MT performance') }}</h2>
+<p>{{ _('Calculate MT quality metrics using human translation as a reference
+  and as many different MT outputs as you attach to it. The input files need to be
+  sentence-aligned UTF-8 text files in order to get accurate scores. As a
+  practical limit, only the first 3000 lines of the files are taken into
+  account.')}}</p>
+</div>
+<div class="container">
+<form class="form-horizontal" id="evalform" method="POST" enctype="multipart/form-data">
+<fieldset>
+<div class="form-group">
+  <label class="col-md-5 control-label" for="htrans">{{ _('Human translation') }}</label>
+  <div class="col-md-5">
+    <input id="htrans" name="htrans" class="input-file" type="file"/>
+  </div>
+</div>
+
+<div class="form-group">
+  <label class="col-md-5 control-label" for="mt">{{ _('Machine translation (one or more)') }}</label>
+  <div class="col-md-5">
+    <input id="mt" name="mt[]" class="input-file" type="file" multiple/>
+  </div>
+</div>
+
+<div class="form-group">
+  <div class="col-md-5">
+  </div>
+  <div class="col-md-5">
+    <button id="evaluate" name="evaluate" class="btn btn-primary disabled">{{ _('Evaluate') }}</button>
+  </div>
+</div>
+</fieldset>
+</form>
+</div>
+
+<div id="scores" class="container hidden" style="margin-top:30px">
+  <div class="col-md-2">
+  </div>
+  <div class="col-md-8">
+  <table id="tscores" class="table table-striped table-bordered">
+    <thead>
+      <tr>
+        <th>{{ _('Test file') }}</th>
+        <th>{{ _('BLEU') }}</th>
+        <th>{{ _('chrF3') }}</th>
+        <th>{{ _('BEER') }}</th>
+        <th>{{ _('TER') }}</th>
+        <th>{{ _('WER') }}</th>
+      </tr>
+    </thead>
+    <tbody>
+    </tbody>
+  </table>
+  <h4>{{ _('Legend') }}</h4>
+  <dl class="row">
+    <dt class="col-sm-1">{{ _('BLEU') }}</dt>
+    <dd class="col-sm-11">{{ _('%% of word n-grams of the reference file present on the MT file.') }}</dd>
+    <dt class="col-sm-1">{{ _('chrF3') }}</dt>
+    <dd class="col-sm-11">{{ _('%% of character n-grams of the reference file present on the MT file.') }}</dd>
+    <dt class="col-sm-1">{{ _('BEER') }}</dt>
+    <dd class="col-sm-11">{{ _('A classifier based in character n-grams and permutation trees.') }}</dd>
+    <dt class="col-sm-1">{{ _('TER') }}</dt>
+    <dd class="col-sm-11">{{ _('%% of characters needing modification in the MT file in order to match the reference file.') }}</dd>
+    <dt class="col-sm-1">{{ _('WER') }}</dt>
+    <dd class="col-sm-11">{{ _('A variation of TER.') }}</dd>
+  </div>
+</div>
+
+<div class="modal fade bs-example-modal-sm" id="my-please-wait" tabindex="-1"
+    role="dialog" aria-hidden="true" data-backdrop="static">
+  <div class="modal-dialog modal-sm">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h4 class="modal-title"><span class="glyphicon glyphicon-time"></span> {{ _('Please wait') }}</h4>
+      </div>
+      <div class="modal-body">
+        <div class="progress">
+          <div class="progress-bar progress-bar-info progress-bar-striped active" style="width:100%"></div>
+        </div>
+<!--        <div class="text-center">
+          <button id="cancel-modal" class="btn btn-primary">{{ _('Cancel translation task') }}</button>
+        </div>-->
+      </div>
+    </div>
+  </div>
+</div>
+
+{% endblock %}
+
+{% block extrajs %}
+<script src="{{ url_for('static', filename='js/evaluate.js') }}"></script> 
+
+{% endblock %}

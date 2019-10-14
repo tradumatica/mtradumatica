@@ -21,12 +21,11 @@ babel            = Babel(app)
 db               = SQLAlchemy(app)
 login_manager    = LoginManager(app)
 
-
-
 if not os.path.exists(app.config['TMP_FOLDER']):
     os.makedirs(app.config['TMP_FOLDER'])
 
-from app import views, models, tasks
+from app import views, models
+from app.utils import tasks
 
 db.create_all()
 db.session.commit()
