@@ -5,13 +5,13 @@ from flask_babel import _
 import tempfile
 import os
 
-evaluate_blueprint = Blueprint('evaluate', __name__, template_folder='templates')
+evaluation_blueprint = Blueprint('evaluation', __name__, template_folder='templates')
 
-@evaluate_blueprint.route('/evaluate')
+@evaluation_blueprint.route('/evaluate')
 def evaluate():
   return render_template("evaluate.html", title = _("Evaluate"), user = user_utils.get_user())
 
-@evaluate_blueprint.route('/actions/perform-evaluation', methods = ["POST"])
+@evaluation_blueprint.route('/actions/perform-evaluation', methods = ["POST"])
 def perform_evaluation():
     reftemp = tempfile.NamedTemporaryFile(delete=False)
     reffile = request.files["htrans"]

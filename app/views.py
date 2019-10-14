@@ -5,7 +5,7 @@ from .utils import utils, user_utils, lang_utils
 
 # Blueprints
 from .blueprints.data.views import data_blueprint
-from .blueprints.evaluate.views import evaluate_blueprint
+from .blueprints.evaluation.views import evaluation_blueprint
 from .blueprints.train.views import train_blueprint
 from .blueprints.translate.views import translate_blueprint
 from .blueprints.auth.views import auth_blueprint
@@ -19,7 +19,7 @@ from flask_babel import _
 
 blueprints = [auth_blueprint, data_blueprint,
               train_blueprint, translate_blueprint, 
-              evaluate_blueprint, dashboard_blueprint]
+              evaluation_blueprint, dashboard_blueprint]
 
 for blueprint in blueprints:
   app.register_blueprint(blueprint)

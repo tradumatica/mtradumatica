@@ -99,26 +99,26 @@
             <li class="dropdown">
               <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">{{ _('Data') }} <span class="caret"/></a>
               <ul class="dropdown-menu">
-                <li{% if request.path == '/files' %} class="active"{% endif %}><a href="{{ url_for('data.files') }}">{{ _('Files') }}</a></li>
-                <li{% if request.path == '/monolingual_corpora' %} class="active"{% endif %}><a href="{{ url_for('data.monolingual_corpora') }}">{{ _('Monotexts') }}</a></li>              
-                <li{% if request.path == '/bitexts' %} class="active"{% endif %}><a href="{{ url_for('data.bitexts') }}">{{_('Bitexts') }}</a></li>
+                <li{% if request.path == url_for('data.files') %} class="active"{% endif %}><a href="{{ url_for('data.files') }}">{{ _('Files') }}</a></li>
+                <li{% if request.path == url_for('data.monolingual_corpora') %} class="active"{% endif %}><a href="{{ url_for('data.monolingual_corpora') }}">{{ _('Monotexts') }}</a></li>              
+                <li{% if request.path == url_for('data.bitexts') %} class="active"{% endif %}><a href="{{ url_for('data.bitexts') }}">{{_('Bitexts') }}</a></li>
               </ul>
             </li>
             <li class="dropdown">
               <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">{{ _('Train') }} <span class="caret" /></a>
               <ul class="dropdown-menu">
-                <li{% if request.path == '/language_models' %} class="active"{% endif %}><a href="{{ url_for('train.language_models') }}">{{ _('Language models') }}</a></li>	
-                <li{% if request.path == '/translators' %} class="active"{% endif %}><a href="{{ url_for('train.translators') }}">{{ _('Translators') }}</a></li>
+                <li{% if request.path == url_for('train.language_models') %} class="active"{% endif %}><a href="{{ url_for('train.language_models') }}">{{ _('Language models') }}</a></li>	
+                <li{% if request.path == url_for('train.translators') %} class="active"{% endif %}><a href="{{ url_for('train.translators') }}">{{ _('Translators') }}</a></li>
               </ul>
             </li>
             <li class="dropdown">
               <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">{{ _('Translate') }} <span class="caret" /></a>
               <ul class="dropdown-menu">
-                <li{% if request.path == '/translate' %} class="active" {% endif %}><a href="{{ url_for('translate.text') }}">{{ _('Translate') }}</a></li>
-                <li{% if request.path == '/inspect' %} class="active" {% endif %}><a href="{{ url_for('translate.inspect') }}">{{ _('Inspect') }}</a></li>
+                <li{% if request.path == url_for('translate.text') %} class="active" {% endif %}><a href="{{ url_for('translate.text') }}">{{ _('Translate') }}</a></li>
+                <li{% if request.path == url_for('translate.inspect') %} class="active" {% endif %}><a href="{{ url_for('translate.inspect') }}">{{ _('Inspect') }}</a></li>
               </ul>
             </li>
-            <li{% if request.path == url_for('evaluate.evaluate') %} class="active" {% endif %}><a href="{{ url_for('evaluate.evaluate') }}">{{ _('Evaluate') }}</a></li>
+            <li{% if request.path == url_for('evaluation.evaluate') %} class="active" {% endif %}><a href="{{ url_for('evaluation.evaluate') }}">{{ _('Evaluate') }}</a></li>
           </ul>
           <ul class="nav navbar-nav navbar-right">
             <li> </li>
@@ -127,7 +127,7 @@
             <li class="dropdown">
               <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false" style="padding-top:15px; padding-bottom:15px; position:relative; line-height:20px; color:#d00;">{{ current_user.username }} <span class="caret"/></a>
               <ul class="dropdown-menu">
-                <li{% if request.path == '/dashboard' %} class="active" {% endif %}><a href="{{ url_for('dashboard.dashboard') }}">{{ _('Dashboard') }}</a></li>
+                <li{% if request.path == url_for('dashboard.dashboard') %} class="active" {% endif %}><a href="{{ url_for('dashboard.dashboard') }}">{{ _('Dashboard') }}</a></li>
                 <li><a href="{{ url_for('auth.logout') }}">{{ _('Logout') }}</a></li>            
               </ul>
             </li>
