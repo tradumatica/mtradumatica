@@ -318,7 +318,7 @@ def training_dir_setup_tuning( l1,l2, translatorpath, devset1, devset2):
   os.symlink(os.path.join(translatorpath,"reordering-table.minlexr") , mydir + "/reordering-table.minlexr")
   os.symlink(os.path.join(translatorpath,"sl.tcm") , mydir + "/sl.tcm")
   os.symlink(os.path.join(translatorpath,"tl.tcm") , mydir + "/tl.tcm")
-
+  
   return mydir
 
 def execute_training(dir):

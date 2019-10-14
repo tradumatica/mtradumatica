@@ -1,8 +1,9 @@
 from app import db
 from app import app
 from app.models import LanguageModel, MonolingualCorpus, Corpus, TranslatorFromBitext, Bitext
-from app.utils import user_utils, utils, train
+from app.utils import user_utils, utils, train, metrics
 from app.utils import tasks as celerytasks
+from app.utils import translate as mosestranslate
 
 from flask import Blueprint, render_template, request, jsonify
 from flask_login import login_required, current_user
@@ -10,6 +11,8 @@ from flask_babel import _
 from datetime import datetime
 
 import shutil
+import tempfile
+import os
 
 USER_LOGIN_ENABLED = user_utils.isUserLoginEnabled()
 
@@ -443,8 +446,7 @@ def perform_eval_translator(id):
     for i in reffile:
         reftemp.write(i)
     reftemp.close()
-  
-  
+
     text = request.files["src"].read()
 
     t = TranslatorFromBitext.query.get(id)

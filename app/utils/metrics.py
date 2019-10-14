@@ -1,4 +1,4 @@
-
+from app import app
 
 from collections import defaultdict
 import io
@@ -6,6 +6,8 @@ import Levenshtein
 import os
 import regex
 import subprocess
+
+basedir = app.config['BASEDIR'] or os.path.realpath(__file__)
 
 def count_unique_words(myfile):
     cmd = 'grep -o "\\b[[:alnum:]]\\+\\b" {} |sort -f -u|wc -l'.format(myfile)
@@ -81,7 +83,7 @@ def chrF3(reference, hypothesis):
 
 def bleu(reference, hypothesis):
     cmd = 'java -Dfile.encoding=UTF8 -XX:+UseCompressedOops -Xmx2g -cp tercom-0.8.0.jar:multeval-0.5.1.jar:meteor-1.4.jar multeval.MultEval eval --refs {} --hyps-baseline {} --metrics bleu 2>&1| grep "[ ]AVG"| grep -o "[^ ]\+$"|sed "s%,%.%g"'
-    wd  = os.path.join(os.path.dirname(os.path.dirname(os.path.realpath(__file__))), "mteval-lite")
+    wd  = os.path.join(basedir, "mteval-lite")
     p = subprocess.Popen(cmd.format(reference, hypothesis), shell=True, stdout=subprocess.PIPE, cwd=wd)
     out = p.communicate()
         
@@ -89,14 +91,14 @@ def bleu(reference, hypothesis):
 
 def ter(reference, hypothesis):
     cmd = 'java -Dfile.encoding=UTF8 -XX:+UseCompressedOops -Xmx2g -cp tercom-0.8.0.jar:multeval-0.5.1.jar:meteor-1.4.jar multeval.MultEval eval --refs {} --hyps-baseline {} --metrics ter 2>&1| grep "[ ]AVG"| grep -o "[^ ]\+$"|sed "s%,%.%g"'
-    wd  = os.path.join(os.path.dirname(os.path.dirname(os.path.realpath(__file__))), "mteval-lite")
+    wd  = os.path.join(basedir, "mteval-lite")
     p = subprocess.Popen(cmd.format(reference, hypothesis), shell=True, stdout=subprocess.PIPE, cwd=wd)
     out = p.communicate()
     return min(100.0,float(out[0]))
 
 def beer(reference, hypothesis):
     cmd = "./beer -r {} -s {}"
-    wd = os.path.join(os.path.dirname(os.path.dirname(os.path.realpath(__file__))), "beer-lite")
+    wd = os.path.join(basedir, "beer-lite")
     p = subprocess.Popen(cmd.format(reference, hypothesis), shell=True, stdout=subprocess.PIPE, cwd=wd)
     out = p.communicate()
     return min(100.0, 100*float(out[0].decode('utf-8').split(" ")[-1]))
