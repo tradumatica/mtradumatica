@@ -1,22 +1,3 @@
-$('body .dropdown-toggle').dropdown(); 
-
-
-var table = $('#filelist').DataTable({
-  serverSide: true,
-  ajax: {
-          url: "actions/file-list",
-          type: "POST"},
-  columnDefs: [{ orderable:false,
-                 targets:[0,7]}],
-  order : [[6, "desc"]],
-  createdRow : function ( row, data, index ) {
-	addFormatedDateToDatatables(row,6);
-  },
-  language: datatables_lang
-});
-
-
-
 Dropzone.options.myDropZone = { // camelized id
   paramName: "file",
   maxFilesize: 1024, // 1 GB
@@ -32,7 +13,6 @@ Dropzone.options.myDropZone = { // camelized id
       table.ajax.reload();
     });
 
-
     this.on("canceled", function(file) {
       this.removeFile(file);
     });
@@ -40,119 +20,129 @@ Dropzone.options.myDropZone = { // camelized id
   autoProcessQueue: true
 };
 
+$(document).ready(function() {
+  $('body .dropdown-toggle').dropdown(); 
 
-var seleclang_id = "";
-
-$('body').on('click','td', function(){
-  var col = $(this).parent().children().index($(this));
-  var row = $(this).parent().parent().children().index($(this).parent());
-
-  if(col == 2)
-  {
-    lang_prev = $(this).html().replace(/^\s+|\s+$/g, '');
-    $("div.seleclang").removeClass("bg-primary");
-    $("div.seleclang[lang = '" + lang_prev + "']").addClass("bg-primary");
-    $('#lang-dialog').modal("show");
-    mystr = $(this).parent().html();
-    seleclang_id = parseInt(mystr.split('id="checkbox-')[1].split('"')[0]);
-  }
-});
-
-
-$('body').on('click', 'span.glyphicon-eye-open', function() {
-
-  $.ajax({
-    url: "actions/file-peek/" + $(this).attr("id").substring("peek-".length),
-    dataType: "json"
-  }).done(function(data) {
-    $('#peek-title').text(data.filename);
-
-    r = "";
-    for(i = 0; i < data.lines.length; i++)
-      r += data.lines[i] + "\n";
-
-    $('#peek-body').text(r);
-    $('#myModal').modal("show");
+  let table = $('#filelist').DataTable({
+    serverSide: true,
+    ajax: {
+      url: "actions/file-list",
+      type: "POST"
+    },
+    columnDefs: [{
+      orderable:false,
+      targets:[0,7]
+    }],
+    order: [
+      [6, "desc"]
+    ],
+    createdRow: function (row, data, index) {
+      addFormatedDateToDatatables(row,6);
+    },
+    language: datatables_lang
   });
-});
 
-$('body').on('click', 'span.glyphicon-download-alt', function() {
-  window.location.href = "actions/file-download/" + $(this).attr("id").substring("download-".length);
-});
+  let seleclang_id = "";
 
-$('body').on('change', 'input.file_checkbox', function() {
-  if($('#checkbox_all').is(":checked"))
-  {
-    $('#checkbox_all').addClass("checkbox-inconsistent");
-  }
+  $('td').on('click', function(){
+    let col = $(this).parent().children().index($(this));
 
-  var any = false;
-  $('.file_checkbox').each(function() {
-    if($(this).is(":checked"))
-    {
-      any = true;
-      return false;
+    if (col == 2) {
+      let lang_prev = $(this).html().replace(/^\s+|\s+$/g, '');
+      $("div.seleclang").removeClass("bg-primary");
+      $(`div.seleclang[lang = '${lang_prev}']`).addClass("bg-primary");
+      $('#lang-dialog').modal("show");
+      let mystr = $(this).parent().html();
+      seleclang_id = parseInt(mystr.split('id="checkbox-')[1].split('"')[0]);
     }
   });
 
-  if(any)
-  {
-    $('#delete_all').addClass("trashbin-enabled");
-  }
-  else
-  {
-    $('#delete_all').removeClass("trashbin-enabled");
+  $('span.glyphicon-eye-open').on('click', function() {
+    $.ajax({
+      url: "actions/file-peek/" + $(this).attr("id").substring("peek-".length),
+      dataType: "json"
+    }).done(function(data) {
+      $('#peek-title').text(data.filename);
+
+      let r = "";
+      for (let i = 0; i < data.lines.length; i++) {
+        r += data.lines[i] + "\n";
+      }
+
+      $('#peek-body').text(r);
+      $('#myModal').modal("show");
+    });
+  });
+
+  $('span.glyphicon-download-alt').on('click', function() {
+    window.location.href = "actions/file-download/" + $(this).attr("id").substring("download-".length);
+  });
+
+  $('input.file_checkbox').on('change', function() {
+    if($('#checkbox_all').is(":checked")) {
+      $('#checkbox_all').addClass("checkbox-inconsistent");
+    }
+
+    let any = false;
+    $('.file_checkbox').each(function() {
+      if($(this).is(":checked")) {
+        any = true;
+        return false;
+      }
+    });
+
+    if (any) {
+      $('#delete_all').addClass("trashbin-enabled");
+    } else {
+      $('#delete_all').removeClass("trashbin-enabled");
+      $('#checkbox_all').prop("checked", false);
+      $('#checkbox_all').removeClass("checkbox-inconsistent");
+    }
+  });
+
+  $('#checkbox_all').change(function() {
+    $(this).removeClass("checkbox-inconsistent");
+    if($(this).is(":checked"))
+    {
+      $('.file_checkbox').prop("checked", true);
+      $('#delete_all').addClass("trashbin-enabled");
+    }
+    else
+    {
+      $('.file_checkbox').prop("checked", false);
+      $('#delete_all').removeClass("trashbin-enabled");
+    }
+  });
+
+
+  $('#delete_all').click(function() {
+    var url = "actions/file-delete/";
+    $('.file_checkbox').each(function () {
+      if($(this).is(":checked"))
+      {
+        my_str = $(this).attr("id");
+        $.ajax({
+          url: "actions/file-delete/" + $(this).attr("id").substring("checkbox-".length)
+        }).done(function(){
+          table.ajax.reload();
+          $('#delete_all').removeClass("trashbin-enabled");
+        });
+      }
+    });
+
     $('#checkbox_all').prop("checked", false);
-    $('#checkbox_all').removeClass("checkbox-inconsistent");
-  }
-
-});
-
-
-$('#checkbox_all').change(function() {
-  $(this).removeClass("checkbox-inconsistent");
-  if($(this).is(":checked"))
-  {
-    $('.file_checkbox').prop("checked", true);
-    $('#delete_all').addClass("trashbin-enabled");
-  }
-  else
-  {
-    $('.file_checkbox').prop("checked", false);
+    $('#checkbox_all').removeClass("checkbox-inconsistent")
     $('#delete_all').removeClass("trashbin-enabled");
-  }
-});
-
-
-$('#delete_all').click(function() {
-  var url = "actions/file-delete/";
-  $('.file_checkbox').each(function () {
-    if($(this).is(":checked"))
-    {
-      my_str = $(this).attr("id");
-      $.ajax({
-        url: "actions/file-delete/" + $(this).attr("id").substring("checkbox-".length)
-      }).done(function(){
-        table.ajax.reload();
-        $('#delete_all').removeClass("trashbin-enabled");
-
-      });
-    }
   });
 
-  $('#checkbox_all').prop("checked", false);
-  $('#checkbox_all').removeClass("checkbox-inconsistent")
-  $('#delete_all').removeClass("trashbin-enabled");
+  $('.seleclang').click(function() {
+    seleclang_lang = $(this).attr("lang");
+    $.ajax({
+      url: "actions/file-setlang/" + seleclang_id + "/" + seleclang_lang
+    }).done(function(){
+      table.ajax.reload();  
+    });
 
-});
-
-$('.seleclang').click(function() {
-  seleclang_lang = $(this).attr("lang");
-  $.ajax({
-    url: "actions/file-setlang/" + seleclang_id + "/" + seleclang_lang
-  }).done(function(){
-    table.ajax.reload();  
+    $('#lang-dialog').modal("hide");
   });
-
-  $('#lang-dialog').modal("hide");
 });

@@ -1,49 +1,3 @@
-var doctype = "";
-var ufilename = "";
-
-function refreshSubmitButtons() {
-  if ($("select#lmsel option").filter(":selected").text() == "" || $("#inputtext").val().trim() == "") {
-    $("#submit").addClass("disabled");
-  } else {
-    $("#submit").removeClass("disabled");
-  }
-  
-  if ($("select#tmsel option").filter(":selected").text() == "" || $("#inputtext2").val().trim() == "") {
-    $("#submit2").addClass("disabled");
-  } else {
-    $("#submit2").removeClass("disabled");
-  }
-  
-  if ($("select#pbdsel option").filter(":selected").text() == "" || $("#inputtext3").val().trim() == "") {
-    $("#submit3").addClass("disabled");
-  } else {
-    $("#submit3").removeClass("disabled");
-  }
-
-  if ($("select#mtsel option").filter(":selected").text() == "" || $("#inputtext4").val().trim() == "") {
-    $("#submit4").addClass("disabled");
-  } else {
-    $("#submit4").removeClass("disabled");
-  }
-  
-  if ($("#inputtext4").val().trim() == "") {
-    $("#clear4").addClass("disabled");
-  } else {
-    $("#clear4").removeClass("disabled");
-  }
-  
-  if ($("select#mrsel option").filter(":selected").text() == "") {
-    $("#submit5").addClass("disabled");
-    $("#clear5").addClass("disabled");
-  } else if ($('#mrsel').is(':disabled')) {
-    $("#submit5").addClass("disabled");
-    $("#clear5").removeClass("disabled");
-  } else {
-    $("#submit5").removeClass("disabled");
-    $("#clear5").addClass("disabled");
-  }  
-}
-
 $(document).ready(function() {
   $("#submit").click(function(){
     if ($("#inputtext").val().trim() == "") {
@@ -214,7 +168,7 @@ $(document).ready(function() {
 
   $('.nav-tabs a').click(function (e) {
     e.preventDefault()
-    $(this).tab('show')
+    $(this).tab('show');
   });
 
   $(".tab-content form").on('submit', function(e) {
@@ -222,6 +176,4 @@ $(document).ready(function() {
     e.stopPropagation();
     return false;
   })
-
-  refreshSubmitButtons();
 });
