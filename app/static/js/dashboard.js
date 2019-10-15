@@ -32,7 +32,6 @@ $(document).ready(function() {
       {
         targets: 2,
         render: function(data, type, row) {
-          console.log(row)
           let date_string = row[2];
           let date_utc = new Date(date_string)
           let date_local = new Date(date_utc.getTime() - (date_utc.getTimezoneOffset() * 60000))
@@ -46,7 +45,12 @@ $(document).ready(function() {
   $('.nav-tabs a').click(function (e) {
     e.preventDefault()
     $(this).tab('show')
+
   });
+
+  $('.nav-tabs a').on('shown.bs.tab', function(e) {
+    $(".table").DataTable().columns.adjust().draw()
+  })
 
   $("#refresh_dashboard").click(function(){
     document.location.reload();
