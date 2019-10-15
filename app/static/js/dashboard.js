@@ -22,56 +22,34 @@ $(document).ready(function() {
     language: datatables_lang
   });
 
+  let table_queue = $('#tasklist').DataTable({
+    serverSide: true,
+    ajax: {
+      url: 'actions/queue-list',
+      type: 'post'
+    },
+    columnDefs: [
+      {
+        targets: 2,
+        render: function(data, type, row) {
+          console.log(row)
+          let date_string = row[2];
+          let date_utc = new Date(date_string)
+          let date_local = new Date(date_utc.getTime() - (date_utc.getTimezoneOffset() * 60000))
+          return `${date_local.toLocaleDateString()} ${date_local.toLocaleTimeString()}`
+        }
+      }
+    ],
+    language: datatables_lang
+  })
+
   $('.nav-tabs a').click(function (e) {
     e.preventDefault()
     $(this).tab('show')
-  })
+  });
+
+  $("#refresh_dashboard").click(function(){
+    document.location.reload();
+  });
 });
 
-$("#system_tab").click(function(){
-  $("#system_tab_contents").removeClass("hidden");
-  $("#users_tab_contents").addClass("hidden");
-  $("#queue_tab_contents").addClass("hidden");
-  $("#space_tab_contents").addClass("hidden");
-  $("#system_tab").addClass("active");
-  $("#users_tab").removeClass("active");
-  $("#queue_tab").removeClass("active");
-  $("#space_tab").removeClass("active");
-});
-
-$("#users_tab").click(function(){
-  $("#system_tab_contents").addClass("hidden");
-  $("#users_tab_contents").removeClass("hidden");
-  $("#queue_tab_contents").addClass("hidden");
-  $("#space_tab_contents").addClass("hidden");
-  $("#system_tab").removeClass("active");
-  $("#users_tab").addClass("active");
-  $("#queue_tab").removeClass("active");
-  $("#space_tab").removeClass("active");
-});
-
-$("#queue_tab").click(function(){
-  $("#system_tab_contents").addClass("hidden");
-  $("#users_tab_contents").addClass("hidden");
-  $("#queue_tab_contents").removeClass("hidden");
-  $("#space_tab_contents").addClass("hidden");
-  $("#system_tab").removeClass("active");
-  $("#users_tab").removeClass("active");
-  $("#queue_tab").addClass("active");
-  $("#space_tab").removeClass("active");
-});
-
-$("#space_tab").click(function(){
-  $("#system_tab_contents").addClass("hidden");
-  $("#users_tab_contents").addClass("hidden");
-  $("#queue_tab_contents").addClass("hidden");
-  $("#space_tab_contents").removeClass("hidden");
-  $("#system_tab").removeClass("active");
-  $("#users_tab").removeClass("active");
-  $("#queue_tab").removeClass("active");
-  $("#space_tab").addClass("active");
-});
-
-$("#refresh_dashboard").click(function(){
-  document.location.reload();
-});

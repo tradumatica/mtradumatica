@@ -1,10 +1,16 @@
 from app import db
-from app.utils import utils, user_utils
 from app.models import TranslatorFromBitext, User
+from app.utils import user_utils, utils
+from app.utils.tasks import celery
 
-from flask import Blueprint, abort, render_template, request, jsonify
-from flask_login import login_required, current_user
+from flask import Blueprint, abort, jsonify, render_template, request
 from flask_babel import _
+from flask_login import current_user, login_required
+from datetime import datetime
+
+import kombu.five
+from time import time
+
 dashboard_blueprint = Blueprint('dashboard', __name__, template_folder='templates')
 
 @dashboard_blueprint.route('/dashboard')
@@ -81,3 +87,37 @@ def user_list():
   except ValueError:
     abort(401)
     return
+
+
+@dashboard_blueprint.route('/actions/queue-list', methods=["POST"])
+def queue_list():
+  start     = int(request.form['start'])
+  length    = int(request.form['length'])
+  draw      = int(request.form['draw'])
+  order_col = int(request.form['order[0][column]'])
+
+  workers = celery.control.inspect().stats().keys()
+  if len(workers) > 0:
+    worker_name = list(workers)[0]
+    inspector = celery.control.inspect([worker_name])
+
+    data = []
+    for task in inspector.active()[worker_name]:
+      start_utc = datetime.fromtimestamp(time() - kombu.five.monotonic() + task['time_start']).strftime("%Y-%m-%d %H:%M:%S")
+
+      data.append([
+        task['name'], 
+        "active",
+        start_utc,
+        worker_name
+      ])
+    
+    for task in inspector.reserved()[worker_name]:
+      data.append({ "name": task['name'], "worker": worker_name, "status": "reserved" })
+    
+    for task in inspector.scheduled()[worker_name]:
+      data.append({ "name": task['name'], "worker": worker_name, "status": "scheduled" })
+
+    return jsonify(draw = (draw + 1), data = data, recordsTotal = len(data), recordsFiltered = len(data))
+  else:
+    return jsonify(["error"])
