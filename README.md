@@ -1,4 +1,4 @@
-# MTradumàtica
+# MTradumàtica on Python 3 🐍
 
 ## Fast installation instructions for Ubuntu 16.04 LTS or Ubuntu 18.04 LTS
 
