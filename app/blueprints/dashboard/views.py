@@ -1,5 +1,5 @@
 from app import db
-from app.models import TranslatorFromBitext, User
+from app.models import TranslatorFromBitext, User, LanguageModel
 from app.utils import user_utils, utils
 from app.utils.tasks import celery
 
@@ -101,23 +101,32 @@ def queue_list():
     worker_name = list(workers)[0]
     inspector = celery.control.inspect([worker_name])
 
+    tasks = {
+      "active": inspector.active()[worker_name],
+      "reserved": inspector.reserved()[worker_name],
+      "scheduled": inspector.scheduled()[worker_name]
+    }
+
     data = []
-    for task in inspector.active()[worker_name]:
-      start_utc = datetime.fromtimestamp(time() - kombu.five.monotonic() + task['time_start']).strftime("%Y-%m-%d %H:%M:%S")
+    for status in tasks.keys():
+      for task in tasks[status]:
+        start_utc = datetime.fromtimestamp(time() - kombu.five.monotonic() + task['time_start']).strftime("%Y-%m-%d %H:%M:%S")
 
-      data.append([
-        task['name'], 
-        "active",
-        start_utc,
-        worker_name
-      ])
-    
-    for task in inspector.reserved()[worker_name]:
-      data.append({ "name": task['name'], "worker": worker_name, "status": "reserved" })
-    
-    for task in inspector.scheduled()[worker_name]:
-      data.append({ "name": task['name'], "worker": worker_name, "status": "scheduled" })
+        item = None
+        translator = TranslatorFromBitext.query.filter(TranslatorFromBitext.task_id.like(task['id'])).first()
+        if translator:
+          item = translator
+        else:
+          item = LangaugeModel.query.filter(LangaugeModel.task_id.like(task['id'])).first()
 
+        data.append([
+          task['name'],
+          status,
+          start_utc,
+          worker_name,
+          item.name if item else ''
+        ])
+    
     return jsonify(draw = (draw + 1), data = data, recordsTotal = len(data), recordsFiltered = len(data))
   else:
     return jsonify(["error"])
