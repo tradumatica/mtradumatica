@@ -20,7 +20,7 @@ $(document).ready(function() {
 			let id = $('td', row).eq(0).find('input').attr('id').split("-")[1];
 
 			/***** Enable training counter  *********/
-			let spanid = "training-time-"+id;
+			let spanid = "training-time-" + id;
 			let startDateTimeStr = $('td', row).eq(5).text();
 			let curContent = $('td', row).eq(6).text();
 			if(curContent === "") {
@@ -28,7 +28,7 @@ $(document).ready(function() {
 				$('td', row).eq(6).html(`<span class="label label-primary" id="${spanid}"></span>`);
 
 				init_clock(startDateTimeStr, spanid, id);
-				init_status_checker("actions/status-translator", id);
+				init_status_checker("actions/status-translator", id, table);
 			} else {
 				//Training has finished: show green label
 				let startDate = parseDate(startDateTimeStr);
@@ -122,154 +122,152 @@ $(document).ready(function() {
 				console.log( "error" );
 			})
 		});
-	})
 
-	$('input.file_checkbox').on('change', function() {
-		if ($('#checkbox_all').is(":checked")) {
-			$('#checkbox_all').addClass("checkbox-inconsistent");
-		}
+		$('input.file_checkbox').on('change', function() {
+			if ($('#checkbox_all').is(":checked")) {
+				$('#checkbox_all').addClass("checkbox-inconsistent");
+			}
 
-		let any = false;
-		$('.file_checkbox').each(function() {
+			let any = false;
+			$('.file_checkbox').each(function() {
+				if ($(this).is(":checked")) {
+					any = true;
+					return false;
+				}
+			});
+
+			if (any) {
+				$('#delete_all').addClass("trashbin-enabled");
+			} else {
+				$('#delete_all').removeClass("trashbin-enabled");
+				$('#checkbox_all').prop("checked", false);
+				$('#checkbox_all').removeClass("checkbox-inconsistent");
+			}
+		});
+
+		$('#checkbox_all').change(function() {
+			$(this).removeClass("checkbox-inconsistent");
 			if ($(this).is(":checked")) {
-				any = true;
-				return false;
+				$('.file_checkbox').prop("checked", true);
+				$('#delete_all').addClass("trashbin-enabled");
+			} else {
+				$('.file_checkbox').prop("checked", false);
+				$('#delete_all').removeClass("trashbin-enabled");
 			}
 		});
 
-		if (any) {
-			$('#delete_all').addClass("trashbin-enabled");
-		} else {
-			$('#delete_all').removeClass("trashbin-enabled");
-			$('#checkbox_all').prop("checked", false);
-			$('#checkbox_all').removeClass("checkbox-inconsistent");
-		}
-	});
-
-	$('#checkbox_all').change(function() {
-		$(this).removeClass("checkbox-inconsistent");
-		if ($(this).is(":checked")) {
-			$('.file_checkbox').prop("checked", true);
-			$('#delete_all').addClass("trashbin-enabled");
-		} else {
-			$('.file_checkbox').prop("checked", false);
-			$('#delete_all').removeClass("trashbin-enabled");
-		}
-	});
-
-	$('#delete_all').click(function() {
-		$('.file_checkbox').each(function () {
-			if ($(this).is(":checked")) {
-				$.ajax({
-					url: "actions/translator-delete/" + $(this).attr("id").substring("checkbox-".length)
-				}).done(function(){
-					table.ajax.reload();
-					$('#delete_all').removeClass("trashbin-enabled");
-				});
-			}
-		}).done(function(){
-			table.ajax.reload();
-		});
-
-		$('#checkbox_all').prop("checked", false);
-		$('#checkbox_all').removeClass("checkbox-inconsistent")
-		$('#delete_all').removeClass("trashbin-enabled");
-	});
-
-	$('span.glyphicon-remove').on('click', function(){
-		$.ajax({
-			url: "actions/optimization-kill/" + $(this).attr("id").substring("cancel-id-".length)
-		}).done(function(){
-			table.ajax.reload();
-		});
-	});
-
-	$("#evalform").submit(function(e){
-		return false;
-	});
-
-	$('#button_evaluate').click(function(){
-		let form = $("#evalform")[0];
-		let data = new FormData(form);
-		
-		$('#modal-evaluate').modal("hide");
-		$("#my-please-wait").modal("show");
-
-		$.ajax({
-			type: "POST",
-			enctype: "multipart/form-data",
-			url: "actions/perform-evaluation-translator/" + translator_id,
-			cache: false,
-			contentType: false,
-			processData: false,
-			data: data,
-			success: function(result){
-				/* Update table */
-				table.ajax.reload();
-				$("#my-please-wait").modal("hide");
-			}
-		});
-	});
-
-	//Put selected language in form, list monolingual corpora
-	$('.seleclang').click(function() {
-		let seleclang_lang = $(this).attr("lang");
-		$('#inputLanguage' + languagenumber).text(seleclang_lang);
-		validateInputLanguage(['inputLanguage1','inputLanguage2']);
-		
-		//if SL and TL are not empty, reload bitexts and language models
-		if($('#inputLanguage1').text() != "" && $('#inputLanguage2').text() != ""){
-			$.ajax("actions/languagemodel-plainlist/" + $('#inputLanguage2').text()).done(function(data) {
-				//fill select with language models
-				$('#selLanguageModel').empty();
-				if(data.data.length  > 0){
-					$.each(data.data, function(i, item) {
-					$("#selLanguageModel").append($("<option></option>").val(item.id).html(item.name));
+		$('#delete_all').click(function() {
+			$('.file_checkbox').each(function () {
+				if ($(this).is(":checked")) {
+					$.ajax({
+						url: "actions/translator-delete/" + $(this).attr("id").substring("checkbox-".length)
+					}).done(function(){
+						table.ajax.reload();
+						$('#delete_all').removeClass("trashbin-enabled");
 					});
 				}
-				else{
-					$("#selLanguageModel").append($("<option></option>").val(null).html(""));
-				}
+			});
 
-				//fill select with bitexts
-				$.ajax(`/actions/bitext-plainlist/${$('#inputLanguage1').text()}/${$('#inputLanguage2').text()}`)
-				.done(function(data) {
-					$('#selBitext').empty();
-					if (data.data.length > 0) {
+			$('#checkbox_all').prop("checked", false);
+			$('#checkbox_all').removeClass("checkbox-inconsistent")
+			$('#delete_all').removeClass("trashbin-enabled");
+		});
+
+		$('span.glyphicon-remove').on('click', function(){
+			$.ajax({
+				url: "actions/optimization-kill/" + $(this).attr("id").substring("cancel-id-".length)
+			}).done(function(){
+				table.ajax.reload();
+			});
+		});
+
+		$("#evalform").submit(function(e){
+			return false;
+		});
+
+		$('#button_evaluate').click(function(){
+			let form = $("#evalform")[0];
+			let data = new FormData(form);
+			
+			$('#modal-evaluate').modal("hide");
+			$("#my-please-wait").modal("show");
+
+			$.ajax({
+				type: "POST",
+				enctype: "multipart/form-data",
+				url: "actions/perform-evaluation-translator/" + translator_id,
+				cache: false,
+				contentType: false,
+				processData: false,
+				data: data,
+				success: function(result){
+					/* Update table */
+					table.ajax.reload();
+					$("#my-please-wait").modal("hide");
+				}
+			});
+		});
+
+		//Put selected language in form, list monolingual corpora
+		$('.seleclang').click(function() {
+			let seleclang_lang = $(this).attr("lang");
+			$('#inputLanguage' + languagenumber).text(seleclang_lang);
+			validateInputLanguage(['inputLanguage1','inputLanguage2']);
+			
+			//if SL and TL are not empty, reload bitexts and language models
+			if($('#inputLanguage1').text() != "" && $('#inputLanguage2').text() != ""){
+				$.ajax("actions/languagemodel-plainlist/" + $('#inputLanguage2').text()).done(function(data) {
+					//fill select with language models
+					$('#selLanguageModel').empty();
+					if(data.data.length  > 0){
 						$.each(data.data, function(i, item) {
-							let option = document.createElement('option');
-							$(option).val(item.id).html(`${item.name} / ${item.nlines}`);
-							$("#selBitext").append(option);
+						$("#selLanguageModel").append($("<option></option>").val(item.id).html(item.name));
 						});
-					} else {
-						let option = document.createElement('option');
-						$(option).val(null).html("");
-						$("#selBitext").append(option);
+					}
+					else{
+						$("#selLanguageModel").append($("<option></option>").val(null).html(""));
 					}
 
-					//hide language selection modal
-					$('#lang-dialog').modal("hide");
+					//fill select with bitexts
+					$.ajax(`/actions/bitext-plainlist/${$('#inputLanguage1').text()}/${$('#inputLanguage2').text()}`)
+					.done(function(data) {
+						$('#selBitext').empty();
+						if (data.data.length > 0) {
+							$.each(data.data, function(i, item) {
+								let option = document.createElement('option');
+								$(option).val(item.id).html(`${item.name} / ${item.nlines}`);
+								$("#selBitext").append(option);
+							});
+						} else {
+							let option = document.createElement('option');
+							$(option).val(null).html("");
+							$("#selBitext").append(option);
+						}
+
+						//hide language selection modal
+						$('#lang-dialog').modal("hide");
+					})
 				})
-			})
-		}
+			}
+		});
+
+		//Show modal for creating a new bitext
+		$('#addbutton').click(function() {
+			$('#modal-add').modal("show");
+		});
+
+		let languagenumber = "0";
+		//Show language selection modal on top ot if
+		$('#inputLanguage1').click(function(){
+			languagenumber = "1";
+			$('#lang-dialog').modal("show");
+		})
+
+		$('#inputLanguage2').click(function(){
+			languagenumber = "2";
+			$('#lang-dialog').modal("show");
+		})
 	});
-
-	//Show modal for creating a new bitext
-	$('#addbutton').click(function() {
-		$('#modal-add').modal("show");
-	});
-
-	let languagenumber = "0";
-	//Show language selection modal on top ot if
-	$('#inputLanguage1').click(function(){
-		languagenumber = "1";
-		$('#lang-dialog').modal("show");
-	})
-
-	$('#inputLanguage2').click(function(){
-		languagenumber = "2";
-		$('#lang-dialog').modal("show");
-	})
 
 	//submit create form
 	$('#buttonCreate').click(function() {

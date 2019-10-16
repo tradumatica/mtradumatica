@@ -6,12 +6,12 @@
   <p>{{ _('Query and examine components of SMT engines.') }}</p>
 
   <ul class="nav nav-tabs">
-    <li id="lmtab_tab" class="active"><a id="lmtab" href="#form-lmtab">{{ _('Language models') }}</a></li>
-    <li id="tmtab_tab"><a id="tmtab" href="#form-tmtab">{{ _('Translation models') }}</a></li>
-    <li id="pbdtab_tab"><a id="pbdtab" href="#form-pbdtab">{{ _('Probabilistic bilingual dictionary') }}</a></li>
-    <li id="mttab_tab"><a id="mttab" href="#form-mttab">{{ _('Translation details') }}</a></li>
+    <li id="lmtab_tab" class="active"><a id="lmtab" href="#form-lmtab" data-toggle="tab">{{ _('Language models') }}</a></li>
+    <li id="tmtab_tab"><a id="tmtab" href="#form-tmtab" data-toggle="tab">{{ _('Translation models') }}</a></li>
+    <li id="pbdtab_tab"><a id="pbdtab" href="#form-pbdtab" data-toggle="tab">{{ _('Probabilistic bilingual dictionary') }}</a></li>
+    <li id="mttab_tab"><a id="mttab" href="#form-mttab" data-toggle="tab">{{ _('Translation details') }}</a></li>
     {% if user == None or user.admin %}
-    <li id="mrtab_tab"><a id="mrtab" href="#form-mrtab">{{ _('Moses remote server') }}</a></li> 
+    <li id="mrtab_tab"><a id="mrtab" href="#form-mrtab" data-toggle="tab">{{ _('Moses remote server') }}</a></li> 
     {% endif %}
   </ul>
 

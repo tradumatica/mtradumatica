@@ -54,11 +54,6 @@ $(document).ready(function() {
     language: datatables_lang
   })
 
-  $('.nav-tabs a').click(function (e) {
-    e.preventDefault()
-    $(this).tab('show')
-  });
-
   $('.nav-tabs a').on('shown.bs.tab', function(e) {
     $(".table").DataTable().columns.adjust().draw();
   });

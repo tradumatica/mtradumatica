@@ -6,12 +6,12 @@
   <p>{{ _('Check the load and health of the components of the system.') }}</p>
 
   <ul class="nav nav-tabs">
-    <li id="system_tab" class="active"><a id="lmtab" href="#system_tab_contents">{{ _('System') }}</a></li>
+    <li id="system_tab" class="active"><a id="lmtab" href="#system_tab_contents" data-toggle="tab">{{ _('System') }}</a></li>
     {% if user == None or user.admin %}
-    <li id="users_tab"><a id="tmtab" href="#users_tab_contents">{{ _('Users') }}</a></li>
+    <li id="users_tab"><a id="tmtab" href="#users_tab_contents" data-toggle="tab">{{ _('Users') }}</a></li>
     {% endif %}
-    <li id="queue_tab"><a id="pbdtab" href="#queue_tab_contents">{{ _('Queue') }}</a></li>
-    <li id="space_tab"><a id="mttab" href="#space_tab_contents">{{ _('Translators') }}</a></li>
+    <li id="queue_tab"><a id="pbdtab" href="#queue_tab_contents" data-toggle="tab">{{ _('Queue') }}</a></li>
+    <li id="space_tab"><a id="mttab" href="#space_tab_contents" data-toggle="tab">{{ _('Translators') }}</a></li>
   </ul>
 
   <div class="tab-content">

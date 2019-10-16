@@ -54,79 +54,81 @@ $(document).ready(function() {
 		resetIntervals();
 	})
 
-	$('input.file_checkbox').on('change', function() {
-		if($('#checkbox_all').is(":checked")) {
-			$('#checkbox_all').addClass("checkbox-inconsistent");
-		}
-
-		let any = false;
-		$('.file_checkbox').each(function() {
-			if($(this).is(":checked")) {
-				any = true;
-				return false;
+	$('#languagemodellist').on('draw.dt', function() {
+		$('input.file_checkbox').on('change', function() {
+			if($('#checkbox_all').is(":checked")) {
+				$('#checkbox_all').addClass("checkbox-inconsistent");
 			}
-		});
 
-		//Add counter to training time
-		if (any) {
-			$('#delete_all').addClass("trashbin-enabled");
-		} else {
-			$('#delete_all').removeClass("trashbin-enabled");
-			$('#checkbox_all').prop("checked", false);
-			$('#checkbox_all').removeClass("checkbox-inconsistent");
-		}
-	});
+			let any = false;
+			$('.file_checkbox').each(function() {
+				if($(this).is(":checked")) {
+					any = true;
+					return false;
+				}
+			});
 
-	$('#checkbox_all').change(function() {
-		$(this).removeClass("checkbox-inconsistent");
-		if ($(this).is(":checked")) {
-			$('.file_checkbox').prop("checked", true);
-			$('#delete_all').addClass("trashbin-enabled");
-		} else {
-			$('.file_checkbox').prop("checked", false);
-			$('#delete_all').removeClass("trashbin-enabled");
-		}
-	});
-
-	$('#delete_all').click(function() {
-		$('.file_checkbox').each(function () {
-			if ($(this).is(":checked")) {
-				$.ajax({
-					url: "actions/languagemodel-delete/" + $(this).attr("id").substring("checkbox-".length)
-				}).done(function(){
-					table.ajax.reload();
-					$('#delete_all').removeClass("trashbin-enabled");
-				});
-			}
-		}).done(function(){
-			table.ajax.reload();
-		});
-
-		$('#checkbox_all').prop("checked", false);
-		$('#checkbox_all').removeClass("checkbox-inconsistent")
-		$('#dele[Ate_all').removeClass("trashbin-enabled");
-	});
-
-	//Put selected language in form, list monolingual corpora
-	$('.seleclang').click(function() {
-		seleclang_lang = $(this).attr("lang");
-		$('#inputLanguage' + languagenumber).text(seleclang_lang);
-		$.ajax("/actions/monolingualcorpus-plainlist/" + seleclang_lang ).done(function(data) {
-			//fill select with monolingual corpora
-			$('#selMonolingualCorpus').empty();
-			if (data.data.length > 0) {
-				$.each(data.data, function(i, item) {
-					let option = document.createElement('option');
-					$(option).val(item.id).html(`${item.name} / ${item.nlines}`)
-					$("#selMonolingualCorpus").append(option);
-				});
+			//Add counter to training time
+			if (any) {
+				$('#delete_all').addClass("trashbin-enabled");
 			} else {
-				//$("#selMonolingualCorpus").append($("<option></option>").val(null).html(""));
+				$('#delete_all').removeClass("trashbin-enabled");
+				$('#checkbox_all').prop("checked", false);
+				$('#checkbox_all').removeClass("checkbox-inconsistent");
 			}
-		}).always(function() {
-			//Always close modal
-			$('#lang-dialog').modal("hide");
-			validateInputLanguage(["inputLanguage1"]);
+		});
+
+		$('#checkbox_all').change(function() {
+			$(this).removeClass("checkbox-inconsistent");
+			if ($(this).is(":checked")) {
+				$('.file_checkbox').prop("checked", true);
+				$('#delete_all').addClass("trashbin-enabled");
+			} else {
+				$('.file_checkbox').prop("checked", false);
+				$('#delete_all').removeClass("trashbin-enabled");
+			}
+		});
+
+		$('#delete_all').click(function() {
+			$('.file_checkbox').each(function () {
+				if ($(this).is(":checked")) {
+					$.ajax({
+						url: "actions/languagemodel-delete/" + $(this).attr("id").substring("checkbox-".length)
+					}).done(function(){
+						table.ajax.reload();
+						$('#delete_all').removeClass("trashbin-enabled");
+					});
+				}
+			}).done(function(){
+				table.ajax.reload();
+			});
+
+			$('#checkbox_all').prop("checked", false);
+			$('#checkbox_all').removeClass("checkbox-inconsistent")
+			$('#dele[Ate_all').removeClass("trashbin-enabled");
+		});
+
+		//Put selected language in form, list monolingual corpora
+		$('.seleclang').click(function() {
+			seleclang_lang = $(this).attr("lang");
+			$('#inputLanguage' + languagenumber).text(seleclang_lang);
+			$.ajax("/actions/monolingualcorpus-plainlist/" + seleclang_lang ).done(function(data) {
+				//fill select with monolingual corpora
+				$('#selMonolingualCorpus').empty();
+				if (data.data.length > 0) {
+					$.each(data.data, function(i, item) {
+						let option = document.createElement('option');
+						$(option).val(item.id).html(`${item.name} / ${item.nlines}`)
+						$("#selMonolingualCorpus").append(option);
+					});
+				} else {
+					//$("#selMonolingualCorpus").append($("<option></option>").val(null).html(""));
+				}
+			}).always(function() {
+				//Always close modal
+				$('#lang-dialog').modal("hide");
+				validateInputLanguage(["inputLanguage1"]);
+			});
 		});
 	});
 

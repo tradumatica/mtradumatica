@@ -11,11 +11,11 @@ function parseDate(dateTimeStr) {
 
 function formatDateDiff(start, now) {
 	try {
-		let diff = now.getTime() - start.getTime();
-		let date = new Date(new Date(diff).getTime() + (date.getTimezoneOffset() * 60000))
+		let diff = new Date(now.getTime() - start.getTime());
+		let date = new Date(diff.getTime() + (diff.getTimezoneOffset() * 60000));
 		
 		return `${pad(date.getDate() - 1)}:${pad(date.getHours())}:${pad(date.getMinutes())}:${pad(date.getSeconds())}`
-	} catch {
+	} catch (e) {
 		return ""
 	}
 }
@@ -26,14 +26,14 @@ function init_clock(dateTimeStr, spanid, dataid) {
 		let today = new Date(new Date().getTime() + (new Date().getTimezoneOffset() * 60000));
 		let timeElapsed = formatDateDiff(startDate, today);
 		if (timeElapsed != "") {
-			$("#"+spanid).html(timeElapsed);
+			$("#" + spanid).html(timeElapsed);
 		}
 	}, 500);
 
 	running_intervals.push(timerid);
 }
 
-function init_status_checker(url, id) {
+function init_status_checker(url, id, table) {
 	timerid = setInterval(() => {
 		//ask web service whether training has finished.
 		//It should return finish time if training has finished and empty string otherwise
