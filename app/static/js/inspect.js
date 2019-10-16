@@ -165,12 +165,7 @@ $(document).ready(function() {
       alert("Error");
     });
   });
-
-  $('.nav-tabs a').click(function (e) {
-    e.preventDefault()
-    $(this).tab('show');
-  });
-
+  
   $(".tab-content form").on('submit', function(e) {
     e.preventDefault();
     e.stopPropagation();
