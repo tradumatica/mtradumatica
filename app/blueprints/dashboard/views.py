@@ -1,15 +1,19 @@
-from app import db
-from app.models import TranslatorFromBitext, User, LanguageModel
-from app.utils import user_utils, utils
-from app.utils.tasks import celery
+from datetime import datetime
+from time import time
+from traceback import print_stack
 
+import kombu.five
+from app import db
+from app.models import LanguageModel, TranslatorFromBitext, User
+from app.utils import tasks as celerytasks
+from app.utils import user_utils, utils
 from flask import Blueprint, abort, jsonify, render_template, request
 from flask_babel import _
 from flask_login import current_user, login_required
-from datetime import datetime
 
-import kombu.five
-from time import time
+from celery.result import AsyncResult
+import os
+import signal
 
 dashboard_blueprint = Blueprint('dashboard', __name__, template_folder='templates')
 
@@ -70,11 +74,11 @@ def user_list():
       raise ValueError('order[0][dir] must be "asc" or "desc"')
 
     search     = request.form['search[value]']
-    search_str = u'%{0}%'.format(search)
+    search_str = '%{0}%'.format(search)
 
-    checkbox   = u'<span class="checkbox"><input class="file_checkbox" type="checkbox" id="ul-checkbox-{0}"/></div>'
-    toggle = u'<button type="button" id="button-toggle-{0}" class="btn btn-default btn-sm">'+_('Toggle')+'</button>'
-    date_fmt   = u'%Y-%m-%d %H:%M:%S'
+    checkbox   = '<span class="checkbox"><input class="file_checkbox" type="checkbox" id="ul-checkbox-{0}"/></div>'
+    toggle = '<button type="button" id="button-toggle-{0}" class="btn btn-default btn-sm">'+_('Toggle')+'</button>'
+    date_fmt   = '%Y-%m-%d %H:%M:%S'
 
 
     data = [[checkbox.format(u.id), u.username, u.email, u.n_engines(), u.size_mb(), u.admin, u.banned, toggle.format(u.id) if u.id != current_user.id else ""]
@@ -91,15 +95,12 @@ def user_list():
 
 @dashboard_blueprint.route('/actions/queue-list', methods=["POST"])
 def queue_list():
-  start     = int(request.form['start'])
-  length    = int(request.form['length'])
   draw      = int(request.form['draw'])
-  order_col = int(request.form['order[0][column]'])
 
-  workers = celery.control.inspect().stats().keys()
+  workers = celerytasks.celery.control.inspect().stats().keys()
   if len(workers) > 0:
     worker_name = list(workers)[0]
-    inspector = celery.control.inspect([worker_name])
+    inspector = celerytasks.celery.control.inspect([worker_name])
 
     tasks = {
       "active": inspector.active()[worker_name],
@@ -110,16 +111,21 @@ def queue_list():
     data = []
     for status in tasks.keys():
       for task in tasks[status]:
+        print(task)
         start_utc = datetime.fromtimestamp(time() - kombu.five.monotonic() + task['time_start']).strftime("%Y-%m-%d %H:%M:%S")
 
         item = None
-        translator = TranslatorFromBitext.query.filter(TranslatorFromBitext.task_id.like(task['id'])).first()
-        if translator:
-          item = translator
+        if task['type'] == 'app.utils.tasks.train_smt':
+          item = TranslatorFromBitext.query.filter(TranslatorFromBitext.task_id.like(task['id'])).first()
+        elif task['type'] == 'app.utils.tasks.train_simple_smt':
+          item = TranslatorFromBitext.query.filter(TranslatorFromBitext.task_id.like(task['id'])).first()
+        elif task['type'] == 'app.utils.tasks.train_lm':
+          item = LanguageModel.query.filter(LanguageModel.task_id.like(task['id'])).first()
         else:
-          item = LangaugeModel.query.filter(LangaugeModel.task_id.like(task['id'])).first()
+          continue
 
         data.append([
+          task['id'],
           task['name'],
           status,
           start_utc,
@@ -130,3 +136,16 @@ def queue_list():
     return jsonify(draw = (draw + 1), data = data, recordsTotal = len(data), recordsFiltered = len(data))
   else:
     return jsonify(["error"])
+
+@dashboard_blueprint.route('/actions/revoke-task', methods=["POST"])
+def terminate_task():
+  task_id = request.form['task_id']
+
+  try:
+    task = AsyncResult(task_id, app=celerytasks.celery)
+    proc_id = task.info['proc_id']
+    os.killpg(proc_id, signal.SIGTERM)
+    celerytasks.celery.control.revoke(task_id, terminate=True)
+    return jsonify({"result": 200})
+  except Exception as e:
+    return jsonify({"result": -1})

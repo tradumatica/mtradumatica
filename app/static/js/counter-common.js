@@ -45,7 +45,7 @@ function init_status_checker(url, id, table) {
 			if(data.status == "done") {
 				//remove intervals and reload datatable
 				resetIntervals();
-				table.ajax.reload(resetPaging=false);
+				$(table).DataTable().ajax.reload(resetPaging=false);
 			}
 		});
 	}, STATUS_INTERVAL);

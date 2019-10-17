@@ -25,7 +25,7 @@ $(document).ready(function() {
 
 				init_clock(startDateTimeStr,spanid,id);
 
-				init_status_checker("actions/status-languagemodel",id);
+				init_status_checker("actions/status-languagemodel", id, '#languagemodellist');
 			} else {
 				//Training has finished: show green label
 				let startDate = parseDate(startDateTimeStr);
@@ -45,7 +45,6 @@ $(document).ready(function() {
 			//Once counters are initialized, display the date according to client's locale
 			date = new Date(new Date(startDateTimeStr).getTime() - (new Date().getTimezoneOffset() * 60000))
 			$('td', row).eq(4).text(date.toLocaleDateString()+" "+date.toLocaleTimeString());
-			console.log(date)
 		},
 		language: datatables_lang
 	});
@@ -54,7 +53,7 @@ $(document).ready(function() {
 		resetIntervals();
 	})
 
-	$('#languagemodellist').on('draw.dt', function() {
+	$('#languagemodellist').on('init.dt', function() {
 		$('input.file_checkbox').on('change', function() {
 			if($('#checkbox_all').is(":checked")) {
 				$('#checkbox_all').addClass("checkbox-inconsistent");
@@ -99,8 +98,6 @@ $(document).ready(function() {
 						$('#delete_all').removeClass("trashbin-enabled");
 					});
 				}
-			}).done(function(){
-				table.ajax.reload();
 			});
 
 			$('#checkbox_all').prop("checked", false);

@@ -84,11 +84,15 @@
       <table id="tasklist" class="table table-striped table-bordered" style="width:100%">
         <thead>
           <tr>
+            <th><input class="checkbox" id="task_checkbox_all" type="checkbox"/></th>
             <th>{{ _('Task name') }}</th>
             <th>{{ _('Status') }}</th>
             <th>{{ _('Creation date') }}</th>
             <th>{{ _('Worker') }}</th>
             <th>{{ _('Working on') }}</th>
+            <th>
+              <span id="tasks_delete" class="glyphicon glyphicon-trash" aria-hidden="true"></span>
+            </th>  
           </tr>
         </thead>
         <tbody>

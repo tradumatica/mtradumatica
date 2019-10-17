@@ -42,7 +42,7 @@ $(document).ready(function() {
     language: datatables_lang
   });
 
-  $('#filelist').on('draw.dt', function() {
+  $('#filelist').on('init.dt', function() {
     let seleclang_id = "";
 
     $('td').on('click', function(){

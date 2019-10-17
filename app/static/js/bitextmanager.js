@@ -19,7 +19,7 @@ $(document).ready(function() {
   });
 
   var idOfBitextToAppend = -1;
-  $('#bitextlist').on('draw.dt', function() {
+  $('#bitextlist').on('init.dt', function() {
     $('span.glyphicon-eye-open').on('click', function() {
       $.ajax({
         url: "actions/bitext-peek/" + $(this).attr("id").substring("peek-".length),

@@ -19,7 +19,7 @@ $(document).ready(function() {
   });
 
   var idOfMonocorpusToAppend = -1;
-  $('#monolingualcorpuslist').on('draw.dt', function() {
+  $('#monolingualcorpuslist').on('init.dt', function() {
     $('span.glyphicon-eye-open').on('click', function() {
       $.ajax({
         url: "actions/monolingualcorpus-peek/" + $(this).attr("id").substring("peek-".length),

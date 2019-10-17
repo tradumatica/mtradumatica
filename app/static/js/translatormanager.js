@@ -28,7 +28,7 @@ $(document).ready(function() {
 				$('td', row).eq(6).html(`<span class="label label-primary" id="${spanid}"></span>`);
 
 				init_clock(startDateTimeStr, spanid, id);
-				init_status_checker("actions/status-translator", id, table);
+				init_status_checker("actions/status-translator", id, '#translatorlist');
 			} else {
 				//Training has finished: show green label
 				let startDate = parseDate(startDateTimeStr);
@@ -61,14 +61,14 @@ $(document).ready(function() {
 					$('td', row).eq(7).html(`<span class="label label-primary" id="${spanid}"></span> <span class="glyphicon glyphicon-remove trashbin-enabled" id="${cancelid}"></span>`);
 
 					init_clock(parts[0],spanid,id);
-					init_status_checker("actions/status-translator-optimization",id);
+					init_status_checker("actions/status-translator-optimization", id, '#translatorlist');
 				}
 			}
 		},
 		language: datatables_lang
 	});
 
-	$('#translatorlist').on('draw.dt', function() {
+	$('#translatorlist').on('init.dt', function() {
 		//Manage optimization modal
 		let idOfTranslatorToOptimize = -1;
 		$('#translatorlist .btn').on('click', function() {
