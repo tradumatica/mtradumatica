@@ -17,7 +17,7 @@ make install
 
 cd $ROOT/software/mosesdecoder
 make -f contrib/Makefiles/install-dependencies.gmake || exit 1
-./compile.sh --prefix=$ROOT/venv/local --with-mm --with-probing-p --install-scripts -j$CORES || exit 1
+./compile.sh --prefix=$ROOT/venv/local --with-mm --with-mm-extras --with-probing-p --install-scripts -j$CORES || exit 1
 
 # Fix problem with script
 
@@ -35,3 +35,4 @@ cd $ROOT/software/apertium
 make -j$CORES 
 make install || exit 1
 
+cp $ROOT/venv/local/bin/* $ROOT/venv/bin/

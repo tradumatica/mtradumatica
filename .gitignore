@@ -1,0 +1,17 @@
+instance/
+venv/
+logs/
+db/
+db/app.db
+proc/
+redis-data/
+uploads/
+translators/
+lms/
+*/*.pot
+*/*/*/*/*.mo
+*/*.pyc
+*.pyc
+*~
+*/*~
+.vscode*

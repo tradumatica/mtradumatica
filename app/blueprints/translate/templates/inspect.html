@@ -1,0 +1,306 @@
+{% extends "base.html" %}
+
+{% block content %}
+<div class="container">
+  <h2>{{ _('Inspect') }}</h2>
+  <p>{{ _('Query and examine components of SMT engines.') }}</p>
+
+  <ul class="nav nav-tabs">
+    <li id="lmtab_tab" class="active"><a id="lmtab" href="#form-lmtab" data-toggle="tab">{{ _('Language models') }}</a></li>
+    <li id="tmtab_tab"><a id="tmtab" href="#form-tmtab" data-toggle="tab">{{ _('Translation models') }}</a></li>
+    <li id="pbdtab_tab"><a id="pbdtab" href="#form-pbdtab" data-toggle="tab">{{ _('Probabilistic bilingual dictionary') }}</a></li>
+    <li id="mttab_tab"><a id="mttab" href="#form-mttab" data-toggle="tab">{{ _('Translation details') }}</a></li>
+    {% if user == None or user.admin %}
+    <li id="mrtab_tab"><a id="mrtab" href="#form-mrtab" data-toggle="tab">{{ _('Moses remote server') }}</a></li> 
+    {% endif %}
+  </ul>
+
+  <div class="tab-content">
+    <form id="form-lmtab" class="tab-pane active" data-toggle="validator">
+      <div id="lmtab_contents">
+        <div class="row">
+          <div class="col-md-offset-3 col-md-6">
+            <div class="form-group">
+              <label for="inputtext">{{ _('Input text') }}</label>
+              <input type="text" class="form-control" id="inputtext" name="name" placeholder="{{ _("Insert tokenized text here") }}"
+              autocomplete="off" required />
+            </div>
+          </div>
+        </div>
+        <div class="row">
+          <div class="col-md-6  col-md-offset-3"> 
+            <div class="form-group">
+              <label for="lmsel">{{ _('LM / LM from translator') }}</label>
+              <select id="lmsel" class="form-control" required>
+                <option value="" selected="selected">
+                {% for d in lm %}
+                <option value="lm-{{d.id}}">[LM] {{d.name}} [{{d.lang}}]</option>
+                {% endfor %}
+                {% for d in trans %}
+                <option value="{{ d.id }}">[TRANS] {{ d.name }} [{{ d.lang2 }}]</option>
+                {% endfor %}
+              </select>
+            </div>
+          </div>
+        </div>
+        <div class="row">
+          <div class="col-md-offset-3 col-md-6">
+            <div class="form-group">
+              <label for="outputtext">{{ _('Output') }}</label>
+              <textarea id="outputtext" class="form-control" rows="5" readonly></textarea>
+            </div>
+          </div>
+        </div>
+        <div class="row text-center">
+          <br/>
+          <button id="submit" type="submit" class="btn btn-primary">{{ _('Query') }}</button>
+        </div>
+      </div>
+    </form>
+        
+    <form id="form-tmtab" class="tab-pane" data-toggle="validator">
+      <div id="tmtab_contents">
+        <div class="row">
+          <div class="col-md-offset-3 col-md-6">
+            <div class="form-group">
+              <label for="inputtext2">{{ _('Input text') }}</label>
+              <input required type="text" class="form-control" id="inputtext2" name="name" placeholder="{{ _("Insert tokenized text here") }}"/>
+            </div>
+          </div>
+        </div>
+        <div class="row">
+          <div class="col-md-6  col-md-offset-3"> 
+            <div class="form-group">
+              <label for="tmsel">{{ _('TM from translator') }}</label>
+              <select required id="tmsel" class="form-control" >
+                <option value="" selected="selected"></option> 
+                {% for d in trans %}
+                <option value="{{ d.id }}">{{ d.name }} [{{d.lang1}} &rarr; {{ d.lang2 }}]</option>
+                {% endfor %}
+              </select>
+            </div>
+          </div>
+        </div>
+        
+        <div class="row">
+          <div class="col-md-offset-3 col-md-6">
+            <div class="form-group">
+              <label for="outputtext2">{{ _('Output') }}</label>
+              <textarea id="outputtext2" class="form-control" rows="10" readonly></textarea>
+            </div>
+          </div>
+        </div>
+        <div class="row text-center">
+            <br/>
+            <button id="submit2" type="submit" class="btn btn-primary">{{ _('Query') }}</button>
+        </div>
+      </div>
+    </form>
+
+    <form id="form-mttab" class="tab-pane" data-toggle="validator">
+      <div id="mttab_contents">
+        <div class="row" >
+          <div class="col-md-6  col-md-offset-3"> 
+            <div class="form-group">
+              <label for="mtsel">{{ _('Translator') }}</label>
+              <select required id="mtsel" class="form-control" >
+                <option value="" selected="selected"></option> 
+                      {% for d in trans %}
+                        <option value="{{ d.id }}">{{ d.name }} [{{d.lang1}} &rarr; {{ d.lang2 }}]</option>
+                      {% endfor %}
+                </select>
+            </div>
+          </div>
+        </div> 
+        <div class="row">
+          <div class="col-md-offset-3 col-md-6">
+            <div class="form-group">
+              <label for="inputtext4">{{ _('Input text') }}</label>
+              <textarea required id="inputtext4" class="form-control" rows="5"></textarea>
+            </div>
+          </div>
+        </div>
+        <div class="row text-center">
+          <br/>
+          <button id="submit4" type="submit" class="btn btn-primary">{{ _('Translate') }}</button>
+          <button id="clear4" class="btn btn-default">{{ _('Clear') }}</button>
+        </div>
+        
+        <div class="row">
+          <br/>
+          <div class="col-md-6">
+            <div class="form-group">
+              <label for="inputtok4">{{ _('Tokenized input') }}</label>
+              <textarea id="inputtok4" class="form-control" rows="3" readonly></textarea>
+            </div>
+          </div>
+          <div class="col-md-6">
+            <div class="form-group">
+              <label for="inputtrue4">{{ _('Truecased input') }}</label>
+              <textarea id="inputtrue4" class="form-control" rows="3" readonly></textarea>
+            </div>
+          </div>
+        </div>
+
+        <div class="row">
+          <div class="col-md-6">
+            <div class="form-group">
+              <label for="details4">{{ _('Translation details') }}</label>
+              <textarea id="details4" class="form-control" rows="3" readonly></textarea>
+            </div>
+          </div>
+          <div class="col-md-6">
+            <div class="form-group">
+              <label for="align4">{{ _('Alignments') }}</label>
+              <textarea id="align4" class="form-control" rows="3" readonly></textarea>
+            </div>
+          </div>
+        </div>
+        
+        <div class="row">
+          <div class="col-md-6">
+            <div class="form-group">
+              <label for="unk4">{{ _('Unknown words') }}</label>
+              <textarea id="unk4" class="form-control" rows="3" readonly></textarea>
+            </div>
+          </div>
+          <div class="col-md-6">
+            <div class="form-group">
+              <label for="outputtrue4">{{ _('Truecased output') }}</label>
+              <textarea id="outputtrue4" class="form-control" rows="3" readonly></textarea>
+            </div>
+          </div>
+        </div>
+        
+        <div class="row">
+          <div class="col-md-6">
+            <div class="form-group">
+              <label for="outputtok4">{{ _('Detruecased output') }}</label>
+              <textarea id="outputtok4" class="form-control" rows="3" readonly></textarea>
+            </div>
+          </div>
+          <div class="col-md-6">
+            <div class="form-group">
+              <label for="outputtext4">{{ _('Output text') }}</label>
+              <textarea id="outputtext4" class="form-control" rows="3" readonly></textarea>
+            </div>
+          </div>
+        </div>      
+        
+        <div class="row">
+          <div class="col-md-12">
+            <div class="form-group">
+              <label for="nbest4">{{ _('N-best list') }}</label>
+              <textarea id="nbest4" class="form-control" rows="5" readonly></textarea>
+            </div>
+          </div>
+        </div>
+      </div>
+    </form>
+    <form id="form-pbdtab" class="tab-pane" data-toggle="validator">
+      <div id="pbdtab_contents">
+        <div class="row">
+          <div class="col-md-offset-3 col-md-6">
+            <div class="form-group">
+              <label for="inputtext3">{{ _('Search') }}</label>
+              <input required type="text" class="form-control" id="inputtext3" name="name" placeholder="{{ _("Insert single word here") }}"/>
+            </div>
+          </div>
+        </div>
+        <div class="row">
+          <div class="col-md-6 col-md-offset-3">
+            <div class="form-group">
+              <label for="source_target">{{ _('Query type') }}</label>
+              <select required id="source_target" class="form-control">
+                <option value="src" selected="selected">{{ _('Source') }}</option>
+                <option value="trg">{{ _('Target') }}</option>
+              </select>
+            </div>
+          </div>
+        </div>
+        <div class="row">
+          <div class="col-md-6  col-md-offset-3"> 
+            <div class="form-group">
+              <label for="pbdsel">{{ _('Translator') }}</label>
+              <select required id="pbdsel" class="form-control" >
+                <option value="" selected="selected"></option> 
+                {% for d in trans %}
+                <option value="{{ d.id }}">{{ d.name }} [{{d.lang1}} &rarr; {{ d.lang2 }}]</option>
+                {% endfor %}
+              </select>
+            </div>
+          </div>
+        </div>
+        
+        <div class="row">
+          <div class="col-md-offset-3 col-md-6">
+            <div class="form-group">
+              <label for="outputtext3">{{ _('Results') }}</label>
+              <textarea id="outputtext3" class="form-control" rows="10" readonly></textarea>
+            </div>
+          </div>
+        </div>
+        <div class="row text-center">
+            <br/>
+            <button id="submit3" type="submit" class="btn btn-primary">{{ _('Query') }}</button>
+        </div> 
+      </div>
+    </form>
+    
+    {% if user == None or user.admin %}
+    <form id="form-mrtab" class="tab-pane" data-toggle="validator">
+      <div id="mrtab_contents">
+        <div class="row">
+          <div class="col-md-6  col-md-offset-3"> 
+          {{ _('Use the address <code>{}</code> to access the remote Moses translation service').format(urlmoses) }}
+          </div>
+        </div>
+        <div class="row">
+          <div>&nbsp;</div>
+        </div>
+        <div class="row">
+          <div class="col-md-6  col-md-offset-3"> 
+            <div class="form-group">
+              <label for="mrsel">{{ _('Translator') }}</label>
+              <select required id="mrsel" class="form-control" {% if moses_active %} disabled="disabled" {% endif %}>
+                <option value=""></option> 
+                {% for d in all_trans %}
+                <option value="{{ d.id }}" {% if d.moses_served == True %} selected="selected" {% endif %}>{{ d.name }} [{{d.lang1}} &rarr; {{ d.lang2 }}] ({{ all_users[d.user_id] }}) </option>
+                {% endfor %}
+              </select>
+            </div>
+          </div>
+        </div>
+        <div class="row text-center">
+          <br/>
+          <button id="submit5" type="submit" class="btn btn-success {% if moses_active %} disabled {% endif %}">{{ _('Start server') }}</button>
+          <button id="clear5" type="submit" class="btn btn-danger {% if not moses_active %} disabled {% endif %}">{{ _('Stop server') }}</button>
+        </div>
+      </div>
+    </form>
+    {% endif %}
+  </div>
+</div>
+
+<div class="modal fade bs-example-modal-sm" id="my-please-wait" tabindex="-1" role="dialog" aria-hidden="true" data-backdrop="static">
+  <div class="modal-dialog modal-sm">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h4 class="modal-title"><span class="glyphicon glyphicon-time"></span> {{ _('Please wait') }}</h4>
+      </div>
+      <div class="modal-body">
+        <div class="progress">
+          <div class="progress-bar progress-bar-info progress-bar-striped active" style="width:100%"></div>
+        </div>
+<!--        <div class="text-center">
+          <button id="cancel-modal" class="btn btn-primary">{{ _('Cancel translation task') }}</button>
+        </div>-->
+      </div>
+    </div>
+  </div>
+</div>
+{% endblock %}
+
+{% block extrajs %}
+  <script src="{{ url_for('static', filename='js/inspect.js') }}"></script>
+{% endblock %}

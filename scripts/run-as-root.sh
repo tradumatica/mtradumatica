@@ -5,8 +5,9 @@ apt-get install -y python-virtualenv python-dev libbz2-dev git \
                    libtool libpcre3-dev flex xsltproc gawk \
                    zip unzip libxml2-dev libxml2-utils pkg-config autoconf \
                    coreutils zlib1g-dev libbz2-dev automake git-core build-essential \
-                   libboost-all-dev software-properties-common python-software-properties
-                   
+                   libboost-all-dev software-properties-common default-jdk curl
+
+apt-get install -y python-software-properties                   
                    
 add-apt-repository -y ppa:chris-lea/redis-server
 apt-get update

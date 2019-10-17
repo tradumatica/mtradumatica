@@ -1,6 +1,15 @@
 body {
   padding-top: 50px;
 }
+
+.navbar-inverse .navbar-nav > li > a, .navbar > .container .navbar-brand {
+  color: white;
+}
+
+.navbar-inverse .navbar-nav > li > a:hover, .navbar > .container .navbar-brand:hover {
+  color: #9d9d9d;
+}
+
 .starter-template {
   padding: 40px 15px;
   text-align: center;

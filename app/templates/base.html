@@ -1,5 +1,9 @@
 <!DOCTYPE html>
+{% if LANGUAGES == None or len(LANGUAGES) == 0 %}
 <html lang="en">
+{% else %}
+<html lang="{{ get_locale() }}">
+{% endif %}
   <head>
     <meta charset="utf-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
@@ -9,28 +13,75 @@
     <meta name="description" content="">
     <meta name="author" content="">
     <meta name="robots" content="noindex,nofollow">
-    <link rel="icon" href="{{ url_for('.static', filename='favicon.ico') }}">
+    <link rel="icon" href="{{ url_for('static', filename='favicon.ico') }}">
 
     <title>{{ _(title) }}</title>
 
-    <link href="{{ url_for('.static', filename='css/bootstrap.min.css') }}" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/3.4.1/css/bootstrap.min.css" integrity="sha256-bZLfwXAP04zRMK2BjiO8iu9pf4FbLqX6zitd+tIvLhE=" crossorigin="anonymous" />
+    
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/datatables/1.10.19/css/dataTables.bootstrap.min.css" integrity="sha256-PbaYLBab86/uCEz3diunGMEYvjah3uDFIiID+jAtIfw=" crossorigin="anonymous" />
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/dropzone/5.5.1/min/dropzone.min.css" integrity="sha256-e47xOkXs1JXFbjjpoRr1/LhVcqSzRmGmPqsrUQeVs+g=" crossorigin="anonymous" />
+    
     {% block extracss %}{% endblock %}
-    <link href="{{ url_for('.static', filename='css/main.css') }}" rel="stylesheet">
-    <link href="{{ url_for('.static', filename='css/sticky-footer-navbar.css') }}" rel="stylesheet">
+
+    <link href="{{ url_for('static', filename='css/main.css') }}" rel="stylesheet">
+    <link href="{{ url_for('static', filename='css/sticky-footer-navbar.css') }}" rel="stylesheet">
+
+    <script>
+      var datatables_lang ={
+    "decimal":        "",
+    "emptyTable":     "{{ _('No data available in table') }}",
+    "info":           "{{ _('Showing _START_ to _END_ of _TOTAL_ entries') }}",
+    "infoEmpty":      "{{ _('Showing 0 to 0 of 0 entries') }}",
+    "infoFiltered":   "{{ _('(filtered from _MAX_ total entries)') }}",
+    "infoPostFix":    "",
+    "thousands":      ",",
+    "lengthMenu":     "{{ _('Show _MENU_ entries') }}",
+    "loadingRecords": "{{ _('Loading...') }}",
+    "processing":     "{{ _('Processing...') }}",
+    "search":         "{{ _('Search:') }}",
+    "zeroRecords":    "{{ _('No matching records found') }}",
+    "paginate": {
+        "first":      "{{ _('First') }}",
+        "last":       "{{ _('Last') }}",
+        "next":       "{{ _('Next') }}",
+        "previous":   "{{ _('Previous') }}"
+    },
+    "aria": {
+        "sortAscending":  "{{ _(': activate to sort column ascending') }}",
+        "sortDescending": "{{ _(': activate to sort column descending') }}"
+    }
+};
+    </script>
     <!-- HTML5 shim and Respond.js for IE8 support of HTML5 elements and
     media queries -->
     <!--[if lt IE 9]>
       <script
-      src="{{ url_for('.static', filename='js/html5shiv.min.js') }}"></script>
+      src="{{ url_for('static', filename='js/html5shiv.min.js') }}"></script>
       <script
-      src="{{ url_for('.static', filename='js/respond.min.js') }}"></script>
+      src="{{ url_for('static', filename='js/respond.min.js') }}"></script>
     <![endif]-->
   </head>
 
   <body>
-
     <nav class="navbar navbar-inverse navbar-fixed-top">
       <div class="container">
+        <div style="width: 100%; position: relative;">
+            <div id="alerts" style="position: absolute; right: 0px; top: 58px;">
+              {% with messages = get_flashed_messages(with_categories=true) %}
+              <!-- Categories: success (green), info (blue), warning (yellow), danger (red) -->
+              {% if messages %}
+              {% for category, message in messages %}
+              <div class="alert alert-{{ category }} alert-dismissible" role="alert">
+                <button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                  <!-- <strong>Title</strong> --> {{ message }}
+              </div>
+              {% endfor %}
+              {% endif %}
+              {% endwith %}
+            </div>
+          </div>
+
         <div class="navbar-header">
           <button type="button" class="navbar-toggle collapsed"
           data-toggle="collapse" data-target="#navbar" aria-expanded="false"
@@ -44,22 +95,62 @@
         </div>
         <div id="navbar" class="collapse navbar-collapse">
           <ul class="nav navbar-nav">
-            <li{% if request.path == '/files' %} class="active"{% endif %}><a href="{{ url_for('files') }}">{{ _('Files') }}</a></li>
-            <li{% if request.path == '/monolingual_corpora' %} class="active"{% endif %}><a href="{{ url_for('monolingual_corpora') }}">{{ _('Monotexts') }}</a></li>
-            <li{% if request.path == '/language_models' %} class="active"{% endif %}><a href="{{ url_for('language_models') }}">{{ _('LMs') }}</a></li>	
-            <li{% if request.path == '/bitexts' %} class="active"{% endif %}><a href="{{ url_for('bitexts') }}">{{_('Bitexts') }}</a></li>
-            <li{% if request.path == '/translators' %} class="active"{% endif %}><a href="{{ url_for('translators') }}">{{ _('Translators') }}</a></li>
-            <li{% if request.path == '/translate' %} class="active" {% endif %}><a href="{{ url_for('translate_page') }}">{{ _('Translate') }}</a></li>
-            <li{% if request.path == '/inspect' %} class="active" {% endif %}><a href="{{ url_for('inspect') }}">{{ _('Inspect') }}</a></li>
+            <li class="dropdown">
+              <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">{{ _('Data') }} <span class="caret"/></a>
+              <ul class="dropdown-menu">
+                <li{% if request.path == url_for('data.files') %} class="active"{% endif %}><a href="{{ url_for('data.files') }}">{{ _('Files') }}</a></li>
+                <li{% if request.path == url_for('data.monolingual_corpora') %} class="active"{% endif %}><a href="{{ url_for('data.monolingual_corpora') }}">{{ _('Monotexts') }}</a></li>              
+                <li{% if request.path == url_for('data.bitexts') %} class="active"{% endif %}><a href="{{ url_for('data.bitexts') }}">{{_('Bitexts') }}</a></li>
+              </ul>
+            </li>
+            <li class="dropdown">
+              <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">{{ _('Train') }} <span class="caret" /></a>
+              <ul class="dropdown-menu">
+                <li{% if request.path == url_for('train.language_models') %} class="active"{% endif %}><a href="{{ url_for('train.language_models') }}">{{ _('Language models') }}</a></li>	
+                <li{% if request.path == url_for('train.translators') %} class="active"{% endif %}><a href="{{ url_for('train.translators') }}">{{ _('Translators') }}</a></li>
+              </ul>
+            </li>
+            <li class="dropdown">
+              <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">{{ _('Translate') }} <span class="caret" /></a>
+              <ul class="dropdown-menu">
+                <li{% if request.path == url_for('translate.text') %} class="active" {% endif %}><a href="{{ url_for('translate.text') }}">{{ _('Translate') }}</a></li>
+                <li{% if request.path == url_for('translate.inspect') %} class="active" {% endif %}><a href="{{ url_for('translate.inspect') }}">{{ _('Inspect') }}</a></li>
+              </ul>
+            </li>
+            <li{% if request.path == url_for('evaluation.evaluate') %} class="active" {% endif %}><a href="{{ url_for('evaluation.evaluate') }}">{{ _('Evaluate') }}</a></li>
           </ul>
           <ul class="nav navbar-nav navbar-right">
+            <li> </li>
+            {% if not user_login_enabled %}  
+            {% elif current_user.is_authenticated and current_user.admin %}
             <li class="dropdown">
-              <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">EN <span class="caret" /></a>
+              <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false" style="padding-top:15px; padding-bottom:15px; position:relative; line-height:20px; color:#d00; font-weight: bold;">{{ current_user.username }} <span class="caret"/></a>
               <ul class="dropdown-menu">
-                <li><a href="#">CA</a></li>
-                <li><a href="#">ES</a></li>
+                <li{% if request.path == url_for('dashboard.dashboard') %} class="active" {% endif %}><a href="{{ url_for('dashboard.dashboard') }}">{{ _('Dashboard') }}</a></li>
+                <li><a href="{{ url_for('auth.logout') }}">{{ _('Logout') }}</a></li>            
+              </ul>
+            </li>
+            {% elif current_user.is_authenticated %}
+            <li class="dropdown">
+              <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false" style="color: #eee;">{{ user.username }} <span class="caret"/></a>
+              <ul class="dropdown-menu">
+                <li><a href="{{ url_for('auth.logout') }}">{{ _('Logout') }}</a></li>            
+              </ul>
+            </li>           
+            {% else %}
+            <li><a href="{{ url_for('google.login') }}">{{ _('Login') }}</a></li>
+            {% endif %}
+             
+            {% if LANGUAGES != None and len(LANGUAGES) != 0 %} 
+            <li class="dropdown">
+              <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">{{ get_locale().upper() }} <span class="caret" /></a>
+              <ul class="dropdown-menu">
+              {% for i in sorted(LANGUAGES.keys()) if i != get_locale() %}
+                <li><a href="{{ url_for('switch_language', langcode=i) }}">{{ LANGUAGES[i] }}</a></li>
+              {% endfor %}
               </ul>            
             </li>
+            {% endif %}
           </ul>
         </div><!--/.nav-collapse -->
       </div>
@@ -77,7 +168,7 @@
             </div>
             <div class="modal-body">
               <div class="row">
-                {% for i in lsl %}
+                {% for i in lsl() %}
                 <div class="col-md-3 text-nowrap seleclang" lang="{{ i[0] }}">{% if i[2] %}<strong>{% endif %}{{ i[1] }}{% if i[2] %}*</strong>{% endif %}</div>
                 {% endfor %}
               </div>
@@ -92,17 +183,26 @@
     <br/>
     <footer class="footer">
       <div class="container text-center">
-        <p class="text-muted credit">{{ _('Developed by Prompsit Language Engineering') }}</p>
+        <p class="text-muted credit"><a href="https://tradumatica.github.io">{{ _('Visit MTradumàtica on Github') }}</a></p>
       </div>
+      
     </footer>
 
 
-    <script src="{{ url_for('.static', filename='js/jquery.min.js') }}"></script>
-    <script src="{{ url_for('.static', filename='js/bootstrap.min.js') }}"></script>
-    <script src="{{ url_for('.static', filename='js/ie10-viewport-bug-workaround.js') }}"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.4.1/jquery.min.js" integrity="sha256-CSXorXvZcTkaix6Yvo6HppcZGetbYMGWSFlBw8HfCJo=" crossorigin="anonymous"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery-validate/1.19.1/jquery.validate.min.js" integrity="sha256-sPB0F50YUDK0otDnsfNHawYmA5M0pjjUf4TvRJkGFrI=" crossorigin="anonymous"></script>
+    
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/3.4.1/js/bootstrap.min.js" integrity="sha384-aJ21OjlMXNL5UyIl/XNwTMqvzeRMZH2w8c5cRVpzpU8Y5bApTppSuUkhZXN0VxHd" crossorigin="anonymous"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/1000hz-bootstrap-validator/0.11.5/validator.min.js"></script>
+    
+    <script src="https://cdn.datatables.net/1.10.20/js/jquery.dataTables.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/datatables/1.10.19/js/dataTables.bootstrap.min.js" integrity="sha256-X/58s5WblGMAw9SpDtqnV8dLRNCawsyGwNqnZD0Je/s=" crossorigin="anonymous"></script>
+    <script src="https://cdn.datatables.net/buttons/1.6.0/js/dataTables.buttons.min.js"></script>
+    
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/dropzone/5.5.1/min/dropzone.min.js" integrity="sha256-cs4thShDfjkqFGk5s2Lxj35sgSRr4MRcyccmi0WKqCM=" crossorigin="anonymous"></script>
+
+    <script src="{{ url_for('static', filename='js/ie10-viewport-bug-workaround.js') }}"></script>
 
     {% block extrajs %}{% endblock %}
-
-
   </body>
 </html>

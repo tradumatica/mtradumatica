@@ -2,12 +2,25 @@
 {% block content %}
 <div class="jumbotron">
   <div class="container">
-    <h1>{{ _('MTradumàtica') }}</h1>
-    <p>{{ _('With MTradumàtica you can train custom statistical machine
-             translation (SMT) systems. Create SMT components and understand how
-             they all interact together.') }}</p> 
-    <p><a class="btn btn-primary btn-lg" href="{{ url_for('files') }}" role="button">{{ _('Start
-             uploading your files now') }} &raquo;</a></p>
+    <h1>{{ _('MTradumàtica') }} <a class="github-button" href="https://github.com/tradumatica/mtradumatica" 
+        data-size="large" aria-label="{{ _('Download MTradumàtica on GitHub') }}">{{ _('Download') }}</a></h1>
+    <div class="row">
+      <div class="col-md-6">
+        <p>{{ _('With MTradumàtica you can train custom statistical machine
+                 translation (SMT) systems. Create SMT components and understand how
+                 they all interact together.') }}</p> 
+        <p><a class="btn btn-primary btn-lg" href="{{ url_for('data.files') }}" 
+              role="button">{{ _('Start uploading your files now') }} &raquo;</a></p>
+      </div>
+      <div class="col-md-6">
+        <p>{{ _('<b>New</b>: With MTradumàtica you can evaluate the performance of your
+                 MT systems and obtain quality metrics such as BLEU, chrF3,
+                 TER and WER.') }}</p>
+        <p><a class="btn btn-primary btn-lg" href="{{ url_for('evaluation.evaluate') }}" 
+                      role="button">{{ _('Evaluate your systems now') }} &raquo;</a></p>
+                 
+      </div>
+    </div>
   </div>
 </div>
 
@@ -18,7 +31,7 @@
       <p>{{ _('Start uploading files: plain text files with source and
       target language texts or TMX translation memories. If you need some
       more text you can find it at <a href="http://opus.lingfil.uu.se" target="_blank">OPUS</a>.') }}</p>
-      <p><a class="btn btn-default" href="{{ url_for('files') }}" role="button">{{ _('Upload files') }} &raquo;</a></p>
+      <p><a class="btn btn-default" href="{{ url_for('data.files') }}" role="button">{{ _('Upload files') }} &raquo;</a></p>
     </div>
 
     
@@ -27,7 +40,7 @@
       <p>{{ _('Create monolingual corpora from one or more of your files.
       They will be used to train language models (LMs) for the target languages of
     your SMT systems.') }}</p>
-      <p><a class="btn btn-default" href="{{ url_for('monolingual_corpora') }}" role="button">{{
+      <p><a class="btn btn-default" href="{{ url_for('data.monolingual_corpora') }}" role="button">{{
       _('Create Monotexts') }} &raquo;</a></p>
     </div> 
 
@@ -37,7 +50,7 @@
       <p>{{ _('See how different language models (LMs) can affect
       translation quality, especially when they are similar to what you want to
       translate.') }} </p>
-      <p><a class="btn btn-default" href="{{ url_for('language_models') }}" role="button">{{
+      <p><a class="btn btn-default" href="{{ url_for('train.language_models') }}" role="button">{{
       _('Train Language Models') }} &raquo;</a></p>
     </div>
   </div>
@@ -47,7 +60,7 @@
       <p>{{ _('Create bilingual corpora from one or more
       paired source-target files. You can join two or more
       bitexts together to create a bigger one.') }}</p>
-      <p><a class="btn btn-default" href="{{ url_for('bitexts') }}" role="button">{{
+      <p><a class="btn btn-default" href="{{ url_for('data.bitexts') }}" role="button">{{
       _('Create a Bitext') }} &raquo;</a></p>
     </div> 
 
@@ -56,7 +69,7 @@
       <p>{{ _('Build a new machine translator with bitexts and language
       models. Create translators with different texts and see
       the effect of optimising them.') }} </p>
-      <p><a class="btn btn-default" href="{{ url_for('translators') }}" role="button">{{
+      <p><a class="btn btn-default" href="{{ url_for('train.translators') }}" role="button">{{
       _('Train a Translator') }} &raquo;</a></p>
     </div>
 
@@ -66,9 +79,14 @@
       <p>{{ _('See your translators in action, test and compare them.
       Translate short texts or documents. As soon as you have a new translator, you
       will be able to try it!') }} </p>
-      <p><a class="btn btn-default" href="{{ url_for('translate_page') }}" role="button">{{
+      <p><a class="btn btn-default" href="{{ url_for('translate.text') }}" role="button">{{
       _('Translate') }} &raquo;</a></p>
     </div>
   </div>
 </div>
+{% endblock %}
+
+{% block extrajs %}
+<!-- Place this tag in your head or just before your close body tag. -->
+<script async defer src="https://buttons.github.io/buttons.js"></script>
 {% endblock %}
