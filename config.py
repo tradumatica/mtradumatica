@@ -37,7 +37,7 @@ DEBUG      = False
 # Uncomment it to enable translations. Follow instructions in README.md to add more languages
 LANGUAGES = { 'ca': 'Català', 'en': 'English', 'es': 'Spanish' }
 
-USER_LOGIN_ENABLED          = True
+USER_LOGIN_ENABLED          = False
 ENABLE_NEW_LOGINS           = True
 ADMINS                      = ['sjarmero@gmail.com']
 BANNED_USERS                = []

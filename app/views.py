@@ -67,6 +67,7 @@ def switch_language(langcode):
   else:
     return redirect(url_for('index'))
 
+@login_manager.user_loader
 @utils.condec(login_manager.user_loader, user_utils.isUserLoginEnabled())
 def load_user(user_id):
   return User.query.get(int(user_id))
