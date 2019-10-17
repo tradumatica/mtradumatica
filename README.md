@@ -62,6 +62,9 @@ $ docker run -p 8080:8080 -p10000:10000 -d --name mtradumatica mtradumatica
 
 Both installation procedures can provide multiple user accounts inside Mtradumatica based on the Google identity server through the OAUTH2 protocol. The procedure of setting such a server in the Google side is a bit complex and Google changes it from time to time, but it can be found [here]( https://developers.google.com/identity/protocols/OAuth2UserAgent). Although not official, a useful resource is [this video](https://www.youtube.com/watch?v=A_5zc3DYZfs).
 
+In order to get the user data once they are signed in, an API endpoint is used. This endpoint
+may change due to changes in the API. If you ever need to modify it, edit the `GOOGLE_USER_DATA_URL` in config.py.
+
 From the process above, you will get at the end two strings, "client ID" and "client secret". You can edit the config.py file in the following way (alternatively, you can create a instance/config.py file with the following content):
 
 ```python
@@ -73,6 +76,7 @@ USER_LOGIN_ENABLED          = True
 OAUTHLIB_INSECURE_TRANSPORT = True # True also behind firewall,  False -> require HTTPS
 GOOGLE_OAUTH_CLIENT_ID      = 'xxxxxxx-xxxxxxxxxxxxxxxxxxxxxxxxx.apps.googleusercontent.com'
 GOOGLE_OAUTH_CLIENT_SECRET  = 'xxxxxxxxxxxxxxx'
+GOOGLE_USER_DATA_URL        = '/oauth2/v1/userinfo'
 ```
 The admin accounts in ADMINS will allow you to use admin features as translator optimization or the remote Moses server. You can set as many as you want.
 

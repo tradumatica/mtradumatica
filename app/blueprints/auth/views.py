@@ -27,14 +27,6 @@ def logout():
     flash(_('You logged out successfully'), 'success')
     return redirect(url_for('index'))
 
-## History of scope changes:
-# Before 2018
-# google_blueprint = make_google_blueprint(scope = ["profile", "email"])
-
-# 2018
-# google_blueprint = make_google_blueprint(scope = ["https://www.googleapis.com/auth/userinfo.email",
-#                                                   "https://www.googleapis.com/auth/userinfo.profile"])
-# Since June 2019
 google_blueprint = make_google_blueprint(
   scope = ["openid",
           "https://www.googleapis.com/auth/userinfo.email",
@@ -46,11 +38,10 @@ if user_utils.isUserLoginEnabled():
 
 @oauth_authorized.connect_via(google_blueprint)
 def google_logged_in(blueprint, token):
-  account_info = blueprint.session.get('/oauth2/v1/userinfo')
+  account_info = blueprint.session.get(app.config['GOOGLE_USER_DATA_URL'])
 
   if account_info.ok:
     account_info_json = account_info.json()
-    print(account_info_json)
     username  = account_info_json['name']
     social_id = account_info_json['id']
     email     = account_info_json['email']
