@@ -2,12 +2,12 @@ from flask_login import current_user
 from app import app
 
 def get_uid():
-  if current_user.is_authenticated:
+  if isUserLoginEnabled() and current_user.is_authenticated:
     return current_user.id
   return None
 
 def get_user():
-  if current_user.get_id() != None:
+  if isUserLoginEnabled() and current_user.get_id() != None:
     return current_user
   else:
     return None

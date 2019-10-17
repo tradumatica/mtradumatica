@@ -10,7 +10,7 @@ from flask import session, request
 def get_locale():
   if "LANGUAGES" not in app.config:
     return "en"
-  if current_user.is_authenticated and current_user.lang in list(app.config["LANGUAGES"].keys()):
+  if user_utils.isUserLoginEnabled() and current_user.is_authenticated and current_user.lang in list(app.config["LANGUAGES"].keys()):
     return current_user.lang  if current_user.lang != None else "en"
   elif 'lang' in session and session['lang'] in list(app.config["LANGUAGES"].keys()):
     return session['lang']
