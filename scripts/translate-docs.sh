@@ -170,6 +170,189 @@ HERE
 ) $L1 $L2
 }
 
+filter_tmx()
+{
+L1=$1
+L2=$2
+python3 <(cat <<"HERE"
+"""Transform TMX in a tab-separated text file according to the code list
+specified.
+
+Usage:
+  fixtmx.py --codelist=<langcodes> [INPUT_FILE [OUTPUT_FILE]]
+
+Options:
+  --codelist=<langcodes>   Comma-separated list of langcodes (i.e. "en,es").
+
+I/O Defaults:
+  INPUT_FILE               Defaults to stdin.
+  OUTPUT_FILE              Defaults to stdout.
+"""
+
+from docopt import docopt
+import re
+import sys
+import xml.parsers.expat
+
+def read_tmx(input, codelist):
+    curlang  = ""
+    curtuv   = []
+    intuv    = False
+    tu       = {}
+    p1       = re.compile(r'\n')
+    p2       = re.compile(r'  *')
+    fmt      = ("{}\t"*len(codelist)).strip()+"\n"
+    result   = []
+
+    def se(name, attrs):
+        nonlocal intuv, curtuv, tu, curlang, codelist
+        if intuv:
+            curtuv.append("")
+        elif name == "tu":
+            tu = {i:'' for i in codelist}
+        elif name == "tuv":
+            if "xml:lang" in attrs:
+                curlang = attrs["xml:lang"]
+            elif "lang" in attrs:
+                curlang = attrs["lang"]
+        elif name == "seg":
+            curtuv = []
+            intuv = True
+
+    def ee(name):
+        nonlocal intuv, curtuv, p1, p2, tu, curlang, codelist, fmt, result
+        if name == "tu":
+            result.append(tu)
+
+        elif name == "seg":
+            intuv = False
+            mystr = p2.sub(' ', p1.sub(' ', "".join(curtuv))).strip()
+            tu[curlang] = mystr
+            curlang = ""
+
+    def cd(data):
+        nonlocal intuv, curtuv
+        if intuv:
+            curtuv.append(data)
+
+    p = xml.parsers.expat.ParserCreate()
+    p.StartElementHandler  = se
+    p.EndElementHandler    = ee
+    p.CharacterDataHandler = cd
+    p.ParseFile(input)
+
+    return result
+
+def eos(tu):
+    return all(tu[i].endswith((".", "!", "?")) for i in tu)
+
+def bos(tu):
+    return all(tu[i][0:1].upper() == tu[i][0:1] for i in tu)
+
+
+def untokenize(text):
+    step1 = text.replace("`` ", '"').replace(" ''", '"').replace('. . .',  '...')
+    step2 = step1.replace(" ( ", " (").replace(" ) ", ") ")
+    step3 = re.sub(r' ([.,:;?!%]+)([ \'"`])', r"\1\2", step2)
+    step4 = re.sub(r' ([.,:;?!%]+)$', r"\1", step3)
+    step5 = step4.replace(" '", "'").replace(" n't", "n't").replace(
+         "can not", "cannot")
+    step6 = step5.replace(" ` ", " '")
+    return step6.strip()
+
+def fix_text(text):
+    return untokenize(text.replace(":.",":").replace("...","…").replace("..","."))
+
+def resplit(tu):
+    splitted = {}
+    for l in tu:
+        splitted[l] = re.split(r'(?<!\w\.\w.)(?<![A-Z][a-z]\.)(?<=\.|\?)\s', tu[l])
+        
+    ntus = len(next(iter(splitted.values())))
+    if all(len(splitted[i]) == ntus for i in splitted):
+        result = []
+        for i in range(ntus):
+            mytu = {}
+            for l in splitted:
+                mytu[l] = splitted[l][i]
+            result.append(mytu)
+        return result        
+    else:
+        return [tu]
+
+def collapse(tus):
+    result = []
+    diclist = {}
+    last = False
+    for i in tus:
+        if last:
+            if bos(i):
+                result.append({l:fix_text(" ".join(diclist[l])) for l in diclist})
+                diclist = {}
+            last = False
+
+        for j in i:
+            if j not in diclist:
+                diclist[j] = []
+            diclist[j].append(i[j])
+
+        if eos(i):
+            last = True
+
+    if len(diclist) != 0:
+        result.append({l:fix_text(" ".join(diclist[l])) for l in diclist})
+
+
+    return result
+    
+    
+def remove_nonalpha(tus):
+    result = []
+    for i in tus:
+        if all(any(j.isalpha() for j in i[k]) for k in i):
+            result.append(i)
+    return result
+
+def write_tmx(output, tus):
+    output.write('''<?xml version="1.0" encoding="utf-8"?>
+<tmx version="1.4">
+<header creationtool="mtradumatica" creationtoolversion="1.0" datatype="xml" segtype="sentence" creationid="anonymous">
+</header>
+<body>
+''')
+    for i in tus:
+        output.write("  <tu>\n")
+        for l in i:
+            output.write("    <tuv xml:lang=\"{}\">\n".format(l))
+            output.write("      <seg>{}</seg>\n".format(i[l]))
+            output.write("    </tuv>\n")
+        output.write("  </tu>\n")
+    output.write('</body>\n</tmx>\n')
+
+if __name__ == '__main__':
+    arguments = docopt(__doc__, version='fixtmx 1.0')
+
+    input = sys.stdin.buffer if not arguments["INPUT_FILE"] else open(arguments["INPUT_FILE"], "rb")
+    output = sys.stdout if not arguments["OUTPUT_FILE"] else open(arguments["OUTPUT_FILE"], "w")
+
+    list = arguments["--codelist"].split(",")
+
+    if len(list) > 1:
+        tus = read_tmx(input, list)
+        tus_new = []
+        for i in collapse(tus):
+            for j in resplit(i):
+                tus_new += [j]                
+        tus = tus_new
+        
+        tus = remove_nonalpha(tus)
+        write_tmx(output, tus)
+
+    input.close()
+    output.close()
+HERE
+) --codelist=$L1,$L2
+}
 
 get_translators()
 {
@@ -205,7 +388,7 @@ translate()
   done
 
   if [ $GENERATE_TMX = "1" ]; then
-    paste $MYTMPDIR/cleansrc_0 $MYTMPDIR/detok | create_tmx $L1F $L2 > "$GLOBAL_TMX_DIR/tmx"
+    paste $MYTMPDIR/cleansrc_0 $MYTMPDIR/detok | create_tmx $L1F $L2 |filter_tmx $L1F $L2 > "$GLOBAL_TMX_DIR/tmx"
   fi
 
   if [[ -e $MYTMPDIR/gen_output ]]; then
@@ -904,10 +1087,16 @@ set -e -o pipefail
 
 OTRASALIDA=$(mktemp "$TMPDIR/apertium.XXXXXXXX")
 
+INFILE2=$(mktemp "$TMPDIR/apertium.XXXXX")
+INFILE3=$(mktemp "$TMPDIR/apertium.XXXXX")
+
+cat "$INFILE" >$INFILE2
+iconv -f $(file -i $INFILE| awk -F"=" '{print $2}') -t utf-8 <$INFILE2 >$INFILE3 || LC_ALL=C tr -dc '\0-\177' <$INFILE2 >$INFILE3
+
 if [ "$FORMAT" = "none" ]; then
-    cat "$INFILE"
+    cat "$INFILE3"
 else
-  "$APERTIUM_PATH/apertium-des$FORMAT" ${FORMAT_OPTIONS} "$INFILE"
+  "$APERTIUM_PATH/apertium-des$FORMAT" ${FORMAT_OPTIONS} "$INFILE3"
 fi | translate | if [ "$FORMAT" = "none" ]; then cat; else "$APERTIUM_PATH/apertium-re$FORMAT"; fi > "$OTRASALIDA"
 
 if [ "$REDIR" == "" ]; then
@@ -932,3 +1121,5 @@ if [ "$REDIR" == "" ]; then
       rm -Rf $GLOBAL_TMX_DIR
     fi    
       rm -Rf "$OTRASALIDA"
+
+rm -Rf $INFILE2 $INFILE3
