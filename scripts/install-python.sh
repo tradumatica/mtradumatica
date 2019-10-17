@@ -4,8 +4,12 @@
 
 ROOT=$(readlink -f $(dirname $(readlink -f $0))/..)
 
-command -v virtualenv >/dev/null 2>&1 || { echo >&2 "Required program virtualenv is not installed. Installing package 'python-virtualenv' is required. Aborting."; exit 1; }
-
+python3 -c "import math"
+if [ $? = 1 ]
+then
+    echo >&2 "Required program virtualenv is not installed. Installing package 'python-virtualenv' is required. Aborting."; 
+    exit 1;
+fi
 
 # Section 1: Install Python
 
@@ -20,5 +24,5 @@ cd -
 source $ROOT/venv/bin/activate
 
 # pip-install packages
-
-pip install -r $ROOT/requirements.txt
+pip3 install wheel
+pip3 install -r $ROOT/requirements.txt

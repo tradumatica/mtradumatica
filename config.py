@@ -37,12 +37,10 @@ DEBUG      = False
 # Uncomment it to enable translations. Follow instructions in README.md to add more languages
 LANGUAGES = { 'ca': 'Català', 'en': 'English', 'es': 'Spanish' }
 
-USER_LOGIN_ENABLED          = True
+USER_LOGIN_ENABLED          = False
 ENABLE_NEW_LOGINS           = True
-ADMINS                      = ['sjarmero@gmail.com']
+ADMINS                      = ['']
 BANNED_USERS                = []
 OAUTHLIB_INSECURE_TRANSPORT = True # True also behind firewall,  False -> require HTTPS
-GOOGLE_OAUTH_CLIENT_ID      = '481103200747-c9g4nsv7ud7ojj9dgv5s1nvhsdkvqji3.apps.googleusercontent.com'
-GOOGLE_OAUTH_CLIENT_SECRET  = '__TyuCk8eD0kR594K18MitZw'
-
-# CELERY_ALWAYS_EAGER = 1 # debug
+GOOGLE_OAUTH_CLIENT_ID      = ''
+GOOGLE_OAUTH_CLIENT_SECRET  = ''
