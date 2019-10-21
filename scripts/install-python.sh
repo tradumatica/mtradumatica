@@ -4,7 +4,7 @@
 
 ROOT=$(readlink -f $(dirname $(readlink -f $0))/..)
 
-python3 -c "import math"
+python3 -c "import venv"
 if [ $? = 1 ]
 then
     echo >&2 "Required program virtualenv is not installed. Installing package 'python-virtualenv' is required. Aborting."; 
