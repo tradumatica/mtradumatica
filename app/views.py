@@ -15,7 +15,7 @@ from app import app, db, login_manager
 from app.models import User
 from flask import redirect, render_template, request, session, url_for
 from flask_login import current_user
-from flask_babel import _
+from flask_babel import _, refresh
 
 blueprints = [auth_blueprint, data_blueprint,
               train_blueprint, translate_blueprint, 
