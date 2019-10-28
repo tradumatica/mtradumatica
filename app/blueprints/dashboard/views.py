@@ -47,8 +47,9 @@ def mt_list():
     date_fmt   = '%Y-%m-%d %H:%M:%S'
 
 
-    data = [[checkbox.format(t.id), t.name, t.lang1+"-"+t.lang2, t.size_mb, t.mydate.strftime(date_fmt), t.get_user().email, ""]
+    data = [[checkbox.format(t.id), t.name, t.lang1+"-"+t.lang2, t.size_mb, t.mydate.strftime(date_fmt) if t.mydate else '', t.get_user().email, ""]
             for t in db.session.query(TranslatorFromBitext).join(User, User.id == TranslatorFromBitext.user_id).filter(TranslatorFromBitext.name.like(search_str)).order_by(utils.query_order(columns[order_col], order_dir))][start:start+length]
+    
     return jsonify(draw            = draw,
                    data            = data,
                    recordsTotal    = User.query.count(),
