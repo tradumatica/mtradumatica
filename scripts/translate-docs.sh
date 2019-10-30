@@ -179,10 +179,11 @@ python3 <(cat <<"HERE"
 specified.
 
 Usage:
-  fixtmx.py --codelist=<langcodes> [INPUT_FILE [OUTPUT_FILE]]
+  fixtmx.py --codelist=<langcodes> [INPUT_FILE [OUTPUT_FILE]] --format <format>
 
 Options:
   --codelist=<langcodes>   Comma-separated list of langcodes (i.e. "en,es").
+  --format=<format>	Format of the original translated file
 
 I/O Defaults:
   INPUT_FILE               Defaults to stdin.
@@ -339,11 +340,12 @@ if __name__ == '__main__':
 
     if len(list) > 1:
         tus = read_tmx(input, list)
-        tus_new = []
-        for i in collapse(tus):
-            for j in resplit(i):
-                tus_new += [j]                
-        tus = tus_new
+        if arguments["--format"] != "txt":
+        	tus_new = []
+        	for i in collapse(tus):
+            		for j in resplit(i):
+                		tus_new += [j]                
+        	tus = tus_new
         
         tus = remove_nonalpha(tus)
         write_tmx(output, tus)
@@ -351,7 +353,7 @@ if __name__ == '__main__':
     input.close()
     output.close()
 HERE
-) --codelist=$L1,$L2
+) --codelist=$L1,$L2 --format=$FORMAT
 }
 
 get_translators()
