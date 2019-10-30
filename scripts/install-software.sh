@@ -17,7 +17,7 @@ make install
 
 cd $ROOT/software/mosesdecoder
 export CPLUS_INCLUDE_PATH=/usr/include/python2.7
-make -f contrib/Makefiles/install-dependencies.gmake || exit 1
+make -j$CORES -f contrib/Makefiles/install-dependencies.gmake || exit 1
 ./compile.sh --prefix=$ROOT/venv/local --with-mm --with-mm-extras --with-probing-p --install-scripts -j$CORES || exit 1
 
 # Fix problem with script
