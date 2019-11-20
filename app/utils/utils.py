@@ -86,7 +86,7 @@ def file_properties(input_filename):
   lang = ""
   for i in input_file:
     sz += len(i)
-    s = str(i, errors='ignore')
+    s = i
     nl += 1
     nw += len(s.split())
     nc += len(s)

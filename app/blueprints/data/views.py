@@ -1,5 +1,5 @@
 from app import app
-from app.utils import utils, user_utils, metrics
+from app.utils import utils, user_utils, metrics, tmxdigest
 from app import db
 from app.models import MonolingualCorpus, Bitext, Corpus, AddCorpusBitext, AddCorpusMonoCorpus, TranslatorFromBitext
 

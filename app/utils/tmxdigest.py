@@ -12,7 +12,7 @@ tu       = {}
 exclude  = []
 
 def explore(filename):
-  with open(filename, "r") as fd:
+  with open(filename, "rb") as fd:
     langset  = set()
     langlist = []
     
@@ -62,7 +62,7 @@ def tmx2txt(fd, output, langlist):
       for i in range(len(langlist)):
         lang = langlist[i]
         out  = output[i]
-        out.write(tu[lang].encode("utf-8"))
+        out.write(tu[lang])
         out.write("\n")
     elif name == "seg":
       intuv = False
@@ -85,7 +85,7 @@ def tmx2txt(fd, output, langlist):
 
 def tmx2txt_filelist(tmx_file, out_prefix):
   lang_list = explore(tmx_file)
-  output    = [open(out_prefix + "." + i.encode("utf-8"), "w") for i in lang_list]
+  output    = [open(out_prefix + "." + i, "w") for i in lang_list]
 
   with open(tmx_file, "rb") as input:
     tmx2txt(input, output, lang_list)
@@ -93,4 +93,4 @@ def tmx2txt_filelist(tmx_file, out_prefix):
   for i in output:
     i.close()
 
-  return [out_prefix + "." + i.encode("utf-8") for i in lang_list]
+  return [out_prefix + "." + i for i in lang_list]
