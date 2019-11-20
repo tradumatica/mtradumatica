@@ -42,10 +42,10 @@ $(document).ready(function() {
     language: datatables_lang
   });
 
-  $('#filelist').on('init.dt', function() {
+  $('#filelist').on('draw.dt', function() {
     let seleclang_id = "";
 
-    $('td').on('click', function(){
+    $('td').off('click').on('click', function(){
       let col = $(this).parent().children().index($(this));
 
       if (col == 2) {
@@ -58,7 +58,7 @@ $(document).ready(function() {
       }
     });
 
-    $('span.glyphicon-eye-open').on('click', function() {
+    $('span.glyphicon-eye-open').off('click').on('click', function() {
       $.ajax({
         url: "actions/file-peek/" + $(this).attr("id").substring("peek-".length),
         dataType: "json"
@@ -75,11 +75,11 @@ $(document).ready(function() {
       });
     });
 
-    $('span.glyphicon-download-alt').on('click', function() {
+    $('span.glyphicon-download-alt').off('click').on('click', function() {
       window.location.href = "actions/file-download/" + $(this).attr("id").substring("download-".length);
     });
 
-    $('input.file_checkbox').on('change', function() {
+    $('input.file_checkbox').off('change').on('change', function() {
       if($('#checkbox_all').is(":checked")) {
         $('#checkbox_all').addClass("checkbox-inconsistent");
       }
@@ -101,7 +101,7 @@ $(document).ready(function() {
       }
     });
 
-    $('#checkbox_all').change(function() {
+    $('#checkbox_all').off('change').on('change', function() {
       $(this).removeClass("checkbox-inconsistent");
       if($(this).is(":checked"))
       {
@@ -116,7 +116,7 @@ $(document).ready(function() {
     });
 
 
-    $('#delete_all').click(function() {
+    $('#delete_all').off('click').on('click', function() {
       var url = "actions/file-delete/";
       $('.file_checkbox').each(function () {
         if($(this).is(":checked"))
@@ -136,7 +136,7 @@ $(document).ready(function() {
       $('#delete_all').removeClass("trashbin-enabled");
     });
 
-    $('.seleclang').click(function() {
+    $('.seleclang').off('click').on('click', function() {
       seleclang_lang = $(this).attr("lang");
       $.ajax({
         url: "actions/file-setlang/" + seleclang_id + "/" + seleclang_lang

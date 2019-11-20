@@ -19,8 +19,8 @@ $(document).ready(function() {
   });
 
   var idOfBitextToAppend = -1;
-  $('#bitextlist').on('init.dt', function() {
-    $('span.glyphicon-eye-open').on('click', function() {
+  $('#bitextlist').on('draw.dt', function() {
+    $('span.glyphicon-eye-open').off('click').on('click', function() {
       $.ajax({
         url: "actions/bitext-peek/" + $(this).attr("id").substring("peek-".length),
         dataType: "json"
@@ -40,7 +40,7 @@ $(document).ready(function() {
       });
     });
 
-    $('tbody span.glyphicon-plus-sign').on('click', function() {
+    $('tbody span.glyphicon-plus-sign').off('click').on('click', function() {
       //Load files available for each language pair, populate options
       //and display modal
       let domidparts = $(this).attr("id").split("-");
@@ -76,7 +76,7 @@ $(document).ready(function() {
       $('#modal-append').modal("show");
     });
 
-    $('input.file_checkbox').on('change', function() {
+    $('input.file_checkbox').off('change').on('change', function() {
       if ($('#checkbox_all').is(":checked")) {
         $('#checkbox_all').addClass("checkbox-inconsistent");
       }
@@ -98,7 +98,7 @@ $(document).ready(function() {
       }
     });
 
-    $('#checkbox_all').change(function() {
+    $('#checkbox_all').off('change').on('change', function() {
       $(this).removeClass("checkbox-inconsistent");
       if ($(this).is(":checked")) {
         $('.file_checkbox').prop("checked", true);
@@ -110,7 +110,7 @@ $(document).ready(function() {
     });
 
 
-    $('#delete_all').click(function() {
+    $('#delete_all').off('click').on('click', function() {
       $('.file_checkbox').each(function () {
         if($(this).is(":checked")) {
           $.ajax({
@@ -130,7 +130,7 @@ $(document).ready(function() {
     });
 
     //Put selected language in form
-    $('.seleclang').click(function() {
+    $('.seleclang').off('click').on('click', function() {
       let seleclang_lang = $(this).attr("lang");
       $('#inputLanguage' + languagenumber).text(seleclang_lang);
       $('#lang-dialog').modal("hide");
@@ -139,24 +139,24 @@ $(document).ready(function() {
   });
 
   //Show modal for creating a new bitext
-  $('#addbutton').click(function() {
+  $('#addbutton').off('click').on('click', function() {
     $('#modal-add').modal("show");
   });
 
   let languagenumber="0";
   //Show language selection modal on top ot if
-  $('#inputLanguage1').click(function(){
+  $('#inputLanguage1').off('click').on('click', function(){
     $('#lang-dialog').modal("show");
     languagenumber="1";
   });
 
-  $('#inputLanguage2').click(function(){
+  $('#inputLanguage2').off('click').on('click', function(){
     $('#lang-dialog').modal("show");
     languagenumber="2";
   });
 
   //submit create form. validate elements that cannot be validated with the plugin
-  $('#buttonCreate').click(function(){
+  $('#buttonCreate').off('click').on('click', function(){
     let resultValForm = $('#form-new-bitext').valid();
     let resultValLanguage = validateInputLanguage(['inputLanguage1','inputLanguage2']);
     if (resultValForm && resultValLanguage) {
@@ -174,7 +174,7 @@ $(document).ready(function() {
   })
 
   //submit content add form
-  $('#buttonAddcontent').click(function(){
+  $('#buttonAddcontent').off('click').on('click', function(){
     if ($('.nav-tabs .active a').attr("href") === "#tab1") {
       if ($('#form-add-files-to-bitext').valid()) {
         $.ajax(`actions/bitext-add-files/${idOfBitextToAppend}/${$("#sourcesel").val()}/${$("#targetsel").val()}`)

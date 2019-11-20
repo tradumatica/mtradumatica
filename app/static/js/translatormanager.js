@@ -68,10 +68,10 @@ $(document).ready(function() {
 		language: datatables_lang
 	});
 
-	$('#translatorlist').on('init.dt', function() {
+	$('#translatorlist').on('draw.dt', function() {
 		//Manage optimization modal
 		let idOfTranslatorToOptimize = -1;
-		$('#translatorlist .btn').on('click', function() {
+		$('#translatorlist .btn').off('click').on('click', function() {
 			if ($(this).attr("id").startsWith("button-optimize-")) {
 				let domidparts = $(this).attr("id").split("-");
 				//asign id to global variable
@@ -111,7 +111,7 @@ $(document).ready(function() {
 		});
 
 		//submit optimize form
-		$('#buttonOptimize').click(function(){
+		$('#buttonOptimize').off('click').on('click', function(){
 			$.ajax(`actions/translator-optimize/${idOfTranslatorToOptimize}/${$('#selBitextOptimize').val()}`)
 			.done(function() {
 				table.ajax.reload();
@@ -123,7 +123,7 @@ $(document).ready(function() {
 			})
 		});
 
-		$('input.file_checkbox').on('change', function() {
+		$('input.file_checkbox').off('change').on('change', function() {
 			if ($('#checkbox_all').is(":checked")) {
 				$('#checkbox_all').addClass("checkbox-inconsistent");
 			}
@@ -145,7 +145,7 @@ $(document).ready(function() {
 			}
 		});
 
-		$('#checkbox_all').change(function() {
+		$('#checkbox_all').off('change').on('change', function() {
 			$(this).removeClass("checkbox-inconsistent");
 			if ($(this).is(":checked")) {
 				$('.file_checkbox').prop("checked", true);
@@ -156,7 +156,7 @@ $(document).ready(function() {
 			}
 		});
 
-		$('#delete_all').click(function() {
+		$('#delete_all').off('change').on('click', function() {
 			$('.file_checkbox').each(function () {
 				if ($(this).is(":checked")) {
 					$.ajax({
@@ -173,7 +173,7 @@ $(document).ready(function() {
 			$('#delete_all').removeClass("trashbin-enabled");
 		});
 
-		$('span.glyphicon-remove').on('click', function(){
+		$('span.glyphicon-remove').off('click').on('click', function(){
 			$.ajax({
 				url: "actions/optimization-kill/" + $(this).attr("id").substring("cancel-id-".length)
 			}).done(function(){
@@ -181,11 +181,11 @@ $(document).ready(function() {
 			});
 		});
 
-		$("#evalform").submit(function(e){
+		$("#evalform").off('submit').on('submit', function(e){
 			return false;
 		});
 
-		$('#button_evaluate').click(function(){
+		$('#button_evaluate').off('click').on('click', function(){
 			let form = $("#evalform")[0];
 			let data = new FormData(form);
 			
@@ -209,7 +209,7 @@ $(document).ready(function() {
 		});
 
 		//Put selected language in form, list monolingual corpora
-		$('.seleclang').click(function() {
+		$('.seleclang').off('click').on('click', function() {
 			let seleclang_lang = $(this).attr("lang");
 			$('#inputLanguage' + languagenumber).text(seleclang_lang);
 			validateInputLanguage(['inputLanguage1','inputLanguage2']);
@@ -252,25 +252,25 @@ $(document).ready(function() {
 		});
 
 		//Show modal for creating a new bitext
-		$('#addbutton').click(function() {
+		$('#addbutton').off('click').on('click', function() {
 			$('#modal-add').modal("show");
 		});
 
 		let languagenumber = "0";
 		//Show language selection modal on top ot if
-		$('#inputLanguage1').click(function(){
+		$('#inputLanguage1').off('click').on('click', function(){
 			languagenumber = "1";
 			$('#lang-dialog').modal("show");
 		})
 
-		$('#inputLanguage2').click(function(){
+		$('#inputLanguage2').off('click').on('click', function(){
 			languagenumber = "2";
 			$('#lang-dialog').modal("show");
 		})
 	});
 
 	//submit create form
-	$('#buttonCreate').click(function() {
+	$('#buttonCreate').off('click').on('click', function() {
 		let resultValFormName = $('#form-new-translator-name').valid();
 
 		if ($('.nav-tabs .active a').attr("href") === "#tab1") {
