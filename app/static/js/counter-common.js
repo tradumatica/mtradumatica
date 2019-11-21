@@ -11,6 +11,8 @@ function parseDate(dateTimeStr) {
 
 function formatDateDiff(start, now) {
 	try {
+		if (isNaN(start.getTime()) || isNaN(now.getTime())) throw new Exception();
+
 		let diff = new Date(now.getTime() - start.getTime());
 		let date = new Date(diff.getTime() + (diff.getTimezoneOffset() * 60000));
 		
@@ -64,7 +66,9 @@ function resetIntervals(){
 function addFormatedDateToDatatables(row, index) {
 	let startDateTimeStr = $('td', row).eq(index).text();
 	let date = new Date(startDateTimeStr);
-    $('td', row).eq(index).text(date.toLocaleDateString()+" "+date.toLocaleTimeString());
+	if (!isNaN(date.getTime())) {
+		$('td', row).eq(index).text(date.toLocaleDateString()+" "+date.toLocaleTimeString());
+	}
 }
 
 function validateInputLanguage(id_array){

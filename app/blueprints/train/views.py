@@ -216,7 +216,7 @@ def status_languagemodel(id):
 def status_translator(id):
   #Get Translator from DB and task from celery
   t = TranslatorFromBitext.query.get(id)
-  if t is None:
+  if t is None or t.task_id is None:
     return jsonify(status = "not found")
   t = celerytasks.train_smt.AsyncResult(t.task_id)
   if t.state in ['PENDING','PROGRESS']:
@@ -367,7 +367,7 @@ def translator_list():
     checkbox   = '<span class="checkbox"><input class="file_checkbox" type="checkbox" id="checkbox-{0}"/></div>'
     date_fmt   = '%Y-%m-%d %H:%M:%S'
 
-    data = [[checkbox.format(c.id),c.name, c.lang1+"-"+c.lang2, c.bitext.name if c.bitext != None else "", c.languagemodel.name if c.languagemodel != None else "" , c.mydate.strftime(date_fmt) , c.mydatefinished.strftime(date_fmt) if c.mydatefinished != None else "" , choose_optimization_cell(c) ,  evaluation_cell(c), choose_optimization_icons(c)  ]
+    data = [[checkbox.format(c.id),c.name, c.lang1+"-"+c.lang2, c.bitext.name if c.bitext != None else "", c.languagemodel.name if c.languagemodel != None else "" , c.mydate.strftime(date_fmt) if c.mydate != None else "", c.mydatefinished.strftime(date_fmt) if c.mydatefinished != None else "" , choose_optimization_cell(c) ,  evaluation_cell(c), choose_optimization_icons(c)  ]
             for c in TranslatorFromBitext.query.filter(TranslatorFromBitext.user_id == user_utils.get_uid()).filter(TranslatorFromBitext.name.like(search_str)).order_by(utils.query_order(columns[order_col], order_dir))][start:start+length]
 #             for c in Corpus.query.filter(Corpus.name.like(search_str)).order_by(order_str)][start:start+length]
     return jsonify(draw            = draw,
