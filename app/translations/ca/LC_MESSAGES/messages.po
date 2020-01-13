@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PROJECT VERSION\n"
 "Report-Msgid-Bugs-To: EMAIL@ADDRESS\n"
-"POT-Creation-Date: 2019-07-05 18:48+0000\n"
+"POT-Creation-Date: 2020-01-13 10:53+0000\n"
 "PO-Revision-Date: 2018-07-26 14:53+0200\n"
 "Last-Translator: \n"
 "Language: ca\n"
@@ -16,414 +16,370 @@ msgstr ""
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=utf-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"Generated-By: Babel 2.1.1\n"
+"Generated-By: Babel 2.6.0\n"
 
-#: views.py:163
-msgid "New user logging is temporary disabled"
-msgstr "El registre de nous usuaris està temporalment deshabilitat"
+#: views.py:51
+msgid "Home"
+msgstr "Inici"
 
-#: views.py:181
-msgid "User temporary banned"
-msgstr "Usuari temporalment expulsat"
-
-#: views.py:185
-msgid "You have been logged in successfully"
-msgstr "Heu accedit al sistema"
-
-#: views.py:191
+#: blueprints/auth/views.py:27
 msgid "You logged out successfully"
 msgstr "Heu sortit del sistema"
 
-#: views.py:200
-msgid "Home"
-msgstr ""
+#: blueprints/auth/views.py:55
+msgid "New user logging is temporary disabled"
+msgstr "El registre de nous usuaris està temporalment deshabilitat"
 
-#: views.py:207 templates/files.html:10
-msgid "File manager"
-msgstr ""
+#: blueprints/auth/views.py:75
+msgid "User temporary banned"
+msgstr "Usuari temporalment bloquejat"
 
-#: views.py:214 templates/bitexts.html:10
-msgid "Bitext manager"
-msgstr ""
+#: blueprints/auth/views.py:79
+msgid "You have been logged in successfully"
+msgstr "Heu accedit al sistema"
 
-#: views.py:220
-msgid "Monolingual corpora"
-msgstr ""
-
-#: views.py:226 templates/base.html:100 templates/inspect.html:8
-msgid "Language models"
-msgstr ""
-
-#: views.py:235 templates/base.html:101 templates/dashboard.html:18
-msgid "Translators"
-msgstr ""
-
-#: views.py:242 templates/base.html:105 templates/base.html:107
-#: templates/index.html:78 templates/index.html:83 templates/inspect.html:123
-#: templates/test.html:18 templates/translate.html:4
-#: templates/translate.html:46 templates/translate.html:89
-#: templates/translate.html:124
-msgid "Translate"
-msgstr ""
-
-#: views.py:249
-msgid "Tasks"
-msgstr ""
-
-#: views.py:254
-msgid "Test"
-msgstr ""
-
-#: views.py:261 templates/base.html:120 templates/dashboard.html:9
+#: blueprints/dashboard/templates/dashboard.html:5
+#: blueprints/dashboard/views.py:25 templates/base.html:129
 msgid "Dashboard"
-msgstr ""
+msgstr "Tauler de control"
 
-#: views.py:268
-msgid "Web service"
-msgstr ""
-
-#: views.py:273
-msgid "About"
-msgstr ""
-
-#: views.py:277
-msgid "Contact"
-msgstr ""
-
-#: views.py:291 templates/base.html:108 templates/inspect.html:4
-msgid "Inspect"
-msgstr ""
-
-#: views.py:297 views.py:988 views.py:989 templates/base.html:111
-#: templates/evaluate.html:36 templates/translators.html:231
-msgid "Evaluate"
-msgstr ""
-
-#: views.py:419
-msgid "Invalid input files"
-msgstr ""
-
-#: views.py:969 views.py:970 templates/translators.html:198
-msgid "Optimize"
-msgstr ""
-
-#: views.py:1676
+#: blueprints/dashboard/views.py:81
 msgid "Toggle"
-msgstr ""
+msgstr "Cambiar"
 
-#: templates/base.html:27
-msgid "No data available in table"
-msgstr ""
-
-#: templates/base.html:28
-msgid "Showing _START_ to _END_ of _TOTAL_ entries"
-msgstr ""
-
-#: templates/base.html:29
-msgid "Showing 0 to 0 of 0 entries"
-msgstr ""
-
-#: templates/base.html:30
-msgid "(filtered from _MAX_ total entries)"
-msgstr ""
-
-#: templates/base.html:33
-msgid "Show _MENU_ entries"
-msgstr ""
-
-#: templates/base.html:34
-msgid "Loading..."
-msgstr ""
-
-#: templates/base.html:35
-msgid "Processing..."
-msgstr ""
-
-#: templates/base.html:36
-msgid "Search:"
-msgstr ""
-
-#: templates/base.html:37
-msgid "No matching records found"
-msgstr ""
-
-#: templates/base.html:39
-msgid "First"
-msgstr ""
-
-#: templates/base.html:40
-msgid "Last"
-msgstr ""
-
-#: templates/base.html:41
-msgid "Next"
-msgstr ""
-
-#: templates/base.html:42
-msgid "Previous"
-msgstr ""
-
-#: templates/base.html:45
-msgid ": activate to sort column ascending"
-msgstr ""
-
-#: templates/base.html:46
-msgid ": activate to sort column descending"
-msgstr ""
-
-#: templates/base.html:80
-msgid "Toggle navigation"
-msgstr ""
-
-#: templates/base.html:85 templates/index.html:5
-msgid "MTradumàtica"
-msgstr ""
-
-#: templates/base.html:90
-msgid "Data"
-msgstr ""
-
-#: templates/base.html:92 templates/bitexts.html:88
-msgid "Files"
-msgstr ""
-
-#: templates/base.html:93
-msgid "Monotexts"
-msgstr ""
-
-#: templates/base.html:94
-msgid "Bitexts"
-msgstr ""
-
-#: templates/base.html:98 templates/language-models.html:80
-msgid "Train"
-msgstr ""
-
-#: templates/base.html:121 templates/base.html:128
-msgid "Logout"
-msgstr ""
-
-#: templates/base.html:132
-msgid "Login"
-msgstr ""
-
-#: templates/base.html:158
-msgid "Change language selection"
-msgstr ""
-
-#: templates/base.html:167 templates/bitexts.html:71 templates/bitexts.html:117
-#: templates/bitexts.html:143 templates/files.html:60
-#: templates/language-models.html:79 templates/monolingual-corpora.html:65
-#: templates/monolingual-corpora.html:106
-#: templates/monolingual-corpora.html:125 templates/translators.html:162
-#: templates/translators.html:197 templates/translators.html:230
-msgid "Close"
-msgstr ""
-
-#: templates/base.html:177
-msgid "Visit MTradumàtica on Github"
-msgstr ""
-
-#: templates/bitexts.html:11
-msgid ""
-"Create bilingual corpora to train SMT systems. Add as many source-target "
-"files as you want to your bitext provided that they are parallel!"
-msgstr ""
-
-#: templates/bitexts.html:18
-msgid "Bitext name"
-msgstr ""
-
-#: templates/bitexts.html:19
-msgid "Languages"
-msgstr ""
-
-#: templates/bitexts.html:20 templates/files.html:20
-#: templates/monolingual-corpora.html:21
-msgid "Lines"
-msgstr ""
-
-#: templates/bitexts.html:21 templates/files.html:23
-#: templates/language-models.html:22 templates/monolingual-corpora.html:22
-#: templates/translators.html:23
-msgid "Date"
-msgstr ""
-
-#: templates/bitexts.html:38
-msgid "Create a new bitext"
-msgstr ""
-
-#: templates/bitexts.html:44 templates/dashboard.html:65
-#: templates/dashboard.html:112 templates/language-models.html:48
-#: templates/monolingual-corpora.html:47 templates/translators.html:50
-msgid "Name"
-msgstr ""
-
-#: templates/bitexts.html:53 templates/translators.html:67
-msgid "Source language"
-msgstr ""
-
-#: templates/bitexts.html:56 templates/bitexts.html:64
-#: templates/language-models.html:61 templates/monolingual-corpora.html:59
-#: templates/translators.html:69 templates/translators.html:77
-msgid "None"
-msgstr ""
-
-#: templates/bitexts.html:61 templates/translators.html:74
-msgid "Target language"
-msgstr ""
-
-#: templates/bitexts.html:72 templates/monolingual-corpora.html:66
-msgid "Create"
-msgstr ""
-
-#: templates/bitexts.html:83
-msgid "Add content to bitext"
-msgstr ""
-
-#: templates/bitexts.html:89 templates/monolingual-corpora.html:83
-#: templates/translate.html:12
-msgid "TMX"
-msgstr ""
-
-#: templates/bitexts.html:118 templates/monolingual-corpora.html:107
-msgid "Add content"
-msgstr ""
-
-#: templates/bitexts.html:130 templates/files.html:54
-#: templates/monolingual-corpora.html:119
-msgid "Excerpt of"
-msgstr ""
-
-#: templates/dashboard.html:10
+#: blueprints/dashboard/templates/dashboard.html:6
 msgid "Check the load and health of the components of the system."
-msgstr ""
+msgstr "Comproveu la càrrega i l'estat dels components del sistema."
 
-#: templates/dashboard.html:13
+#: blueprints/dashboard/templates/dashboard.html:9
 msgid "System"
-msgstr ""
+msgstr "Sistema"
 
-#: templates/dashboard.html:15
+#: blueprints/dashboard/templates/dashboard.html:11
 msgid "Users"
-msgstr ""
+msgstr "Usuaris"
 
-#: templates/dashboard.html:17
+#: blueprints/dashboard/templates/dashboard.html:13
 msgid "Queue"
-msgstr ""
+msgstr "Cua"
 
-#: templates/dashboard.html:22
+#: blueprints/dashboard/templates/dashboard.html:14
+#: blueprints/train/views.py:33 templates/base.html:110
+msgid "Translators"
+msgstr "Traductors"
+
+#: blueprints/dashboard/templates/dashboard.html:20
 msgid "Memory"
-msgstr ""
+msgstr "Memòria"
 
-#: templates/dashboard.html:25
+#: blueprints/dashboard/templates/dashboard.html:23
 #, python-format
 msgid "%(used).2f / %(total).2f GB"
-msgstr ""
+msgstr "%(used).2f / %(total).2f GB"
 
-#: templates/dashboard.html:38
+#: blueprints/dashboard/templates/dashboard.html:36
 msgid "Disk Space"
-msgstr ""
+msgstr "Espai al disc"
 
-#: templates/dashboard.html:40
+#: blueprints/dashboard/templates/dashboard.html:38
 #, python-format
 msgid ""
 "%(used).2f GB used (%(percent).1f%%) of %(total).2f GB in total, from "
 "which"
 msgstr ""
+"%(used).2f GB utilitzats (%(percent).1f%%) de %(total).2f GB en total, "
+"dels quals"
 
-#: templates/dashboard.html:42
+#: blueprints/dashboard/templates/dashboard.html:40
 #, python-format
 msgid "MT engines: %(mt_size).2f GB (%(mt_engines)d engines)"
-msgstr ""
+msgstr "Motors de TA: %(mt_size).2f GB (%(mt_engines)d motors)"
 
-#: templates/dashboard.html:43
+#: blueprints/dashboard/templates/dashboard.html:41
 #, python-format
 msgid "Training corpora: %(tc_size).2f GB (%(tc_files)d items)"
-msgstr ""
+msgstr "Corpus d'entrenament: %(tc_size).2f GB (%(tc_files)d ítems)"
 
-#: templates/dashboard.html:44
+#: blueprints/dashboard/templates/dashboard.html:42
 #, python-format
 msgid "Language models: %(lm_size).2f GB (%(lm_models)d models)"
-msgstr ""
+msgstr "Models de llengua: %(lm_size).2f GB (%(lm_models)d models)"
 
-#: templates/dashboard.html:45
+#: blueprints/dashboard/templates/dashboard.html:43
 #, python-format
 msgid "Temporary files: %(tmp_size).2f GB"
-msgstr ""
+msgstr "Fitxers temporals: %(tmp_size).2f GB"
 
-#: templates/dashboard.html:48
+#: blueprints/dashboard/templates/dashboard.html:46
 msgid "CPU cores"
-msgstr ""
+msgstr "Nucli de CPU"
 
-#: templates/dashboard.html:50
+#: blueprints/dashboard/templates/dashboard.html:48
 msgid "System load"
-msgstr ""
+msgstr "Càrrega del sistema"
 
-#: templates/dashboard.html:54
+#: blueprints/dashboard/templates/dashboard.html:52
 msgid "Refresh"
-msgstr ""
+msgstr "Actualitzar"
 
-#: templates/dashboard.html:66
+#: blueprints/dashboard/templates/dashboard.html:63
+#: blueprints/dashboard/templates/dashboard.html:109
+#: blueprints/data/templates/bitexts.html:39
+#: blueprints/data/templates/monolingual-corpora.html:41
+#: blueprints/train/templates/language-models.html:42
+#: blueprints/train/templates/translators.html:44
+msgid "Name"
+msgstr "Nom"
+
+#: blueprints/dashboard/templates/dashboard.html:64
 msgid "E-mail"
-msgstr ""
+msgstr "Correu electrònic"
 
-#: templates/dashboard.html:67
+#: blueprints/dashboard/templates/dashboard.html:65
 msgid "MT engines"
-msgstr ""
+msgstr "Motors de TA"
 
-#: templates/dashboard.html:68
+#: blueprints/dashboard/templates/dashboard.html:66
 msgid "Disk space (Mb)"
-msgstr ""
+msgstr "Espai al disc (Mb)"
 
-#: templates/dashboard.html:69
+#: blueprints/dashboard/templates/dashboard.html:67
 msgid "Admin"
-msgstr ""
+msgstr "Administrador"
 
-#: templates/dashboard.html:70
+#: blueprints/dashboard/templates/dashboard.html:68
 msgid "Banned"
-msgstr ""
+msgstr "Bloquejat"
 
-#: templates/dashboard.html:81
+#: blueprints/dashboard/templates/dashboard.html:79
 msgid "Disable registration of new users"
+msgstr "Desactiva el registre de nous usuaris"
+
+#: blueprints/dashboard/templates/dashboard.html:88
+msgid "Task name"
 msgstr ""
 
-#: templates/dashboard.html:90
-msgid "Task ID"
-msgstr ""
-
-#: templates/dashboard.html:91
-msgid "Task type"
-msgstr ""
-
-#: templates/dashboard.html:92 templates/dashboard.html:116
-msgid "User e-mail"
-msgstr ""
-
-#: templates/dashboard.html:93
+#: blueprints/dashboard/templates/dashboard.html:89
 msgid "Status"
-msgstr ""
+msgstr "Estat"
 
-#: templates/dashboard.html:94 templates/dashboard.html:115
+#: blueprints/dashboard/templates/dashboard.html:90
+#: blueprints/dashboard/templates/dashboard.html:112
 msgid "Creation date"
+msgstr "Data de creació"
+
+#: blueprints/dashboard/templates/dashboard.html:91
+msgid "Worker"
 msgstr ""
 
-#: templates/dashboard.html:95
-msgid "Time"
+#: blueprints/dashboard/templates/dashboard.html:92
+msgid "Working on"
 msgstr ""
 
-#: templates/dashboard.html:113 templates/translators.html:20
+#: blueprints/dashboard/templates/dashboard.html:110
+#: blueprints/train/templates/translators.html:15
 msgid "Language pair"
-msgstr ""
+msgstr "Parell de llengües"
 
-#: templates/dashboard.html:114
+#: blueprints/dashboard/templates/dashboard.html:111
 msgid "Size (Mb)"
-msgstr ""
+msgstr "Tamany (Mb)"
 
-#: templates/evaluate.html:8
+#: blueprints/dashboard/templates/dashboard.html:113
+msgid "User e-mail"
+msgstr "Correu electrònic de l'usuari"
+
+#: blueprints/data/templates/files.html:5 blueprints/data/views.py:24
+msgid "File manager"
+msgstr "Gestor de fitxers"
+
+#: blueprints/data/templates/bitexts.html:5 blueprints/data/views.py:31
+msgid "Bitext manager"
+msgstr "Gestor de bitextos"
+
+#: blueprints/data/views.py:37
+msgid "Monolingual corpora"
+msgstr "Corpus monolingües"
+
+#: blueprints/data/templates/bitexts.html:6
+msgid ""
+"Create bilingual corpora to train SMT systems. Add as many source-target "
+"files as you want to your bitext provided that they are parallel!"
+msgstr ""
+"Creeu corpus bilingües per entrenar sistemes TAE. Afegiu tants fitxers "
+"originals i meta com vulgueu al vostre bitext sempre que siguin "
+"paral·lels."
+
+#: blueprints/data/templates/bitexts.html:13
+msgid "Bitext name"
+msgstr "Nom del bitext"
+
+#: blueprints/data/templates/bitexts.html:14
+msgid "Languages"
+msgstr "Llengües"
+
+#: blueprints/data/templates/bitexts.html:15
+#: blueprints/data/templates/files.html:15
+#: blueprints/data/templates/monolingual-corpora.html:15
+msgid "Lines"
+msgstr "Línies"
+
+#: blueprints/data/templates/bitexts.html:16
+#: blueprints/data/templates/files.html:18
+#: blueprints/data/templates/monolingual-corpora.html:16
+#: blueprints/train/templates/language-models.html:16
+#: blueprints/train/templates/translators.html:18
+msgid "Date"
+msgstr "Data"
+
+#: blueprints/data/templates/bitexts.html:33
+msgid "Create a new bitext"
+msgstr "Crear un nou text"
+
+#: blueprints/data/templates/bitexts.html:48
+#: blueprints/train/templates/translators.html:63
+msgid "Source language"
+msgstr "Llengua origen"
+
+#: blueprints/data/templates/bitexts.html:51
+#: blueprints/data/templates/bitexts.html:59
+#: blueprints/data/templates/monolingual-corpora.html:53
+#: blueprints/train/templates/language-models.html:55
+#: blueprints/train/templates/translators.html:65
+#: blueprints/train/templates/translators.html:72
+msgid "None"
+msgstr "Cap"
+
+#: blueprints/data/templates/bitexts.html:56
+#: blueprints/train/templates/translators.html:70
+msgid "Target language"
+msgstr "Llengua meta"
+
+#: blueprints/data/templates/bitexts.html:66
+#: blueprints/data/templates/bitexts.html:112
+#: blueprints/data/templates/bitexts.html:138
+#: blueprints/data/templates/files.html:55
+#: blueprints/data/templates/monolingual-corpora.html:59
+#: blueprints/data/templates/monolingual-corpora.html:100
+#: blueprints/data/templates/monolingual-corpora.html:119
+#: blueprints/train/templates/language-models.html:73
+#: blueprints/train/templates/translators.html:155
+#: blueprints/train/templates/translators.html:184
+#: blueprints/train/templates/translators.html:221 templates/base.html:176
+msgid "Close"
+msgstr "Tancar"
+
+#: blueprints/data/templates/bitexts.html:67
+#: blueprints/data/templates/monolingual-corpora.html:60
+msgid "Create"
+msgstr "Crear"
+
+#: blueprints/data/templates/bitexts.html:78
+msgid "Add content to bitext"
+msgstr "Afegir contingut a bitext"
+
+#: blueprints/data/templates/bitexts.html:83 templates/base.html:101
+msgid "Files"
+msgstr "Fitxers"
+
+#: blueprints/data/templates/bitexts.html:84
+#: blueprints/data/templates/monolingual-corpora.html:77
+#: blueprints/translate/templates/translate.html:12
+msgid "TMX"
+msgstr "TMX"
+
+#: blueprints/data/templates/bitexts.html:113
+#: blueprints/data/templates/monolingual-corpora.html:101
+msgid "Add content"
+msgstr "Afegir contingut"
+
+#: blueprints/data/templates/bitexts.html:125
+#: blueprints/data/templates/files.html:49
+#: blueprints/data/templates/monolingual-corpora.html:113
+msgid "Excerpt of"
+msgstr "Fragment de"
+
+#: blueprints/data/templates/files.html:6
+msgid ""
+"Add either text or TMX files to MTradumàtica; you will always find them "
+"all stored here."
+msgstr ""
+"Afegiu fitxers de text o TMX a MTradumàtica; sempre els trobareu "
+"emmagatzemats aquí."
+
+#: blueprints/data/templates/files.html:13
+msgid "File name"
+msgstr "Nom de l'arxiu"
+
+#: blueprints/data/templates/files.html:14
+#: blueprints/data/templates/monolingual-corpora.html:14
+#: blueprints/data/templates/monolingual-corpora.html:50
+#: blueprints/train/templates/language-models.html:14
+#: blueprints/train/templates/language-models.html:52
+msgid "Language"
+msgstr "Llengua"
+
+#: blueprints/data/templates/files.html:16
+msgid "Words (unique)"
+msgstr "Paraules (úniques)"
+
+#: blueprints/data/templates/files.html:17
+msgid "Chars"
+msgstr "Caràcters"
+
+#: blueprints/data/templates/files.html:37
+msgid "Click here or drag and drop files"
+msgstr "Feu clic aquí o arrossegueu els fitxers"
+
+#: blueprints/data/templates/files.html:38
+msgid "(you can upload more than one file at once)"
+msgstr "(podeu carregar més d’un fitxer alhora)"
+
+#: blueprints/data/templates/monolingual-corpora.html:5
+msgid "Monotext manager"
+msgstr "Gestor de monotextos"
+
+#: blueprints/data/templates/monolingual-corpora.html:6
+msgid ""
+"Create monolingual corpora to train language models. Add one or more "
+"files to each monotext provided that they are all in the same language!"
+msgstr ""
+"Creeu corpus monolingües per entrenar models de llengua. Afegiu un o més "
+"fitxers a cada monotext sempre que siguin tots en un mateix idioma."
+
+#: blueprints/data/templates/monolingual-corpora.html:13
+msgid "Monotext name"
+msgstr "Nom del monotext"
+
+#: blueprints/data/templates/monolingual-corpora.html:35
+msgid "Create a new monotext"
+msgstr "Creeu un monotext nou"
+
+#: blueprints/data/templates/monolingual-corpora.html:71
+msgid "Add content to monotext"
+msgstr "Afegiu contingut al monotext"
+
+#: blueprints/data/templates/monolingual-corpora.html:84
+msgid "File to append"
+msgstr "Fitxer que cal afegir"
+
+#: blueprints/evaluation/templates/evaluate.html:33
+#: blueprints/evaluation/views.py:12
+#: blueprints/train/templates/translators.html:222
+#: blueprints/train/views.py:423 blueprints/train/views.py:424
+#: templates/base.html:120
+msgid "Evaluate"
+msgstr "Avaluar"
+
+#: blueprints/evaluation/views.py:50
+msgid "Invalid input files"
+msgstr "Els fitxers d'entrada no són vàlids"
+
+#: blueprints/evaluation/templates/evaluate.html:5
 msgid "Evaluate MT performance"
-msgstr ""
+msgstr "Avaluar el rendiment de la TA"
 
-#: templates/evaluate.html:9
+#: blueprints/evaluation/templates/evaluate.html:6
 msgid ""
 "Calculate MT quality metrics using human translation as a reference\n"
 "  and as many different MT outputs as you attach to it. The input files "
@@ -433,118 +389,553 @@ msgid ""
 "  practical limit, only the first 3000 lines of the files are taken into\n"
 "  account."
 msgstr ""
+"Calcular mètriques automàtiques de rendiment de la TA utilitzant com a "
+"referència una traducció professional\n"
+" i tantes sortides de TA diferents com vulgueu. Els fitxers d’entrada han"
+" de ser\n"
+" fitxers de text UTF-8 alineats a oració per obtenir puntuacions "
+"precises. En la\n"
+" pràctica, només es tenen en compte les 3.000 primeres línies dels "
+"fitxers\n"
+" ."
 
-#: templates/evaluate.html:19 templates/translators.html:223
-#, fuzzy
+#: blueprints/evaluation/templates/evaluate.html:16
+#: blueprints/train/templates/translators.html:213
+#, -ERR:PROP-NOT-FOUND-
 msgid "Human translation"
-msgstr "Optimitzar traductor"
+msgstr "Traducció professional"
 
-#: templates/evaluate.html:26
+#: blueprints/evaluation/templates/evaluate.html:23
 msgid "Machine translation (one or more)"
-msgstr ""
+msgstr "Traducció automàtica (una o més)"
 
-#: templates/evaluate.html:50
+#: blueprints/evaluation/templates/evaluate.html:47
 msgid "Test file"
-msgstr ""
+msgstr "Prova"
 
-#: templates/evaluate.html:51 templates/evaluate.html:63
+#: blueprints/evaluation/templates/evaluate.html:48
+#: blueprints/evaluation/templates/evaluate.html:60
 msgid "BLEU"
-msgstr ""
+msgstr "BLEU"
 
-#: templates/evaluate.html:52 templates/evaluate.html:65
+#: blueprints/evaluation/templates/evaluate.html:49
+#: blueprints/evaluation/templates/evaluate.html:62
 msgid "chrF3"
-msgstr ""
+msgstr "chrF3"
 
-#: templates/evaluate.html:53 templates/evaluate.html:67
+#: blueprints/evaluation/templates/evaluate.html:50
+#: blueprints/evaluation/templates/evaluate.html:64
 msgid "BEER"
-msgstr ""
+msgstr "BEER"
 
-#: templates/evaluate.html:54 templates/evaluate.html:69
+#: blueprints/evaluation/templates/evaluate.html:51
+#: blueprints/evaluation/templates/evaluate.html:66
 msgid "TER"
-msgstr ""
+msgstr "TER"
 
-#: templates/evaluate.html:55 templates/evaluate.html:71
+#: blueprints/evaluation/templates/evaluate.html:52
+#: blueprints/evaluation/templates/evaluate.html:68
 msgid "WER"
-msgstr ""
+msgstr "WER"
 
-#: templates/evaluate.html:61
+#: blueprints/evaluation/templates/evaluate.html:58
 msgid "Legend"
-msgstr ""
+msgstr "Llegenda"
 
-#: templates/evaluate.html:64
+#: blueprints/evaluation/templates/evaluate.html:61
 #, python-format
 msgid "%% of word n-grams of the reference file present on the MT file."
-msgstr ""
+msgstr "%% de n-grames de paraules del fitxer de referència presents al fitxer TA."
 
-#: templates/evaluate.html:66
+#: blueprints/evaluation/templates/evaluate.html:63
 #, python-format
 msgid "%% of character n-grams of the reference file present on the MT file."
 msgstr ""
+"%% de n-grames de caràcters del fitxer de referència presents al fitxer "
+"TA."
 
-#: templates/evaluate.html:68
+#: blueprints/evaluation/templates/evaluate.html:65
 msgid "A classifier based in character n-grams and permutation trees."
-msgstr ""
+msgstr "Un classificador basat en n-grames de caràcters i arbres de permutació."
 
-#: templates/evaluate.html:70
+#: blueprints/evaluation/templates/evaluate.html:67
 #, python-format
 msgid ""
 "%% of characters needing modification in the MT file in order to match "
 "the reference file."
 msgstr ""
+"un %% de caràcters necessiten modificacions al fitxer TA per coincidir "
+"amb el fitxer de referència."
 
-#: templates/evaluate.html:72
+#: blueprints/evaluation/templates/evaluate.html:69
 msgid "A variation of TER."
-msgstr ""
+msgstr "Una variació de TER."
 
-#: templates/evaluate.html:81 templates/inspect.html:287
-#: templates/translate.html:136 templates/translators.html:242
+#: blueprints/evaluation/templates/evaluate.html:78
+#: blueprints/train/templates/translators.html:233
+#: blueprints/translate/templates/inspect.html:289
+#: blueprints/translate/templates/translate.html:134
 msgid "Please wait"
-msgstr ""
+msgstr "Si us plau, espereu"
 
-#: templates/evaluate.html:88 templates/inspect.html:294
-#: templates/translate.html:143
+#: blueprints/evaluation/templates/evaluate.html:85
+#: blueprints/translate/templates/inspect.html:296
+#: blueprints/translate/templates/translate.html:141
 msgid "Cancel translation task"
-msgstr ""
+msgstr "Cancel·lar la tasca de traducció"
 
-#: templates/files.html:11
+#: blueprints/train/views.py:24 blueprints/translate/templates/inspect.html:9
+#: templates/base.html:109
+msgid "Language models"
+msgstr "Models de llengüa"
+
+#: blueprints/train/templates/translators.html:185
+#: blueprints/train/views.py:404 blueprints/train/views.py:405
+msgid "Optimize"
+msgstr "Optimitzar"
+
+#: blueprints/train/templates/language-models.html:5
+msgid "Language model trainer"
+msgstr "Entrenador de models de llengua"
+
+#: blueprints/train/templates/language-models.html:6
 msgid ""
-"Add either text or TMX files to MTradumàtica; you will always find them "
-"all stored here."
+"Train language models by selecting monotexts previously defined. The "
+"training will be automatically launched!"
 msgstr ""
+"Entreneu models de llengüa seleccionant monotextos anteriorment "
+"elaborats. L'entrenament s’iniciarà automàticament."
 
-#: templates/files.html:18
-msgid "File name"
-msgstr ""
+#: blueprints/train/templates/language-models.html:13
+msgid "Model name"
+msgstr "Nom del model"
 
-#: templates/files.html:19 templates/language-models.html:20
-#: templates/language-models.html:58 templates/monolingual-corpora.html:20
-#: templates/monolingual-corpora.html:56
-msgid "Language"
-msgstr ""
+#: blueprints/train/templates/language-models.html:15
+msgid "Monolingual corpus"
+msgstr "Corpus monolingüe"
 
-#: templates/files.html:21
-msgid "Words (unique)"
-msgstr ""
+#: blueprints/train/templates/language-models.html:17
+msgid "Training time"
+msgstr "Temps d’entrenament"
 
-#: templates/files.html:22
-msgid "Chars"
-msgstr ""
+#: blueprints/train/templates/language-models.html:36
+msgid "Train a new language model"
+msgstr "Entrenar un nou model de llengua"
 
-#: templates/files.html:42
-msgid "Click here or drag and drop files"
-msgstr ""
+#: blueprints/train/templates/language-models.html:61
+msgid "Monotext"
+msgstr "Monotext"
 
-#: templates/files.html:43
-msgid "(you can upload more than one file at once)"
+#: blueprints/train/templates/language-models.html:74 templates/base.html:107
+msgid "Train"
+msgstr "Entrenar"
+
+#: blueprints/train/templates/translators.html:5
+msgid "Translator trainer"
+msgstr "Entrenador de traductors"
+
+#: blueprints/train/templates/translators.html:6
+msgid ""
+"Train SMT systems by combining bitexts and language models for a language"
+" pair."
 msgstr ""
+"Entreneu sistemes TAE combinant bitextos i models de llengüa per a un par"
+" de llengües."
+
+#: blueprints/train/templates/translators.html:7
+msgid "Optimising can take time but also bring higher quality."
+msgstr "L’optimització pot tardar prou, però també aporta una qualitat superior."
+
+#: blueprints/train/templates/translators.html:14
+msgid "Translator name"
+msgstr "Nom del traductor"
+
+#: blueprints/train/templates/translators.html:16
+#: blueprints/train/templates/translators.html:77
+msgid "Bitext"
+msgstr "Bitext"
+
+#: blueprints/train/templates/translators.html:17
+msgid "LM"
+msgstr "ML"
+
+#: blueprints/train/templates/translators.html:19
+msgid "Training"
+msgstr "Entrenament"
+
+#: blueprints/train/templates/translators.html:20
+msgid "Optimization"
+msgstr "Optimització"
+
+#: blueprints/train/templates/translators.html:21
+msgid "Evaluation"
+msgstr "Avaluació"
+
+#: blueprints/train/templates/translators.html:38
+msgid "Create a new translator"
+msgstr "Crear un nou traductor"
+
+#: blueprints/train/templates/translators.html:46
+msgid "Give a name to the translator"
+msgstr "Anomeneu el traductor"
+
+#: blueprints/train/templates/translators.html:54
+msgid "From bitexts and LMs"
+msgstr "De bitextos i ML"
+
+#: blueprints/train/templates/translators.html:55
+msgid "From files (no pre-built LM)"
+msgstr "Des de fitxers (sense ML)"
+
+#: blueprints/train/templates/translators.html:56
+msgid "Link existing MT"
+msgstr "Enllaceu un TA existent"
+
+#: blueprints/train/templates/translators.html:86
+msgid "Laguage model"
+msgstr "Model de llengua"
+
+#: blueprints/train/templates/translators.html:99
+msgid "Source side"
+msgstr "Origen"
+
+#: blueprints/train/templates/translators.html:111
+msgid "Target side"
+msgstr "Meta"
+
+#: blueprints/train/templates/translators.html:127
+msgid "First translator"
+msgstr "Primer traductor"
+
+#: blueprints/train/templates/translators.html:139
+msgid "Second translator"
+msgstr "Segon traductor"
+
+#: blueprints/train/templates/translators.html:156
+msgid "Add"
+msgstr "Afegir"
+
+#: blueprints/train/templates/translators.html:169
+msgid "Optimize translator"
+msgstr "Optimitzar traductor"
+
+#: blueprints/train/templates/translators.html:197
+#, -ERR:PROP-NOT-FOUND-
+msgid "Evaluate translator"
+msgstr "Avaluar traductor"
+
+#: blueprints/train/templates/translators.html:201
+msgid ""
+"The input files need to be plain text files, at one sentence per line, \n"
+"\t\t\t\t\t\tand to have the same number of sentences."
+msgstr "Els fitxers d'entrada han de ser fitxers de text pla amb una oració per línia\n"
+"\t\t\t\t\t\ti amb el mateix nombre de línies."
+
+#: blueprints/train/templates/translators.html:207
+msgid "Original language text"
+msgstr "Text en llengua origen"
+
+#: blueprints/translate/templates/inspect.html:125
+#: blueprints/translate/templates/translate.html:4
+#: blueprints/translate/templates/translate.html:43
+#: blueprints/translate/templates/translate.html:86
+#: blueprints/translate/templates/translate.html:121
+#: blueprints/translate/views.py:25 templates/base.html:114
+#: templates/base.html:116 templates/index.html:78 templates/index.html:83
+msgid "Translate"
+msgstr "Traduir"
+
+#: blueprints/translate/templates/inspect.html:5
+#: blueprints/translate/views.py:55 templates/base.html:117
+msgid "Inspect"
+msgstr "Inspeccionar"
+
+#: blueprints/translate/templates/inspect.html:6
+msgid "Query and examine components of SMT engines."
+msgstr "Consulteu i examineu els components dels motors TAE."
+
+#: blueprints/translate/templates/inspect.html:10
+msgid "Translation models"
+msgstr "Models de traducció"
+
+#: blueprints/translate/templates/inspect.html:11
+msgid "Probabilistic bilingual dictionary"
+msgstr "Diccionari probabilistic bilingüe"
+
+#: blueprints/translate/templates/inspect.html:12
+#: blueprints/translate/templates/inspect.html:148
+msgid "Translation details"
+msgstr "Detalls de la traducció"
+
+#: blueprints/translate/templates/inspect.html:14
+msgid "Moses remote server"
+msgstr "Servidor remot Moses"
+
+#: blueprints/translate/templates/inspect.html:24
+#: blueprints/translate/templates/inspect.html:66
+#: blueprints/translate/templates/inspect.html:118
+#: blueprints/translate/templates/translate.html:31
+msgid "Input text"
+msgstr "Text d'entrada"
+
+#: blueprints/translate/templates/inspect.html:25
+#: blueprints/translate/templates/inspect.html:67
+msgid "Insert tokenized text here"
+msgstr "Afegiu aquí el text tokenitzat"
+
+#: blueprints/translate/templates/inspect.html:33
+msgid "LM / LM from translator"
+msgstr "ML / ML del traductor"
+
+#: blueprints/translate/templates/inspect.html:49
+#: blueprints/translate/templates/inspect.html:88
+msgid "Output"
+msgstr "Sortida"
+
+#: blueprints/translate/templates/inspect.html:56
+#: blueprints/translate/templates/inspect.html:95
+#: blueprints/translate/templates/inspect.html:245
+msgid "Query"
+msgstr "Consultar"
+
+#: blueprints/translate/templates/inspect.html:74
+msgid "TM from translator"
+msgstr "Memòria del traductor"
+
+#: blueprints/translate/templates/inspect.html:105
+#: blueprints/translate/templates/inspect.html:224
+#: blueprints/translate/templates/inspect.html:264
+#: blueprints/translate/templates/translate.html:20
+#: blueprints/translate/templates/translate.html:68
+#: blueprints/translate/templates/translate.html:108
+msgid "Translator"
+msgstr "Traductor"
+
+#: blueprints/translate/templates/inspect.html:126
+#: blueprints/translate/templates/translate.html:44
+msgid "Clear"
+msgstr "Eliminar"
+
+#: blueprints/translate/templates/inspect.html:133
+msgid "Tokenized input"
+msgstr "Entrada tokenitzada"
+
+#: blueprints/translate/templates/inspect.html:139
+msgid "Truecased input"
+msgstr "Text d'entrada amb capitalització truecase"
+
+#: blueprints/translate/templates/inspect.html:154
+msgid "Alignments"
+msgstr "Aliniaments"
+
+#: blueprints/translate/templates/inspect.html:163
+msgid "Unknown words"
+msgstr "Paraules desconegudes"
+
+#: blueprints/translate/templates/inspect.html:169
+msgid "Truecased output"
+msgstr "Text de sortida amb capitalització truecase"
+
+#: blueprints/translate/templates/inspect.html:178
+msgid "Detruecased output"
+msgstr "Text de sortida sense capitalització truecase"
+
+#: blueprints/translate/templates/inspect.html:184
+#: blueprints/translate/templates/translate.html:35
+msgid "Output text"
+msgstr "Text de sortida"
+
+#: blueprints/translate/templates/inspect.html:193
+msgid "N-best list"
+msgstr "Llista de n-millors"
+
+#: blueprints/translate/templates/inspect.html:205
+msgid "Search"
+msgstr "Cercar"
+
+#: blueprints/translate/templates/inspect.html:206
+msgid "Insert single word here"
+msgstr "Inseriu aquí una sola paraula"
+
+#: blueprints/translate/templates/inspect.html:213
+msgid "Query type"
+msgstr "Tipus de consulta"
+
+#: blueprints/translate/templates/inspect.html:215
+msgid "Source"
+msgstr "Origen"
+
+#: blueprints/translate/templates/inspect.html:216
+msgid "Target"
+msgstr "Meta"
+
+#: blueprints/translate/templates/inspect.html:238
+msgid "Results"
+msgstr "Resultats"
+
+#: blueprints/translate/templates/inspect.html:255
+msgid ""
+"Use the address <code>{}</code> to access the remote Moses translation "
+"service"
+msgstr ""
+"Utilitzeu l'enllaç <code>{}</code> per accedir al servei de traducció "
+"remot de Moses"
+
+#: blueprints/translate/templates/inspect.html:276
+msgid "Start server"
+msgstr "Iniciar servidor"
+
+#: blueprints/translate/templates/inspect.html:277
+msgid "Stop server"
+msgstr "Parar servidor"
+
+#: blueprints/translate/templates/translate.html:5
+msgid ""
+"Select a translator, input a text or a document and press 'Translate' to "
+"get the translation\n"
+"  done. Supported document types include HTML, TXT, DOCX, PPTX, XLSX, "
+"ODT, ODS and ODP.\n"
+"  You can translate also translation memories in TMX format."
+msgstr "Seleccioneu un traductor, introduïu un document i premeu 'Traduir' per "
+"obtenir la traducció\n"
+"  automàtica. Els tipus de documents que podeu pujar són HTML, TXT, DOCX, PPTX, XLSX, "
+"ODT, ODS i ODP.\n"
+"  També podeu traduir memòries de traducció en format TMX."
+
+
+#: blueprints/translate/templates/translate.html:10
+msgid "Text"
+msgstr "Text"
+
+#: blueprints/translate/templates/translate.html:11
+msgid "Documents"
+msgstr "Documents"
+
+#: blueprints/translate/templates/translate.html:56
+msgid "Select document"
+msgstr "Seleccioneu el tipus de document"
+
+#: blueprints/translate/templates/translate.html:60
+#: blueprints/translate/templates/translate.html:100
+msgid "Browse..."
+msgstr "Navegar..."
+
+#: blueprints/translate/templates/translate.html:64
+#: blueprints/translate/templates/translate.html:104
+msgid "Filetype not supported"
+msgstr "El tipus de fitxer no és compatible"
+
+#: blueprints/translate/templates/translate.html:81
+msgid "Download also the translation memory in TMX format"
+msgstr "Descarregueu la memòria de traducció en format TMX"
+
+#: blueprints/translate/templates/translate.html:96
+msgid "Select TMX"
+msgstr "Seleccionar TMX"
+
+#: templates/base.html:33
+msgid "No data available in table"
+msgstr "No hi ha dades disponibles a la taula"
+
+#: templates/base.html:34
+msgid "Showing _START_ to _END_ of _TOTAL_ entries"
+msgstr "S'estan mostrant de_START_ a_END_ de _TOTAL_ entrades"
+
+#: templates/base.html:35
+msgid "Showing 0 to 0 of 0 entries"
+msgstr "Mostrant de 0 a 0 de 0 entrades"
+
+#: templates/base.html:36
+msgid "(filtered from _MAX_ total entries)"
+msgstr "(filtrat d'un total de _MAX_ entrades)"
+
+#: templates/base.html:39
+msgid "Show _MENU_ entries"
+msgstr "Mostrar les entrades de _MENU_"
+
+#: templates/base.html:40
+msgid "Loading..."
+msgstr "S'està carregant..."
+
+#: templates/base.html:41
+msgid "Processing..."
+msgstr "S'està processant..."
+
+#: templates/base.html:42
+msgid "Search:"
+msgstr "Cercar:"
+
+#: templates/base.html:43
+msgid "No matching records found"
+msgstr "No s'ha trobat cap coincidència"
+
+#: templates/base.html:45
+msgid "First"
+msgstr "Primer"
+
+#: templates/base.html:46
+msgid "Last"
+msgstr "Últim"
+
+#: templates/base.html:47
+msgid "Next"
+msgstr "Següent"
+
+#: templates/base.html:48
+msgid "Previous"
+msgstr "Anterior"
+
+#: templates/base.html:51
+msgid ": activate to sort column ascending"
+msgstr ": ordenar la columna en ordre ascendent"
+
+#: templates/base.html:52
+msgid ": activate to sort column descending"
+msgstr ": ordenar la columna en ordre descendent"
+
+#: templates/base.html:89
+msgid "Toggle navigation"
+msgstr "Canviar vista"
+
+#: templates/base.html:94 templates/index.html:5
+msgid "MTradumàtica"
+msgstr "MTradumàtica"
+
+#: templates/base.html:99
+msgid "Data"
+msgstr "Dades"
+
+#: templates/base.html:102
+msgid "Monotexts"
+msgstr "Monotextos"
+
+#: templates/base.html:103
+msgid "Bitexts"
+msgstr "Bitextos"
+
+#: templates/base.html:130 templates/base.html:137
+msgid "Logout"
+msgstr "Tancar sessió"
+
+#: templates/base.html:141
+msgid "Login"
+msgstr "Iniciar sessió"
+
+#: templates/base.html:167
+msgid "Change language selection"
+msgstr "Canviar l’idioma seleccionat"
+
+#: templates/base.html:186
+msgid "Visit MTradumàtica on Github"
+msgstr "Visiteu MTradumàtica al Github"
 
 #: templates/index.html:6
 msgid "Download MTradumàtica on GitHub"
-msgstr ""
+msgstr "Podeu descarregar MTradumàtica en GitHub"
 
 #: templates/index.html:6
 msgid "Download"
-msgstr ""
+msgstr "Descàrrega:"
 
 #: templates/index.html:9
 msgid ""
@@ -553,10 +944,14 @@ msgid ""
 "understand how\n"
 "                 they all interact together."
 msgstr ""
+"Amb MTradumàtica podreu entrenar sistemes de traducció \n"
+" automàtica estadística personalitzats (TAE), crear components de TAE i "
+"veure com\n"
+" tots interactuen junts."
 
 #: templates/index.html:13
 msgid "Start uploading your files now"
-msgstr ""
+msgstr "Comenceu carregant els fitxers"
 
 #: templates/index.html:16
 msgid ""
@@ -565,14 +960,17 @@ msgid ""
 "chrF3,\n"
 "                 TER and WER."
 msgstr ""
+"<b>Nou</b>: Avalueu el rendiment del vostres\n"
+" sistemes de TA i obtenir mètriques automàtiques com ara BLEU, chrF3,\n"
+" TER i WER."
 
 #: templates/index.html:20
 msgid "Evaluate your systems now"
-msgstr ""
+msgstr "Avalueu els vostres sistemes"
 
 #: templates/index.html:30 templates/index.html:34
 msgid "Upload files"
-msgstr ""
+msgstr "Carregar fitxers"
 
 #: templates/index.html:31
 msgid ""
@@ -582,10 +980,14 @@ msgid ""
 "      more text you can find it at <a href=\"http://opus.lingfil.uu.se\" "
 "target=\"_blank\">OPUS</a>."
 msgstr ""
+"Comenceu a carregar fitxers: fitxers de text  amb l'original i\n"
+" les seves traduccions o memòries de traducció (TMX). Si necessiteu\n"
+" més memòries les podeu trobar a <a href=\"http://opus.lingfil.uu.se\" "
+"target=\"_blank\">OPUS</a>."
 
 #: templates/index.html:39 templates/index.html:44
 msgid "Create Monotexts"
-msgstr ""
+msgstr "Crear monotextos"
 
 #: templates/index.html:40
 msgid ""
@@ -594,10 +996,14 @@ msgid ""
 "languages of\n"
 "    your SMT systems."
 msgstr ""
+"Creeu corpus monolingües a partir d’un o més fitxers.\n"
+" S'utilitzaran per entrenar models de llengua (ML) per a les llengües "
+"meta\n"
+" dels vostres sistemes TAE."
 
 #: templates/index.html:49
 msgid "Build LMs"
-msgstr ""
+msgstr "Entrenar ML"
 
 #: templates/index.html:50
 msgid ""
@@ -606,14 +1012,18 @@ msgid ""
 "want to\n"
 "      translate."
 msgstr ""
+"Consulteu com poden afectar diferents models de llengua (ML)\n"
+" a la qualitat de la traducció, sobretot quan són similars a allò que "
+"voleu\n"
+" traduir."
 
 #: templates/index.html:54
 msgid "Train Language Models"
-msgstr ""
+msgstr "Entrenar models de llengua"
 
 #: templates/index.html:59
 msgid "Create Bitexts"
-msgstr ""
+msgstr "Crear bitextos"
 
 #: templates/index.html:60
 msgid ""
@@ -621,14 +1031,17 @@ msgid ""
 "      paired source-target files. You can join two or more\n"
 "      bitexts together to create a bigger one."
 msgstr ""
+"Creeu corpus bilingües a partir d’un o més\n"
+" fitxers de text original i meta aparellats. Podeu unir dos o més\n"
+" bitextos per crear-ne un de més gran."
 
 #: templates/index.html:64
 msgid "Create a Bitext"
-msgstr ""
+msgstr "Crear un bitext"
 
 #: templates/index.html:68
 msgid "Build Translators"
-msgstr ""
+msgstr "Entrenar traductors"
 
 #: templates/index.html:69
 msgid ""
@@ -636,10 +1049,13 @@ msgid ""
 "      models. Create translators with different texts and see\n"
 "      the effect of optimising them."
 msgstr ""
+"Creeu un nou traductor automàtic amb models de llengua i\n"
+" bitextos. Creeu traductors amb diferents textos i veieu quin\n"
+" és l’efecte d’optimitzar-los."
 
 #: templates/index.html:73
 msgid "Train a Translator"
-msgstr ""
+msgstr "Entrenar un traductor"
 
 #: templates/index.html:79
 msgid ""
@@ -648,431 +1064,8 @@ msgid ""
 "translator, you\n"
 "      will be able to try it!"
 msgstr ""
-
-#: templates/inspect.html:5
-msgid "Query and examine components of SMT engines."
-msgstr ""
-
-#: templates/inspect.html:9
-msgid "Translation models"
-msgstr ""
-
-#: templates/inspect.html:10
-msgid "Probabilistic bilingual dictionary"
-msgstr ""
-
-#: templates/inspect.html:11 templates/inspect.html:146
-msgid "Translation details"
-msgstr ""
-
-#: templates/inspect.html:13
-msgid "Moses remote server"
-msgstr ""
-
-#: templates/inspect.html:22 templates/inspect.html:64
-#: templates/inspect.html:116 templates/test.html:8 templates/translate.html:34
-msgid "Input text"
-msgstr ""
-
-#: templates/inspect.html:23 templates/inspect.html:65
-msgid "Insert tokenized text here"
-msgstr ""
-
-#: templates/inspect.html:31
-msgid "LM / LM from translator"
-msgstr ""
-
-#: templates/inspect.html:47 templates/inspect.html:86
-msgid "Output"
-msgstr ""
-
-#: templates/inspect.html:54 templates/inspect.html:93
-#: templates/inspect.html:243
-msgid "Query"
-msgstr ""
-
-#: templates/inspect.html:72
-msgid "TM from translator"
-msgstr ""
-
-#: templates/inspect.html:103 templates/inspect.html:222
-#: templates/inspect.html:262 templates/translate.html:21
-#: templates/translate.html:71 templates/translate.html:111
-msgid "Translator"
-msgstr ""
-
-#: templates/inspect.html:124 templates/test.html:19
-#: templates/translate.html:47
-msgid "Clear"
-msgstr ""
-
-#: templates/inspect.html:131
-msgid "Tokenized input"
-msgstr ""
-
-#: templates/inspect.html:137
-msgid "Truecased input"
-msgstr ""
-
-#: templates/inspect.html:152
-msgid "Alignments"
-msgstr ""
-
-#: templates/inspect.html:161
-msgid "Unknown words"
-msgstr ""
-
-#: templates/inspect.html:167
-msgid "Truecased output"
-msgstr ""
-
-#: templates/inspect.html:176
-msgid "Detruecased output"
-msgstr ""
-
-#: templates/inspect.html:182 templates/test.html:12
-#: templates/translate.html:38
-msgid "Output text"
-msgstr ""
-
-#: templates/inspect.html:191
-msgid "N-best list"
-msgstr ""
-
-#: templates/inspect.html:203
-msgid "Search"
-msgstr ""
-
-#: templates/inspect.html:204
-msgid "Insert single word here"
-msgstr ""
-
-#: templates/inspect.html:211
-msgid "Query type"
-msgstr ""
-
-#: templates/inspect.html:213
-msgid "Source"
-msgstr ""
-
-#: templates/inspect.html:214
-msgid "Target"
-msgstr ""
-
-#: templates/inspect.html:236
-msgid "Resuls"
-msgstr ""
-
-#: templates/inspect.html:253
-msgid ""
-"Use the address <code>{}</code> to access the remote Moses translation "
-"service"
-msgstr ""
-
-#: templates/inspect.html:274
-msgid "Start server"
-msgstr ""
-
-#: templates/inspect.html:275
-msgid "Stop server"
-msgstr ""
-
-#: templates/language-models.html:11
-msgid "Language model trainer"
-msgstr ""
-
-#: templates/language-models.html:12
-msgid ""
-"Train language models by selecting monotexts previously defined. The "
-"training will be automatically launched!"
-msgstr ""
-
-#: templates/language-models.html:19
-msgid "Model name"
-msgstr ""
-
-#: templates/language-models.html:21
-msgid "Monolingual corpus"
-msgstr ""
-
-#: templates/language-models.html:23
-msgid "Training time"
-msgstr ""
-
-#: templates/language-models.html:42
-msgid "Train a new language model"
-msgstr ""
-
-#: templates/language-models.html:67
-msgid "Monotext"
-msgstr ""
-
-#: templates/monolingual-corpora.html:11
-msgid "Monotext manager"
-msgstr ""
-
-#: templates/monolingual-corpora.html:12
-msgid ""
-"Create monolingual corpora to train language models. Add one or more "
-"files to each monotext provided that they are all in the same language!"
-msgstr ""
-
-#: templates/monolingual-corpora.html:19
-msgid "Monotext name"
-msgstr ""
-
-#: templates/monolingual-corpora.html:41
-msgid "Create a new monotext"
-msgstr ""
-
-#: templates/monolingual-corpora.html:77
-msgid "Add content to monotext"
-msgstr ""
-
-#: templates/monolingual-corpora.html:90
-msgid "File to append"
-msgstr ""
-
-#: templates/tasks.html:4
-msgid "Train SMT system"
-msgstr ""
-
-#: templates/tasks.html:5
-msgid ""
-"Select a parallel corpus (both source and target sides), then click the "
-"button to start training the system."
-msgstr ""
-
-#: templates/tasks.html:8 templates/translators.html:104
-msgid "Source side"
-msgstr ""
-
-#: templates/tasks.html:17 templates/translators.html:116
-msgid "Target side"
-msgstr ""
-
-#: templates/tasks.html:28
-msgid "Start training"
-msgstr ""
-
-#: templates/tasks.html:33
-msgid "Training in progress"
-msgstr ""
-
-#: templates/tasks.html:34
-msgid "You can cancel the current training by pressing the button to cancel."
-msgstr ""
-
-#: templates/tasks.html:40
-msgid "Cancel training"
-msgstr ""
-
-#: templates/tasks.html:45
-msgid "System trained"
-msgstr ""
-
-#: templates/tasks.html:46
-msgid ""
-"You can remove the current MT system by pressing the button. The MT "
-"system will be removed permanently."
-msgstr ""
-
-#: templates/tasks.html:49
-msgid "Remove system"
-msgstr ""
-
-#: templates/test.html:4
-msgid "Test SMT system"
-msgstr ""
-
-#: templates/test.html:5
-msgid ""
-"Type or paste some text in the input text area, then press 'Submit' to "
-"get the translation done."
-msgstr ""
-
-#: templates/translate.html:5
-msgid ""
-"Select a translator, input a text or a document and press 'Translate' to "
-"get the translation\n"
-"  done. Document types supported include HTML, TXT, DOCX, PPTX, XLSX, "
-"ODT, ODS and ODP.\n"
-"  You can translate also translation memories in TMX format."
-msgstr ""
-
-#: templates/translate.html:10
-msgid "Text"
-msgstr ""
-
-#: templates/translate.html:11
-msgid "Documents"
-msgstr ""
-
-#: templates/translate.html:59
-msgid "Select document"
-msgstr ""
-
-#: templates/translate.html:63 templates/translate.html:103
-msgid "Browse..."
-msgstr ""
-
-#: templates/translate.html:67 templates/translate.html:107
-msgid "Filetype not supported"
-msgstr ""
-
-#: templates/translate.html:84
-msgid "Download also the translation memory in TMX format"
-msgstr ""
-
-#: templates/translate.html:99
-msgid "Select TMX"
-msgstr ""
-
-#: templates/translators.html:10
-msgid "Translator trainer"
-msgstr ""
-
-#: templates/translators.html:11
-msgid ""
-"Train SMT systems by combining bitexts and language models for a language"
-" pair."
-msgstr ""
-
-#: templates/translators.html:12
-msgid "Optimising can take time but also bring higher quality."
-msgstr ""
-
-#: templates/translators.html:19
-msgid "Translator name"
-msgstr ""
-
-#: templates/translators.html:21 templates/translators.html:82
-msgid "Bitext"
-msgstr ""
-
-#: templates/translators.html:22
-msgid "LM"
-msgstr ""
-
-#: templates/translators.html:24
-msgid "Training"
-msgstr ""
-
-#: templates/translators.html:25
-msgid "Optimization"
-msgstr ""
-
-#: templates/translators.html:26
-msgid "Evaluation"
-msgstr ""
-
-#: templates/translators.html:45
-msgid "Create a new translator"
-msgstr ""
-
-#: templates/translators.html:52
-msgid "Give a name to the translator"
-msgstr ""
-
-#: templates/translators.html:59
-msgid "From bitexts and LMs"
-msgstr ""
-
-#: templates/translators.html:60
-msgid "From files (no pre-built LM)"
-msgstr ""
-
-#: templates/translators.html:61
-msgid "Link existing MT"
-msgstr ""
-
-#: templates/translators.html:91
-msgid "Laguage model"
-msgstr ""
-
-#: templates/translators.html:132
-msgid "First translator"
-msgstr ""
-
-#: templates/translators.html:144
-msgid "Second translator"
-msgstr ""
-
-#: templates/translators.html:163
-msgid "Add"
-msgstr ""
-
-#: templates/translators.html:180
-msgid "Optimize translator"
-msgstr "Optimitzar traductor"
-
-#: templates/translators.html:210
-#, fuzzy
-msgid "Evaluate translator"
-msgstr "Optimitzar traductor"
-
-#: templates/translators.html:213
-msgid ""
-"The input files need to be plain text files, at one sentence per\n"
-"\t      line, and to have the same number of sentences."
-msgstr ""
-
-#: templates/translators.html:219
-msgid "Original language text"
-msgstr ""
-
-#~ msgid ""
-#~ msgstr ""
-
-#~ msgid "Click here or drag and drop files*"
-#~ msgstr ""
-
-#~ msgid "*Currently, only text files (one sentence per line) are supported."
-#~ msgstr ""
-
-#~ msgid "DownloadMTradumàtica on GitHub"
-#~ msgstr ""
-
-#~ msgid "LMs"
-#~ msgstr ""
-
-#~ msgid "Use"
-#~ msgstr ""
-
-#~ msgid "Check the load an health of the components of the system."
-#~ msgstr ""
-
-#~ msgid "Item size"
-#~ msgstr ""
-
-#~ msgid "Translate &amp; more"
-#~ msgstr ""
-
-#~ msgid "Developed by Prompsit Language Engineering"
-#~ msgstr ""
-
-#~ msgid "Words"
-#~ msgstr ""
-
-#~ msgid ""
-#~ "With MTradumàtica you can train custom statistical machine\n"
-#~ "             translation (SMT) systems. Create"
-#~ " SMT components and understand how\n"
-#~ "             they all interact together."
-#~ msgstr ""
-
-#~ msgid ""
-#~ "Select a translator, input a text "
-#~ "or a document and press 'Translate' "
-#~ "to get the translation\n"
-#~ "  done. Document types supported include"
-#~ " HTML, TXT, DOCX, PPTX, XLSX, ODT,"
-#~ " ODS and ODP."
-#~ msgstr ""
-
-#~ msgid "Language model"
-#~ msgstr ""
-
-#~ msgid "Optimization time"
-#~ msgstr ""
+"Veieu els vostres traductors en acció, proveu-los i compareu-los.\n"
+" Tradueix textos o documents breus. Tan aviat com tingueu un traductor "
+"nou, el\n"
+" podreu provar!"
 
