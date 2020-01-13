@@ -33,7 +33,8 @@ RUN apt-get update -q --fix-missing && \
                        software-properties-common \
                        redis \
                        curl \
-                       default-jdk && \
+                       default-jdk \
+                       subversion && \
     /opt/mtradumatica/scripts/install.sh && \
     rm -Rf /opt/mtradumatica/software && \  
     apt-get autoremove -y && \
