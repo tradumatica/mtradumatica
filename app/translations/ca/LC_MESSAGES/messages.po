@@ -487,7 +487,7 @@ msgstr "Cancel·lar la tasca de traducció"
 #: blueprints/train/views.py:24 blueprints/translate/templates/inspect.html:9
 #: templates/base.html:109
 msgid "Language models"
-msgstr "Models de llengüa"
+msgstr "Models de llengua"
 
 #: blueprints/train/templates/translators.html:185
 #: blueprints/train/views.py:404 blueprints/train/views.py:405
@@ -503,7 +503,7 @@ msgid ""
 "Train language models by selecting monotexts previously defined. The "
 "training will be automatically launched!"
 msgstr ""
-"Entreneu models de llengüa seleccionant monotextos anteriorment "
+"Entreneu models de llengua seleccionant monotextos anteriorment "
 "elaborats. L'entrenament s’iniciarà automàticament."
 
 #: blueprints/train/templates/language-models.html:13
@@ -539,7 +539,7 @@ msgid ""
 "Train SMT systems by combining bitexts and language models for a language"
 " pair."
 msgstr ""
-"Entreneu sistemes TAE combinant bitextos i models de llengüa per a un par"
+"Entreneu sistemes TAE combinant bitextos i models de llengua per a un par"
 " de llengües."
 
 #: blueprints/train/templates/translators.html:7
