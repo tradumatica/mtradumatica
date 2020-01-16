@@ -999,6 +999,14 @@ case "$FORMAT" in
     translate_odt
     exit 0
     ;;
+  odp)
+    translate_odt
+    exit 0
+    ;;
+  ods)
+    translate_odt
+    exit 0
+    ;;
   latex)
     translate_latex
     exit 0
