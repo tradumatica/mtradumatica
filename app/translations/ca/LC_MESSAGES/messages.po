@@ -170,11 +170,11 @@ msgstr "Data de creació"
 
 #: blueprints/dashboard/templates/dashboard.html:91
 msgid "Worker"
-msgstr ""
+msgstr "Procés"
 
 #: blueprints/dashboard/templates/dashboard.html:92
 msgid "Working on"
-msgstr ""
+msgstr "Executant-se a"
 
 #: blueprints/dashboard/templates/dashboard.html:110
 #: blueprints/train/templates/translators.html:15
@@ -581,11 +581,11 @@ msgstr "Anomeneu el traductor"
 
 #: blueprints/train/templates/translators.html:54
 msgid "From bitexts and LMs"
-msgstr "De bitextos i ML"
+msgstr "Amb bitextos i ML"
 
 #: blueprints/train/templates/translators.html:55
 msgid "From files (no pre-built LM)"
-msgstr "Des de fitxers (sense ML)"
+msgstr "Amb fitxers (sense ML)"
 
 #: blueprints/train/templates/translators.html:56
 msgid "Link existing MT"
@@ -685,7 +685,7 @@ msgstr "Afegiu aquí el text tokenitzat"
 
 #: blueprints/translate/templates/inspect.html:33
 msgid "LM / LM from translator"
-msgstr "ML / ML del traductor"
+msgstr "Model de llengua / Model de llengua del traductor"
 
 #: blueprints/translate/templates/inspect.html:49
 #: blueprints/translate/templates/inspect.html:88
