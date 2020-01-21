@@ -73,7 +73,6 @@ $(document).ready(function() {
 
   $('#tasklist').on('init.dt', function() {
     $('input.task_checkbox').on('change', function() {
-      console.log('lol')
       if ($('#task_checkbox_all').is(":checked")) {
         $('#task_checkbox_all').addClass("checkbox-inconsistent");
       }
@@ -125,6 +124,54 @@ $(document).ready(function() {
       $('#task_checkbox_all').prop("checked", false);
       $('#task_checkbox_all').removeClass("checkbox-inconsistent")
       $('#tasks_delete').removeClass("trashbin-enabled");
+    });
+  });
+
+  $('#mtlist').on('draw.dt', function() {
+    $('input.mt_checkbox').off('change').on('change', function() {
+      if ($('#mt_checkbox_all').is(":checked")) {
+        $('#mt_checkbox_all').addClass("checkbox-inconsistent");
+      }
+
+      let any = false;
+      $('.mt_checkbox').each(function() {
+        if ($(this).is(":checked")) {
+          any = true;
+          return false;
+        }
+      });
+
+      if (any) {
+        $('#ml_delete_all').addClass("trashbin-enabled");
+      } else {
+        $('#ml_delete_all').removeClass("trashbin-enabled");
+        $('#mt_checkbox_all').prop("checked", false);
+        $('#mt_checkbox_all').removeClass("checkbox-inconsistent");
+      }
+    });
+
+    $('#mt_checkbox_all').change(function() {
+      $(this).removeClass("checkbox-inconsistent");
+      if ($(this).is(":checked")) {
+        $('.mt_checkbox').prop("checked", true);
+        $('#ml_delete_all').addClass("trashbin-enabled");
+      } else {
+        $('.mt_checkbox').prop("checked", false);
+        $('#ml_delete_all').removeClass("trashbin-enabled");
+      }
+    });
+
+    $('#ml_delete_all').off('click').on('click', function() {
+      $('.mt_checkbox').each(function() {
+        if ($(this).is(":checked")) {
+          $.ajax({
+						url: "actions/translator-delete/" + $(this).attr("id").substring("mt_checkbox-".length)
+					}).done(function(){
+						table_mt.ajax.reload();
+						$('#delete_all').removeClass("trashbin-enabled");
+					});
+        }
+      })
     });
   });
 

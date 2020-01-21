@@ -43,7 +43,7 @@ def mt_list():
 
     search     = request.form['search[value]']
     search_str = '%{0}%'.format(search)
-    checkbox   = '<span class="checkbox"><input class="file_checkbox" type="checkbox" id="ml-checkbox-{0}"/></div>'
+    checkbox   = '<span class="checkbox"><input class="mt_checkbox" type="checkbox" id="ml-checkbox-{0}"/></div>'
     date_fmt   = '%Y-%m-%d %H:%M:%S'
 
     data = [[checkbox.format(t.id), t.name, t.lang1+"-"+t.lang2, t.size_mb, t.mydate.strftime(date_fmt) if t.mydate else '', t.get_user().email, ""]
