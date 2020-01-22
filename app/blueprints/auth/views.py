@@ -107,15 +107,26 @@ def delete_user(id):
     try:
       user = User.query.filter(User.id == id).one()
 
+      print(user.translators)
       for t in user.translators:
-        print(t)
         for i in t.get_path():
-          print("translator path {0}" % i)
+          shutil.rmtree(i, ignore_errors=True)
+
+      for t in user.tfbitexts:
+        for i in t.get_path():
+          shutil.rmtree(i, ignore_errors=True)
 
       for c in user.corpora:
-        print(c)
-        for i in c.path:
-          print("corpora path {0}" % i)
+        os.remove(c.path)
+
+      user.translators.clear()
+      user.corpora.clear()
+      user.language_models.clear()
+      user.bitexts.clear()
+      user.mono_corpora.clear()
+      user.tfbitexts.clear()
+      user.translation.clear()
+      user.translators.clear()
 
       User.query.filter(User.id == id).delete()
       db.session.commit()
