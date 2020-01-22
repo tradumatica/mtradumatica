@@ -107,7 +107,6 @@ def delete_user(id):
     try:
       user = User.query.filter(User.id == id).one()
 
-      print(user.translators)
       for t in user.translators:
         for i in t.get_path():
           shutil.rmtree(i, ignore_errors=True)
