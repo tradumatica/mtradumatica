@@ -71,6 +71,13 @@ $(document).ready(function() {
     language: datatables_lang
   });
 
+  $('#disable_newusers').on('change', function() {
+    let state = $(this).is(":checked");
+    $.ajax({
+      url: "/actions/user-login/" + (state ? 0 : 1)
+    });
+  })
+
   $('#tasklist').on('init.dt', function() {
     $('input.task_checkbox').on('change', function() {
       if ($('#task_checkbox_all').is(":checked")) {
@@ -172,6 +179,72 @@ $(document).ready(function() {
 					});
         }
       })
+    });
+  });
+
+  $('#userlist').on('draw.dt', function() {
+    $('.btn-ban, .btn-unban').off('click').on('click', function() {
+      let id = $(this).attr("data-user-id");
+      let state = $(this).hasClass('btn-ban') ? 1 : 0;
+      $.ajax({
+        url: "/actions/ban/" + id + "/" + state
+      }).done(function() {
+        table_ul.ajax.reload();
+      })
+    });
+
+    $('input.user_checkbox').off('change').on('change', function() {
+      if ($('#ul_checkbox_all').is(":checked")) {
+        $('#ul_checkbox_all').addClass("checkbox-inconsistent");
+      }
+
+      let any = false;
+      $('.user_checkbox').each(function() {
+        if ($(this).is(":checked")) {
+          any = true;
+          return false;
+        }
+      });
+
+      if (any) {
+        $('#ul_delete_all').addClass("trashbin-enabled");
+      } else {
+        $('#ul_delete_all').removeClass("trashbin-enabled");
+        $('#ul_checkbox_all').prop("checked", false);
+        $('#ul_checkbox_all').removeClass("checkbox-inconsistent");
+      }
+    });
+
+    $('#ul_checkbox_all').off('change').on('change', function() {
+      $(this).removeClass("checkbox-inconsistent");
+      if ($(this).is(":checked")) {
+        $('.user_checkbox').prop("checked", true);
+        $('#ul_delete_all').addClass("trashbin-enabled");
+      } else {
+        $('.user_checkbox').prop("checked", false);
+        $('#ul_delete_all').removeClass("trashbin-enabled");
+      }
+    });
+
+    $('#ul_delete_all').off('click').on('click', function() {
+      $('.user_checkbox').each(function () {
+        if($(this).is(":checked")) {
+          $.ajax({
+            url: "/actions/delete-user/" + $(this).attr("data-user-id"),
+            type: "get",
+            data: {
+              task_id: $(this).attr("data-task-id")
+            }
+          }).done(function(){
+            table_ul.ajax.reload();
+            $('#ul_delete_all').removeClass("trashbin-enabled");
+          });
+        }
+      });
+
+      $('#ul_checkbox_all').prop("checked", false);
+      $('#ul_checkbox_all').removeClass("checkbox-inconsistent")
+      $('#ul_delete_all').removeClass("trashbin-enabled");
     });
   });
 

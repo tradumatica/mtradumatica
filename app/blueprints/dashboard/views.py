@@ -3,7 +3,7 @@ from time import time
 from traceback import print_stack
 
 import kombu.five
-from app import db
+from app import app, db
 from app.models import LanguageModel, TranslatorFromBitext, User
 from app.utils import tasks as celerytasks
 from app.utils import user_utils, utils
@@ -22,7 +22,7 @@ dashboard_blueprint = Blueprint('dashboard', __name__, template_folder='template
 def dashboard():
   u = user_utils.get_user()
   if u == None or u.admin:
-    return render_template("dashboard.html", title = _("Dashboard"), user = u)
+    return render_template("dashboard.html", title = _("Dashboard"), user = u, login_disabled = app.config["ENABLE_NEW_LOGINS"])
   else:
     return redirect("/")
 
@@ -62,7 +62,6 @@ def mt_list():
 @utils.condec(login_required, user_utils.isUserLoginEnabled())
 def user_list():
   columns = [None, User.username, User.email, None, None, User.admin, User.banned]
-
   try:
     start     = int(request.form['start'])
     length    = int(request.form['length'])
@@ -76,12 +75,13 @@ def user_list():
     search     = request.form['search[value]']
     search_str = '%{0}%'.format(search)
 
-    checkbox   = '<span class="checkbox"><input class="file_checkbox" type="checkbox" id="ul-checkbox-{0}"/></div>'
-    toggle = '<button type="button" id="button-toggle-{0}" class="btn btn-default btn-sm">'+_('Toggle')+'</button>'
+    checkbox   = '<span class="checkbox"><input class="user_checkbox" type="checkbox" data-user-id="{0}"/></div>'
+    toggle_ban = '<button type="button" data-user-id="{0}" class="btn btn-default btn-sm btn-ban">'+_('Ban user')+'</button>'
+    toggle_unban = '<button type="button" data-user-id="{0}" class="btn btn-default btn-sm btn-unban">'+_('Remove ban')+'</button>'
     date_fmt   = '%Y-%m-%d %H:%M:%S'
 
 
-    data = [[checkbox.format(u.id), u.username, u.email, u.n_engines(), u.size_mb(), u.admin, u.banned, toggle.format(u.id) if u.id != current_user.id else ""]
+    data = [[checkbox.format(u.id) if current_user.id != u.id else "", u.username, u.email, u.n_engines(), u.size_mb(), u.admin, u.banned, (toggle_unban if u.banned else toggle_ban).format(u.id) if u.id != current_user.id else ""]
             for u in User.query.filter(User.username.like(search_str)).order_by(utils.query_order(columns[order_col], order_dir))][start:start+length]
     return jsonify(draw            = draw,
                    data            = data,

@@ -1,11 +1,12 @@
 import os
+import shutil
 
 from app import app, db, login_manager
 from app.models import OAuth, User
 from app.utils import user_utils, utils, lang_utils
 from flask_login import login_required, current_user, login_user, logout_user
 
-from flask import Blueprint, render_template, abort, flash, redirect, url_for
+from flask import Blueprint, render_template, abort, flash, redirect, url_for, jsonify
 from flask_dance.consumer import oauth_authorized
 from flask_dance.consumer.storage.sqla import SQLAlchemyStorage
 from flask_dance.contrib.google import make_google_blueprint, google
@@ -71,7 +72,7 @@ def google_logged_in(blueprint, token):
     db.session.commit() 
 
     # Check bans
-    if user.email in app.config["BANNED_USERS"]:
+    if user.email in app.config["BANNED_USERS"] or user.banned:
       flash(_('User temporary banned'), "danger")
       return False
       
@@ -80,3 +81,57 @@ def google_logged_in(blueprint, token):
 
   else:
     print("No account info available")
+
+@auth_blueprint.route('/actions/ban/<int:id>/<int:state>')
+@utils.condec(login_required, True)
+def ban_user(id, state):
+  me = user_utils.get_user()
+  if me.admin:
+    try: 
+      user = User.query.filter(User.id == id).one()
+      user.banned = state
+      db.session.add(user)
+      db.session.commit()
+
+      return jsonify([{"result": 200}])
+    except NoResultFound:
+      return jsonify({"result": "-1"})
+  
+  return jsonify({"result": "-1"})
+
+@auth_blueprint.route('/actions/delete-user/<int:id>')
+@utils.condec(login_required, True)
+def delete_user(id):
+  me = user_utils.get_user()
+  if me.admin and me.id != id:
+    try:
+      user = User.query.filter(User.id == id).one()
+
+      for t in user.translators:
+        print(t)
+        for i in t.get_path():
+          print("translator path {0}" % i)
+
+      for c in user.corpora:
+        print(c)
+        for i in c.path:
+          print("corpora path {0}" % i)
+
+      User.query.filter(User.id == id).delete()
+      db.session.commit()
+
+      return jsonify([{"result": 200}])
+    except NoResultFound:
+      return jsonify({"result": "-1"})
+  
+  return jsonify({"result": "-1"})
+
+@auth_blueprint.route('/actions/user-login/<int:state>')
+@utils.condec(login_required, True)
+def disable_login(state):
+  me = user_utils.get_user()
+  if me.admin:
+    app.config["ENABLE_NEW_LOGINS"] = state
+    return jsonify({"result": "200"})
+
+  return jsonify({"result": "-1"})
