@@ -18,6 +18,28 @@ LTTOOLBOX_PATH="$ROOT/venv/local/bin"
 DEFAULT_DIRECTORY="$ROOT/venv/local/share/apertium"
 ABSOLUTE_PATH_TRANSLATOR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)/$(basename "${BASH_SOURCE[0]}")"
 
+
+nltk_tokenize_sent () 
+{
+python <(cat <<HERE
+import nltk
+import sys
+from iso639 import languages
+
+language = languages.get(alpha2=sys.argv[1])
+language_name = None
+if language:
+  language_name = language.name.lower()
+
+if language_name:
+  for i in sys.stdin:
+    for j in nltk.tokenize.sent_tokenize(i, language=language_name):
+      print(j)
+
+HERE
+) $1
+}
+
 unbraid ()
 {
 python <(cat <<HERE
@@ -170,8 +192,7 @@ HERE
 ) $L1 $L2
 }
 
-filter_tmx()
-{
+filter_tmx(){
 L1=$1
 L2=$2
 python3 <(cat <<"HERE"
@@ -372,7 +393,7 @@ translate()
 {
   MYTMPDIR=$(mktemp -d)
   cat >$MYTMPDIR/gen_input
-  
+
   L1F=""
   for TRANS in $(get_translators $ENGINE); do
     L1=$(python -c 'print("'$TRANS'".split("-")[1])')
@@ -389,14 +410,17 @@ translate()
     translate_chain $MYTMPDIR $TRANS
   done
 
-  if [ $GENERATE_TMX = "1" ]; then
-    paste $MYTMPDIR/cleansrc_0 $MYTMPDIR/detok | create_tmx $L1F $L2 |filter_tmx $L1F $L2 > "$GLOBAL_TMX_DIR/tmx"
-  fi
-
   if [[ -e $MYTMPDIR/gen_output ]]; then
     cat $MYTMPDIR/gen_output
   else
     cat $MYTMPDIR/gen_input
+  fi
+
+  if [ $GENERATE_TMX = "1" ]; then
+    cat $MYTMPDIR/cleansrc | nltk_tokenize_sent $L1 > $MYTMPDIR/nltk
+    cp $MYTMPDIR/nltk $MYTMPDIR/gen_input
+    translate_chain $MYTMPDIR $TRANS
+    paste $MYTMPDIR/cleansrc $MYTMPDIR/detok | create_tmx $L1F $L2 |filter_tmx $L1F $L2 > "$GLOBAL_TMX_DIR/tmx"
   fi
   
   rm -Rf $MYTMPDIR
