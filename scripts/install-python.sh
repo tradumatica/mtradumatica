@@ -26,3 +26,6 @@ source $ROOT/venv/bin/activate
 # pip-install packages
 pip3 install wheel
 pip3 install -r $ROOT/requirements.txt
+
+# Install NLTK Punkt corpora
+python3 -c 'import nltk; nltk.download("punkt")'
