@@ -55,10 +55,13 @@ def tmx2txt(fd, output, langlist):
     if name == "tu":
       for i in range(len(langlist)):
         lang = langlist[i]
-        if cld2.detect(tu[lang].encode("utf-8"))[2][0][1] in exclude:
-          print("DISCARDED",tu[lang])
-          return
-        
+        try:
+          if cld2.detect(tu[lang].encode("utf-8"))[2][0][1] in exclude:
+            print("DISCARDED",tu[lang])
+            return
+        except:
+            print("DISCARDED",tu[lang])
+            return        
       for i in range(len(langlist)):
         lang = langlist[i]
         out  = output[i]
