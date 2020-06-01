@@ -11,6 +11,18 @@ $(document).ready(function() {
 		columnDefs: [{
 			orderable: false,
 			targets: [0,6,7,8,9]
+		},
+		{
+			targets: [9],
+			render: function(data, type, row) {
+				let template = document.importNode(document.querySelector("#change-lm-template").content, true);
+				$(template).find(".change-lm-btn").attr("data-id", row[10])
+				$(template).find(".change-lm-btn").attr("data-lang", row[11])
+				let ghost = document.createElement('div');
+
+				$(ghost).append(template);
+				return ghost.innerHTML + data;
+			}
 		}],
 		order : [
 			[5, "desc"]
@@ -269,6 +281,41 @@ $(document).ready(function() {
 			languagenumber = "2";
 			$('#lang-dialog').modal("show");
 		})
+
+		$(".change-lm-btn").off('click').on('click', function() {
+			let translator_id = $(this).attr("data-id");
+			
+			$('#changeLMalert').addClass("hidden");
+			$.ajax("actions/languagemodel-plainlist/" + $(this).attr("data-lang")).done(function(data) {
+				$('#changeLMselect option:not(.select_original)').remove();
+				if (data.data.length > 0){
+					$.each(data.data, function(i, item) {
+						$("#changeLMselect").append($("<option></option>").val(item.id).html(item.name));
+					});
+				} else{
+					$("#changeLMselect").append($("<option></option>").val(null).html(""));
+				}
+
+				$("#modal-change-lm #changeLMBtn").off("click").on("click", function() {
+					let lm_id = $("#changeLMselect option:selected").val()
+					$.ajax({
+						url: "actions/change-lm",
+						method: "POST",
+						data: { translator_id: translator_id, lm_id: lm_id }
+					}).done(function(data) {
+						if (data.result == 200) {
+							table.ajax.reload();
+							$('#modal-change-lm').modal("hide");
+						} else {
+							$('#changeLMalert').removeClass("hidden");
+						}
+					});
+				});
+
+				$('#changeLMalert').addClass("hidden");
+				$("#modal-change-lm").modal();
+			})
+		});
 	});
 
 	//submit create form

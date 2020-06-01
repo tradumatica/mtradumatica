@@ -197,6 +197,36 @@ def languageModel_list():
     abort(401)
     return
 
+@train_blueprint.route('/actions/change-lm', methods=["POST"])
+@utils.condec(login_required, USER_LOGIN_ENABLED)
+def change_languagemodel():
+  translator_id = request.form.get('translator_id')
+  lm_id = request.form.get('lm_id')
+
+  translator = TranslatorFromBitext.query.filter_by(id=translator_id).first()
+  lm = LanguageModel.query.filter_by(id=lm_id).first()
+
+  if translator and (lm or lm_id == "-1"):
+    translator_path = os.path.join(app.config['TRANSLATORS_FOLDER'], translator.basename)
+    current_lm_path = os.path.join(translator_path, 'LM.blm')
+    original_lm_path = os.path.join(translator_path, 'LM.blm.original')
+    new_lm_path = os.path.join(lm.path, 'LM.blm') if lm else original_lm_path
+
+    try:
+      os.stat(original_lm_path)
+    except:
+      os.link(current_lm_path, original_lm_path)
+    
+    os.remove(current_lm_path)
+    os.link(new_lm_path, current_lm_path)
+
+    translator.languagemodel_id = lm_id
+    db.session.commit()
+
+    return jsonify({ "result": 200 })
+  else:
+    return jsonify({ "result": -1 })
+
 @train_blueprint.route('/actions/status-languagemodel/<int:id>')
 @utils.condec(login_required, USER_LOGIN_ENABLED)
 def status_languagemodel(id):
@@ -367,7 +397,8 @@ def translator_list():
     checkbox   = '<span class="checkbox"><input class="file_checkbox" type="checkbox" id="checkbox-{0}"/></div>'
     date_fmt   = '%Y-%m-%d %H:%M:%S'
 
-    data = [[checkbox.format(c.id),c.name, c.lang1+"-"+c.lang2, c.bitext.name if c.bitext != None else "", c.languagemodel.name if c.languagemodel != None else "" , c.mydate.strftime(date_fmt) if c.mydate != None else "", c.mydatefinished.strftime(date_fmt) if c.mydatefinished != None else "" , choose_optimization_cell(c) ,  evaluation_cell(c), choose_optimization_icons(c)  ]
+    data = [[checkbox.format(c.id),c.name, c.lang1+"-"+c.lang2, c.bitext.name if c.bitext != None else "", c.languagemodel.name if c.languagemodel != None else "" , c.mydate.strftime(date_fmt) if c.mydate != None else "", c.mydatefinished.strftime(date_fmt) if c.mydatefinished != None else "" , choose_optimization_cell(c) ,  evaluation_cell(c), choose_optimization_icons(c), 
+            c.id, c.lang2  ]
             for c in TranslatorFromBitext.query.filter(TranslatorFromBitext.user_id == user_utils.get_uid()).filter(TranslatorFromBitext.name.like(search_str)).order_by(utils.query_order(columns[order_col], order_dir))][start:start+length]
 #             for c in Corpus.query.filter(Corpus.name.like(search_str)).order_by(order_str)][start:start+length]
     return jsonify(draw            = draw,
