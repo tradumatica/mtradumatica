@@ -20,12 +20,12 @@ usage()
 
 if [ $# -lt 1 ]; then usage; exit 1; fi
 if [ ENGINE == "" ]; then usage; exit 1; fi
-if [ ! -d $ROOT/translators/$ENGINE ]; then echo $ROOT/translators/$ENGINE; echo "Model not found" 1>&2; exit 1; fi
+if [ ! -d $ROOT/data/translators/$ENGINE ]; then echo $ROOT/data/translators/$ENGINE; echo "Model not found" 1>&2; exit 1; fi
 
 L1=$(python -c 'print "'$ENGINE'".split("-")[1]')
 L2=$(python -c 'print "'$ENGINE'".split("-")[2]')
 
-cd $ROOT/translators/$ENGINE
+cd $ROOT/data/translators/$ENGINE
 
 if [ -f "moses.tuned.ini" ]; then
 	INIFILE="moses.tuned.ini"

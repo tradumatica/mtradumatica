@@ -431,13 +431,13 @@ translate_chain ()
 MYTMPDIR=$1
 ENGINE=$2
 
-if [ -f "$ROOT/translators/$ENGINE/moses.tuned.ini" ]; then
-	INIFILE="$ROOT/translators/$ENGINE/moses.tuned.ini"
+if [ -f "$ROOT/data/translators/$ENGINE/moses.tuned.ini" ]; then
+	INIFILE="$ROOT/data/translators/$ENGINE/moses.tuned.ini"
 else
-	INIFILE="$ROOT/translators/$ENGINE/moses.ini"
+	INIFILE="$ROOT/data/translators/$ENGINE/moses.ini"
 fi
 
-cd $ROOT/translators/$ENGINE
+cd $ROOT/data/translators/$ENGINE
 
 cat $MYTMPDIR/gen_input | \
 f2p | \
