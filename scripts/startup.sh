@@ -13,6 +13,10 @@ then echo "Installation failed, please re-install"
      exit
 fi
 
+if [ ! -d $ROOT/data ]
+then mkdir $ROOT/data
+fi
+
 if [ ! -d $ROOT/data/db ]
 then mkdir $ROOT/data/db
 fi
@@ -34,7 +38,7 @@ then mkdir $ROOT/data/translators
 fi
 
 if [ ! -d $ROOT/data/tmp ]
-then mkdir $ROOT/tmp
+then mkdir $ROOT/data/tmp
 fi
 
 if [ "$OPTION" = "-d" ]
