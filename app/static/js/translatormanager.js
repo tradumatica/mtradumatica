@@ -18,6 +18,13 @@ $(document).ready(function() {
 				let template = document.importNode(document.querySelector("#change-lm-template").content, true);
 				$(template).find(".change-lm-btn").attr("data-id", row[10])
 				$(template).find(".change-lm-btn").attr("data-lang", row[11])
+
+				if (row[6] != "") {
+					// Training has finished. We can share the MT
+					$(template).find(".share-mt-btn").attr("data-id", row[10]);
+					$(template).find(".share-mt-btn").removeClass("hidden");
+				}
+
 				let ghost = document.createElement('div');
 
 				$(ghost).append(template);
@@ -315,6 +322,28 @@ $(document).ready(function() {
 				$('#changeLMalert').addClass("hidden");
 				$("#modal-change-lm").modal();
 			})
+		});
+
+		$(".share-mt-btn").off('click').on('click', function() {
+			$("#modal-share-mt .copy-btn").removeClass("btn-success").addClass("btn-default");
+			$("#modal-share-mt").modal('show');
+
+			$.ajax({
+				url: "actions/generate-share-link",
+				method: "POST",
+				data: { id: $(this).attr("data-id") }
+			}).done(function(data) {
+				console.log(data);
+				if (data.result == 200) {
+					$(".share-mt-link").val(data.share_url);
+
+					$(".copy-btn").off('click').on('click', function() {
+						$(".share-mt-link")[0].select();
+						document.execCommand('copy');
+						$(this).removeClass("btn-default").addClass("btn-success");
+					});
+				}
+			});
 		});
 	});
 

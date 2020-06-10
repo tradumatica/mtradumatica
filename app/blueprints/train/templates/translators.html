@@ -31,10 +31,44 @@
 </div>
 
 <template id="change-lm-template">
-	<a href="#" class="change-lm-btn text-primary" title="{{ _('Change language model') }}">
+	<a href="#" class="change-lm-btn" title="{{ _('Change language model') }}">
 		<i class="glyphicon glyphicon-edit"></i>
 	</a>
+
+	<a href="#" class="share-mt-btn hidden" title="{{ _('Share MT') }}">
+		<i class="glyphicon glyphicon-share"></i>
+	</a>
 </template>
+
+<div class="modal fade" id="modal-share-mt" role="dialog">
+	<div class="modal-dialog">
+		<div class="modal-content">
+			<div class="modal-header">
+				<button type="button" class="close" data-dismiss="modal">&times;</button>
+				<h4 class="modal-title">{{ _('Share MT') }}</h4>
+			</div>
+
+			<div class="modal-body">
+				<p class="h5">
+					<i class="glyphicon glyphicon-link"></i> Share with a link
+				</p>
+
+				<div class="input-group">
+					<input type=text class="form-control share-mt-link" readonly placeholder="{{ _('Your link will appear here') }}" />
+					<span class="input-group-btn">
+						<button class="btn btn-default copy-btn">
+							<i class="glyphicon glyphicon-copy"></i> Copy
+						</button>
+					</span>
+				</div>
+			</div>
+
+			<div class="modal-footer">
+				<button type="button" class="btn btn-default" data-dismiss="modal">{{ _('Close') }}</button>
+			</div>
+		</div>
+	</div>
+</div>
 
 <div class="modal fade" id="modal-change-lm" role="dialog">
 	<div class="modal-dialog">

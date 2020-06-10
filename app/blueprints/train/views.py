@@ -1,11 +1,11 @@
 from app import db
 from app import app
-from app.models import LanguageModel, MonolingualCorpus, Corpus, TranslatorFromBitext, Bitext
+from app.models import LanguageModel, MonolingualCorpus, Corpus, TranslatorFromBitext, Bitext, User
 from app.utils import user_utils, utils, train, metrics
 from app.utils import tasks as celerytasks
 from app.utils import translate as mosestranslate
 
-from flask import Blueprint, render_template, request, jsonify, abort
+from flask import Blueprint, render_template, request, jsonify, abort, url_for, flash, redirect
 from flask_login import login_required, current_user
 from flask_babel import _
 from datetime import datetime
@@ -13,6 +13,7 @@ from datetime import datetime
 import shutil
 import tempfile
 import os
+import hashlib
 
 USER_LOGIN_ENABLED = user_utils.isUserLoginEnabled()
 
@@ -32,7 +33,63 @@ def translators():
   translators = [t for t in TranslatorFromBitext.query.filter(TranslatorFromBitext.user_id == user_utils.get_uid()).all() if t.mydatefinished != None]
   return render_template("translators.html", title = _("Translators"), data = data, translators = translators,
                          user = user_utils.get_user())
-                         
+
+@train_blueprint.route('/actions/generate-share-link', methods=["POST"])
+@utils.condec(login_required, USER_LOGIN_ENABLED)
+def generate_share_link():
+  mt_id = request.form.get('id')
+  mt = TranslatorFromBitext.query.filter_by(id=mt_id).first()
+
+  if mt and mt.user_id == user_utils.get_uid():
+    h = hashlib.blake2b()
+    h.update("{}-{}-{}-{}".format(mt.user_id, mt.id, mt.basename, mt.name).encode('utf-8'))
+    share_key = h.hexdigest()[:32]
+
+    mt.share_key = share_key
+    db.session.commit()
+
+    return jsonify({ "result": 200, "share_url": url_for('train.grab_mt', _external=True, share_key=share_key) })
+  else:
+    return jsonify({ "result": -1 })
+
+@train_blueprint.route('/translators/<string:share_key>')
+@utils.condec(login_required, USER_LOGIN_ENABLED)
+def grab_mt(share_key):
+  mt = TranslatorFromBitext.query.filter_by(share_key=share_key).first()
+  if mt and mt.user_id != user_utils.get_uid():
+    new_mt_basename = mt.basename + "-" + share_key[:8]
+    copy_mt_path = os.path.join(app.config['TRANSLATORS_FOLDER'], new_mt_basename)
+
+    try:
+      os.stat(copy_mt_path)
+      flash(_('You have already imported this translator'), "danger")
+    except:
+      user = User.query.filter_by(id=mt.user_id).first()
+      
+      mt_copy = TranslatorFromBitext(name=mt.name, lang1=mt.lang1, lang2=mt.lang2, mydate=mt.mydate, mydatefinished=mt.mydatefinished, 
+                  mydateopt=mt.mydateopt, mydateoptfinished=mt.mydateoptfinished, bitext_id=mt.bitext_id, 
+                  languagemodel_id=mt.languagemodel_id, task_id=mt.task_id, task_opt_id=mt.task_opt_id, 
+                  generated_id=mt.generated_id, basename=mt.basename, exitstatus=mt.exitstatus, moses_served=mt.moses_served, 
+                  moses_served_port=mt.moses_served_port, size_mb=mt.size_mb, bleu=mt.bleu, chrf3=mt.chrf3, 
+                  wer=mt.wer, ter=mt.ter, beer=mt.beer)
+
+      mt_copy.user_id = user_utils.get_uid()
+      mt_copy.name = mt.name + " [{}]".format(user.email if user else "")
+      mt_copy.basename = new_mt_basename
+
+      mt_path = os.path.join(app.config['TRANSLATORS_FOLDER'], mt.basename)
+      
+      os.mkdir(copy_mt_path)
+      for file in os.listdir(mt_path):
+        os.link(os.path.join(mt_path, file), os.path.join(copy_mt_path, file))
+
+      db.session.add(mt_copy)
+      db.session.commit()
+  else:
+    flash(_('The link you provided is invalid'), "danger")
+  
+  return redirect(url_for('train.translators'))
+
 @train_blueprint.route('/actions/languagemodel-create/<string:parname>/<string:language1>/<string:monocorpusid>')
 @utils.condec(login_required, USER_LOGIN_ENABLED)
 def languagemodel_create(parname, language1, monocorpusid):

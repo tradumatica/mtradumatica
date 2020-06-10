@@ -165,7 +165,8 @@ class TranslatorFromBitext(db.Model):
   ter               = db.Column(db.Float)
   beer              = db.Column(db.Float)
   user_id           = db.Column(db.Integer, db.ForeignKey('users.id'))
-  
+  share_key         = db.Column(db.String(32), unique=True)
+
   def get_user(self):
     return User.query.get(self.user_id)
     
