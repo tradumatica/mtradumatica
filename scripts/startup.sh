@@ -69,3 +69,9 @@ echo $! >$ROOT/data/proc/celery.pid
 if [ "$DEBUG_MODE" != "1" ]
 then nohup gunicorn -c $ROOT/conf/gunicorn.conf app:app &
 fi
+
+#####################
+# User data removal #
+#####################
+echo -e "0 0 */1 * * $ROOT/venv/bin/python3 $ROOT/scripts/tidyup.py $ROOT\n" > $ROOT/data/rootcron
+crontab $ROOT/data/rootcron
