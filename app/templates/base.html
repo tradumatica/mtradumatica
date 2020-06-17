@@ -167,11 +167,11 @@
               <h4 class="modal-title">{{ _('Change language selection') }} <span id="peek-title"></span></h4>
             </div>
             <div class="modal-body">
-              <div class="row">
+                <div style="column-width:50px; column-count:4;">
                 {% for i in lsl() %}
-                <div class="col-md-3 text-nowrap seleclang" lang="{{ i[0] }}">{% if i[2] %}<strong>{% endif %}{{ i[1] }}{% if i[2] %}*</strong>{% endif %}</div>
+                <div class="text-nowrap seleclang" lang="{{ i[0] }}">{% if i[2] %}<strong>{% endif %}{{ i[1] }}{% if i[2] %}*</strong>{% endif %}</div>
                 {% endfor %}
-              </div>
+            </div>
               <div class="modal-footer">
                 <button type="button" class="btn btn-default" data-dismiss="modal">{{ _('Close') }}</button>
               </div>
