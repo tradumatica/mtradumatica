@@ -31,7 +31,7 @@ def translatechoose(id):
   text = json.loads(request.data)['text'] #.encode("utf-8")
   t = TranslatorFromBitext.query.get(id)
   if t is None:
-    return jsonify(status = "Fail", message = "Translator not available")
+    return jsonify(status = "Fail", message = "Translation engine not available")
   try:
     result = mosestranslate.translate(text, t.basename)
     return jsonify(status = "OK", text = result)

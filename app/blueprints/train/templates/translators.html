@@ -2,8 +2,8 @@
 
 {% block content %}
 <div class="container">
-  <h2>{{ _('Translator trainer') }}</h2>
-  <p>{{ _('Train SMT systems by combining bitexts and language models for a language pair.') }} 
+  <h2>{{ _('MT engine trainer') }}</h2>
+  <p>{{ _('Train SMT engines by combining bitexts and language models for a language pair.') }} 
      {% if user == None or user.admin %} {{ _('Optimising can take time but also bring higher quality.') }} {% endif %}</p>
 </div>
 <div class="container">
@@ -11,7 +11,7 @@
     <thead>
       <tr>
         <th><input class="checkbox" id="checkbox_all" type="checkbox"/></th>
-        <th>{{ _('Translator name') }}</th>
+        <th>{{ _('Engine name') }}</th>
         <th>{{ _('Language pair') }}</th>
 		<th>{{ _('Bitext') }}</th>
         <th>{{ _('LM') }}</th>
@@ -106,7 +106,7 @@
 		<div class="modal-content">
 			<div class="modal-header">
 				<button type="button" class="close" data-dismiss="modal">&times;</button>
-				<h4 class="modal-title">{{ _('Create a new translator') }} </h4>
+				<h4 class="modal-title">{{ _('Create a new engine') }} </h4>
 			</div>
 			
 			<div class="modal-body">
@@ -114,7 +114,7 @@
 					<div class="form-group">
 						<label class="col-sm-2 control-label" for="inputName">{{ _('Name') }}</label>
 						<div class="col-sm-10">
-							<input type="text" class="form-control" id="inputName" name="inputName" placeholder="{{ _('Give a name to the translator') }}"
+							<input type="text" class="form-control" id="inputName" name="inputName" placeholder="{{ _('Give a name to the engine') }}"
 							autocomplete="off" required />
 						</div>
 					</div>
@@ -195,7 +195,7 @@
 						<div class="tab-pane" id="tab3">
 							<form class="form-horizontal" role="form" id="form-new-translator-existing">
 								<div class="form-group">
-									<label class="col-sm-2 control-label" for="selTrans1" >{{ _('First translator') }}</label>
+									<label class="col-sm-2 control-label" for="selTrans1" >{{ _('First engine') }}</label>
 									<div class="col-sm-10">
 										<select id="selTrans1" name="selTrans1" class="form-control ">
 											<!-- <option value="null" selected></option> -->
@@ -207,7 +207,7 @@
 								</div>
 
 								<div class="form-group">
-									<label class="col-sm-2 control-label" for="selTrans2" >{{ _('Second translator') }}</label>
+									<label class="col-sm-2 control-label" for="selTrans2" >{{ _('Second engine') }}</label>
 									<div class="col-sm-10">
 										<select id="selTrans2" name="selTrans2" class="form-control ">
 											<!-- <option value="null" selected></option> -->
@@ -237,7 +237,7 @@
 		<div class="modal-content">
 			<div class="modal-header">
 				<button type="button" class="close" data-dismiss="modal">&times;</button>
-				<h4 class="modal-title">{{ _('Optimize translator') }} </h4>
+				<h4 class="modal-title">{{ _('Optimize engine') }} </h4>
 			</div>
 			<div class="modal-body">
 				<form class="form-horizontal" role="form">
@@ -265,7 +265,7 @@
 			<form class="form-horizontal" data-toggle="validator" id="evalform" method="POST" enctype="multipart/form-data">
 				<div class="modal-header">
 					<button type="button" class="close" data-dismiss="modal">&times;</button>
-					<h4 class="modal-title">{{ _('Evaluate translator') }} '<span id="translator_name"></span>'</h4>
+					<h4 class="modal-title">{{ _('Evaluate engine') }} '<span id="translator_name"></span>'</h4>
 				</div>
 				<div class="modal-body">
 					<p>

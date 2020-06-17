@@ -65,19 +65,19 @@
     </div> 
 
     <div class="col-md-4">
-      <h2>{{ _('Build Translators') }}</h2>
-      <p>{{ _('Build a new machine translator with bitexts and language
+      <h2>{{ _('Build Engines') }}</h2>
+      <p>{{ _('Build a new machine translation engine with bitexts and language
       models. Create translators with different texts and see
       the effect of optimising them.') }} </p>
       <p><a class="btn btn-default" href="{{ url_for('train.translators') }}" role="button">{{
-      _('Train a Translator') }} &raquo;</a></p>
+      _('Train an Engine') }} &raquo;</a></p>
     </div>
 
 
     <div class="col-md-4">
       <h2>{{ _('Translate') }}</h2>
-      <p>{{ _('See your translators in action, test and compare them.
-      Translate short texts or documents. As soon as you have a new translator, you
+      <p>{{ _('See your engines in action, test and compare them.
+      Translate short texts or documents. As soon as you have a new engine, you
       will be able to try it!') }} </p>
       <p><a class="btn btn-default" href="{{ url_for('translate.text') }}" role="button">{{
       _('Translate') }} &raquo;</a></p>
