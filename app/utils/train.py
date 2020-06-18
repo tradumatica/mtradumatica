@@ -198,6 +198,7 @@ all: $(targets)
 	ln corpus.$(L2).tcm         ../../translators/{3}-$(L1)-$(L2)/tl.tcm
 	ln model/lex.e2f            ../../translators/{3}-$(L1)-$(L2)/lex.e2f
 	ln model/lex.f2e            ../../translators/{3}-$(L1)-$(L2)/lex.f2e
+	ln model/phrase-table.gz    ../../translators/{3}-$(L1)-$(L2)/phrase-table.gz
 	@echo "$$MOSES_INI"        >../../translators/{3}-$(L1)-$(L2)/moses.ini
 
 phrase-table.minphr: model/phrase-table.gz

@@ -180,22 +180,22 @@ targets = corpus.$(L1).tok corpus.$(L2).tok \
        corpus.clean.$(L1) corpus.clean.$(L2) \
        LM.blm \
        train.ok phrase-table.minphr reordering-table.minlexr \
-       ../../translators/{3}-$(L1)-$(L2)
+       ../../data/translators/{3}-$(L1)-$(L2)
 
 objs = $(targets) LM.arpa
 
 all: $(targets)
 
-../../translators/{3}-$(L1)-$(L2): phrase-table.minphr reordering-table.minlexr LM.blm corpus.$(L1).tcm
-	mkdir ../../translators/{3}-$(L1)-$(L2)
-	ln phrase-table.minphr      ../../translators/{3}-$(L1)-$(L2)/phrase-table.minphr
-	ln reordering-table.minlexr ../../translators/{3}-$(L1)-$(L2)/reordering-table.minlexr
-	ln LM.blm                   ../../translators/{3}-$(L1)-$(L2)/LM.blm
-	ln corpus.$(L1).tcm         ../../translators/{3}-$(L1)-$(L2)/sl.tcm
-	ln corpus.$(L2).tcm         ../../translators/{3}-$(L1)-$(L2)/tl.tcm
-	ln model/lex.e2f            ../../translators/{3}-$(L1)-$(L2)/lex.e2f
-	ln model/lex.f2e            ../../translators/{3}-$(L1)-$(L2)/lex.f2e
-	@echo "$$MOSES_INI"        >../../translators/{3}-$(L1)-$(L2)/moses.ini
+../../data/translators/{3}-$(L1)-$(L2): phrase-table.minphr reordering-table.minlexr LM.blm corpus.$(L1).tcm
+	mkdir ../../data/translators/{3}-$(L1)-$(L2)
+	ln phrase-table.minphr      ../../data/translators/{3}-$(L1)-$(L2)/phrase-table.minphr
+	ln reordering-table.minlexr ../../data/translators/{3}-$(L1)-$(L2)/reordering-table.minlexr
+	ln LM.blm                   ../../data/translators/{3}-$(L1)-$(L2)/LM.blm
+	ln corpus.$(L1).tcm         ../../data/translators/{3}-$(L1)-$(L2)/sl.tcm
+	ln corpus.$(L2).tcm         ../../data/translators/{3}-$(L1)-$(L2)/tl.tcm
+	ln model/lex.e2f            ../../data/translators/{3}-$(L1)-$(L2)/lex.e2f
+	ln model/lex.f2e            ../../data/translators/{3}-$(L1)-$(L2)/lex.f2e
+	@echo "$$MOSES_INI"        >../../data/translators/{3}-$(L1)-$(L2)/moses.ini
 
 phrase-table.minphr: model/phrase-table.gz
 	processPhraseTableMin -in $< -out phrase-table -nscores 4 -threads $(EFFECTIVE_CORES)

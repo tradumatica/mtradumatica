@@ -2,6 +2,7 @@ from flask import Flask
 from flask_babel import Babel
 from flask_sqlalchemy import SQLAlchemy
 from flask_login import LoginManager
+from flask_migrate import Migrate
 import os
 
 app    = Flask(__name__, static_folder='static', static_url_path='', instance_relative_config=True)
@@ -20,6 +21,7 @@ app.debug = app.config['DEBUG']
 babel            = Babel(app)
 db               = SQLAlchemy(app)
 login_manager    = LoginManager(app)
+migrate          = Migrate(app, db)
 
 if not os.path.exists(app.config['TMP_FOLDER']):
     os.makedirs(app.config['TMP_FOLDER'])

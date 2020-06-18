@@ -116,7 +116,7 @@ loglevel notice
 # Specify the log file name. Also the empty string can be used to force
 # Redis to log on the standard output. Note that if you use standard
 # output for logging but daemonize, logs will be sent to /dev/null
-logfile "$ROOT/logs/redis.log"
+logfile "$ROOT/data/logs/redis.log"
 
 # To enable logging to the system logger, just set 'syslog-enabled' to yes,
 # and optionally update the other syslog parameters to suit your needs.
@@ -200,7 +200,7 @@ dbfilename dump.rdb
 # The Append Only File will also be created inside this directory.
 #
 # Note that you must specify a directory here, not a file name.
-dir $ROOT/redis-data
+dir $ROOT/data/redis-data
 
 ################################# REPLICATION #################################
 

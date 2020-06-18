@@ -107,7 +107,7 @@
               <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">{{ _('Train') }} <span class="caret" /></a>
               <ul class="dropdown-menu">
                 <li{% if request.path == url_for('train.language_models') %} class="active"{% endif %}><a href="{{ url_for('train.language_models') }}">{{ _('Language models') }}</a></li>	
-                <li{% if request.path == url_for('train.translators') %} class="active"{% endif %}><a href="{{ url_for('train.translators') }}">{{ _('Translators') }}</a></li>
+                <li{% if request.path == url_for('train.translators') %} class="active"{% endif %}><a href="{{ url_for('train.translators') }}">{{ _('MT Engines') }}</a></li>
               </ul>
             </li>
             <li class="dropdown">
@@ -167,11 +167,11 @@
               <h4 class="modal-title">{{ _('Change language selection') }} <span id="peek-title"></span></h4>
             </div>
             <div class="modal-body">
-              <div class="row">
+                <div style="column-width:50px; column-count:4;">
                 {% for i in lsl() %}
-                <div class="col-md-3 text-nowrap seleclang" lang="{{ i[0] }}">{% if i[2] %}<strong>{% endif %}{{ i[1] }}{% if i[2] %}*</strong>{% endif %}</div>
+                <div class="text-nowrap seleclang" lang="{{ i[0] }}">{% if i[2] %}<strong>{% endif %}{{ i[1] }}{% if i[2] %}*</strong>{% endif %}</div>
                 {% endfor %}
-              </div>
+            </div>
               <div class="modal-footer">
                 <button type="button" class="btn btn-default" data-dismiss="modal">{{ _('Close') }}</button>
               </div>

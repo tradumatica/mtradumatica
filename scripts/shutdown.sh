@@ -1,8 +1,10 @@
+#!/bin/bash
+
 ROOT=$(readlink -f $(dirname $(readlink -f $0))/..)
 
 source $ROOT/venv/bin/activate
 
-for i in $(find $ROOT/proc -type f -name "*.pid");
+for i in $(find $ROOT/data/proc -type f -name "*.pid");
 do
   curpid=$(cat $i)
   for j in $(pgrep -P $curpid);

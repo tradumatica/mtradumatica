@@ -30,7 +30,7 @@
         <div class="row">
           <div class="col-md-6  col-md-offset-3"> 
             <div class="form-group">
-              <label for="lmsel">{{ _('LM / LM from translator') }}</label>
+              <label for="lmsel">{{ _('LM / LM from engine') }}</label>
               <select id="lmsel" class="form-control" required>
                 <option value="" selected="selected">
                 {% for d in lm %}
@@ -71,7 +71,7 @@
         <div class="row">
           <div class="col-md-6  col-md-offset-3"> 
             <div class="form-group">
-              <label for="tmsel">{{ _('TM from translator') }}</label>
+              <label for="tmsel">{{ _('TM from engine') }}</label>
               <select required id="tmsel" class="form-control" >
                 <option value="" selected="selected"></option> 
                 {% for d in trans %}
@@ -102,7 +102,7 @@
         <div class="row" >
           <div class="col-md-6  col-md-offset-3"> 
             <div class="form-group">
-              <label for="mtsel">{{ _('Translator') }}</label>
+              <label for="mtsel">{{ _('Engine') }}</label>
               <select required id="mtsel" class="form-control" >
                 <option value="" selected="selected"></option> 
                       {% for d in trans %}
@@ -221,7 +221,7 @@
         <div class="row">
           <div class="col-md-6  col-md-offset-3"> 
             <div class="form-group">
-              <label for="pbdsel">{{ _('Translator') }}</label>
+              <label for="pbdsel">{{ _('Engine') }}</label>
               <select required id="pbdsel" class="form-control" >
                 <option value="" selected="selected"></option> 
                 {% for d in trans %}
@@ -261,7 +261,7 @@
         <div class="row">
           <div class="col-md-6  col-md-offset-3"> 
             <div class="form-group">
-              <label for="mrsel">{{ _('Translator') }}</label>
+              <label for="mrsel">{{ _('Engine') }}</label>
               <select required id="mrsel" class="form-control" {% if moses_active %} disabled="disabled" {% endif %}>
                 <option value=""></option> 
                 {% for d in all_trans %}
