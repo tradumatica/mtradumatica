@@ -79,7 +79,7 @@ def query_lm():
 def query_tm():
   req_s = json.loads(request.data)
   tobj = TranslatorFromBitext.query.get(req_s['id'])
-  file_tm = os.path.join(tobj.get_path()[0],"phrase-table.minphr")
+  file_tm = os.path.join(tobj.get_path()[0],"phrase-table.gz")
 
   if file_tm is not None:
     lines = qm.query_tm(req_s['text'], file_tm)
