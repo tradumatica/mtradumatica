@@ -34,11 +34,13 @@
 	<a href="#" class="change-lm-btn" title="{{ _('Change language model') }}">
 		<i class="glyphicon glyphicon-edit"></i>
 	</a>
-
+        {% if user_login_enabled %}
 	<a href="#" class="share-mt-btn hidden" title="{{ _('Share MT') }}">
 		<i class="glyphicon glyphicon-share"></i>
 	</a>
+        {% endif %}
 </template>
+
 
 <div class="modal fade" id="modal-share-mt" role="dialog">
 	<div class="modal-dialog">
