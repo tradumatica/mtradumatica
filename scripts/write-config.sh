@@ -200,7 +200,7 @@ dbfilename dump.rdb
 # The Append Only File will also be created inside this directory.
 #
 # Note that you must specify a directory here, not a file name.
-dir $ROOT/redis-data
+dir $ROOT/data/redis-data
 
 ################################# REPLICATION #################################
 
