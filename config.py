@@ -17,7 +17,7 @@ TRANSLATION_PROGRAM   = os.path.join(SCRIPTS_FOLDER, "translate-docs.sh")
 TRANSLATION_PROGRAM_TRACE = os.path.join(SCRIPTS_FOLDER, "translate-trace.sh")
 REBUNDLE_PROGRAM      = os.path.join(SCRIPTS_FOLDER, "rebundle.sh")
 QUERY_LM_PROGRAM      = os.path.join(EXECUTABLE_FOLDER, "query")
-QUERY_TM_PROGRAM      = os.path.join(EXECUTABLE_FOLDER, "queryPhraseTableMin")
+QUERY_TM_PROGRAM      = os.path.join(SCRIPTS_FOLDER, "query_phrase_table.sh")
 TMX_UNFORMAT_SCRIPT   = os.path.join(SCRIPTS_FOLDER, "tmx-unformat.py")
 TMX_REFORMAT_SCRIPT   = os.path.join(SCRIPTS_FOLDER, "tmx-reformat.py")
 
