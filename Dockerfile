@@ -36,7 +36,8 @@ RUN apt-get update -q --fix-missing && \
                        default-jdk \
                        subversion && \
     /opt/mtradumatica/scripts/install.sh && \
-    rm -Rf /opt/mtradumatica/software && \  
+    rm -Rf /opt/mtradumatica/software && \
+    mkdir /opt/mtradumatica/data && \
     apt-get autoremove -y && \
     apt-get autoclean
 
