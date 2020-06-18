@@ -24,7 +24,7 @@ Flask-WTF==0.14.2
 flipflop==1.0
 guess-language==0.2
 gunicorn==19.7.1
-httplib2==0.11.3
+httplib2==0.18.0
 idna==2.6
 iso-639==0.4.5
 itsdangerous==0.24
