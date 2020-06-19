@@ -3,6 +3,7 @@ Dropzone.options.myDropZone = { // camelized id
   maxFilesize: 1024, // 1 GB
   filesizeBase: 1000,
   //maxFiles: 40, // needed?
+  timeout: 3600000,
   init: function() {
     this.on("complete", function(file) {
       obj = this;

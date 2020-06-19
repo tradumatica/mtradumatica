@@ -7,8 +7,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PROJECT VERSION\n"
 "Report-Msgid-Bugs-To: EMAIL@ADDRESS\n"
-"POT-Creation-Date: 2020-06-16 08:40+0000\n"
-"PO-Revision-Date: 2020-06-16 10:52+0200\n"
+"POT-Creation-Date: 2020-06-17 05:39+0000\n"
+"PO-Revision-Date: 2020-06-17 08:06+0200\n"
 "Last-Translator: \n"
 "Language: es\n"
 "Language-Team: es <LL@li.org>\n"
@@ -17,7 +17,7 @@ msgstr ""
 "Content-Type: text/plain; charset=utf-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Generated-By: Babel 2.6.0\n"
-"X-Generator: Poedit 2.3\n"
+"X-Generator: Poedit 2.1\n"
 
 #: views.py:51
 msgid "Home"
@@ -70,8 +70,8 @@ msgstr "Cola"
 
 #: blueprints/dashboard/templates/dashboard.html:14
 #: blueprints/train/views.py:34 templates/base.html:110
-msgid "Translators"
-msgstr "Traductores"
+msgid "MT Engines"
+msgstr "Traductores automáticos"
 
 #: blueprints/dashboard/templates/dashboard.html:20
 msgid "Memory"
@@ -497,8 +497,8 @@ msgid "Language models"
 msgstr "Modelos de lengua"
 
 #: blueprints/train/views.py:65
-msgid "You have already imported this translator"
-msgstr "Ya has importado este traductor"
+msgid "You have already imported this engine"
+msgstr "Este traductor automático ya ha sido importado"
 
 #: blueprints/train/views.py:89
 msgid "The link you provided is invalid"
@@ -546,16 +546,16 @@ msgid "Train"
 msgstr "Entrenar"
 
 #: blueprints/train/templates/translators.html:5
-msgid "Translator trainer"
-msgstr "Entrenador de traductores"
+msgid "MT engine trainer"
+msgstr "Entrenador de traductores automáticos"
 
 #: blueprints/train/templates/translators.html:6
 msgid ""
-"Train SMT systems by combining bitexts and language models for a language "
+"Train SMT engines by combining bitexts and language models for a language "
 "pair."
 msgstr ""
-"Entrena sistemas SMT mediante la combinación de bitextos y modelos de "
-"lengua para un par de lenguas dado."
+"Entrena traductores automáticos estadísticos combinando bitextos y modelos "
+"de lengua para cada par de lenguas."
 
 #: blueprints/train/templates/translators.html:7
 msgid "Optimising can take time but also bring higher quality."
@@ -564,8 +564,8 @@ msgstr ""
 "mejor calidad."
 
 #: blueprints/train/templates/translators.html:14
-msgid "Translator name"
-msgstr "Nombre"
+msgid "Engine name"
+msgstr "Nombre del traductor"
 
 #: blueprints/train/templates/translators.html:16
 #: blueprints/train/templates/translators.html:148
@@ -620,12 +620,12 @@ msgid "Add"
 msgstr "Añadir"
 
 #: blueprints/train/templates/translators.html:109
-msgid "Create a new translator"
-msgstr "Crear un nuevo traductor"
+msgid "Create a new engine"
+msgstr "Crear un nuevo traductor automático"
 
 #: blueprints/train/templates/translators.html:117
-msgid "Give a name to the translator"
-msgstr "Pon un nombre al traductor"
+msgid "Give a name to the engine"
+msgstr "Nombrar el traductor automático"
 
 #: blueprints/train/templates/translators.html:125
 msgid "From bitexts and LMs"
@@ -652,19 +652,19 @@ msgid "Target side"
 msgstr "Lengua meta"
 
 #: blueprints/train/templates/translators.html:198
-msgid "First translator"
-msgstr "Primer traductor"
+msgid "First engine"
+msgstr "Primer  traductor"
 
 #: blueprints/train/templates/translators.html:210
-msgid "Second translator"
+msgid "Second engine"
 msgstr "Segundo traductor"
 
 #: blueprints/train/templates/translators.html:240
-msgid "Optimize translator"
+msgid "Optimize engine"
 msgstr "Optimizar traductor"
 
 #: blueprints/train/templates/translators.html:268
-msgid "Evaluate translator"
+msgid "Evaluate engine"
 msgstr "Evaluar traductor"
 
 #: blueprints/train/templates/translators.html:272
@@ -729,8 +729,8 @@ msgid "Insert tokenized text here"
 msgstr "Inserte texto tokenizado aquí"
 
 #: blueprints/translate/templates/inspect.html:33
-msgid "LM / LM from translator"
-msgstr "Modelo de lengua / Modelo de lengua del traductor"
+msgid "LM / LM from engine"
+msgstr "ML / ML de traductor"
 
 #: blueprints/translate/templates/inspect.html:49
 #: blueprints/translate/templates/inspect.html:88
@@ -744,16 +744,15 @@ msgid "Query"
 msgstr "Consulta"
 
 #: blueprints/translate/templates/inspect.html:74
-msgid "TM from translator"
-msgstr "Modelo de traducción"
+msgid "TM from engine"
+msgstr "ML de traductor"
 
 #: blueprints/translate/templates/inspect.html:105
 #: blueprints/translate/templates/inspect.html:224
 #: blueprints/translate/templates/inspect.html:264
-#: blueprints/translate/templates/translate.html:20
 #: blueprints/translate/templates/translate.html:68
 #: blueprints/translate/templates/translate.html:108
-msgid "Translator"
+msgid "Engine"
 msgstr "Traductor"
 
 #: blueprints/translate/templates/inspect.html:126
@@ -836,17 +835,16 @@ msgstr "Parar servidor"
 
 #: blueprints/translate/templates/translate.html:5
 msgid ""
-"Select a translator, input a text or a document and press 'Translate' to "
-"get the translation\n"
+"Select a translation engine, input a text or a document and press "
+"'Translate' to get the translation\n"
 "  done. Supported document types include HTML, TXT, DOCX, PPTX, XLSX, ODT, "
 "ODS and ODP.\n"
 "  You can translate also translation memories in TMX format."
 msgstr ""
-"Selecciona un traductor, añade un texto o documento y pulsa el botón "
-"'Translate' para obtener el \n"
-"  resultado. Damos soporte a los siguientes formatos de documento: HTML, "
-"TXT, DOCX, PPTX, XLSX, ODT, ODS y ODP.\n"
-"  También puedes traducir memorias de traducción en formato TMX\""
+"Seleccione un traductor, adjunte un documento y presione 'Traducir' para "
+"obtener la traducción. Los tipos de documento que se pueden procesar son "
+"HTML, TXT, DOCX, PPTX, XLSX, ODT, ODS and ODP. También puede traducir "
+"memorias de traducción en formato TMX."
 
 #: blueprints/translate/templates/translate.html:10
 msgid "Text"
@@ -855,6 +853,10 @@ msgstr "Texto"
 #: blueprints/translate/templates/translate.html:11
 msgid "Documents"
 msgstr "Documentos"
+
+#: blueprints/translate/templates/translate.html:20
+msgid "Translator"
+msgstr "Traductor"
 
 #: blueprints/translate/templates/translate.html:56
 msgid "Select document"
@@ -1080,35 +1082,116 @@ msgid "Create a Bitext"
 msgstr "Crear un bitexto"
 
 #: templates/index.html:68
-msgid "Build Translators"
+msgid "Build Engines"
 msgstr "Entrenar traductores"
 
 #: templates/index.html:69
 msgid ""
-"Build a new machine translator with bitexts and language\n"
+"Build a new machine translation engine with bitexts and language\n"
 "      models. Create translators with different texts and see\n"
 "      the effect of optimising them."
 msgstr ""
-"Crea un nuevo traductor automático a partir de un bitexto y un modelo de "
-"lengua. Crea traductores con textos diferentes y observa el efecto de la "
+"Crear un nuevo traductor automático a partir de un bitexto y un modelo de "
+"lengua. Crear traductores con textos diferentes y observe el efecto de la "
 "optimización."
 
 #: templates/index.html:73
-msgid "Train a Translator"
-msgstr "Entrenar un traductor"
+msgid "Train an Engine"
+msgstr "Entrenar un Traductor"
 
 #: templates/index.html:79
 msgid ""
-"See your translators in action, test and compare them.\n"
+"See your engines in action, test and compare them.\n"
 "      Translate short texts or documents. As soon as you have a new "
-"translator, you\n"
+"engine, you\n"
 "      will be able to try it!"
 msgstr ""
-"Echa un vistazo a tus traductores, pruébalos y compáralos. Traduce textos "
-"cortos o documentos tan pronto como tengas un nuevo traductor disponible."
+"Eche un vistazo a sus traductores, pruébelos y compárelos. Traduzca textos "
+"cortos o documentos tan pronto como tenga un nuevo traductor disponible."
 
 #~ msgid "Toggle"
 #~ msgstr "Cambiar"
 
 #~ msgid "Entrenar LMs"
 #~ msgstr "Crear ML"
+
+#~ msgid "Translators"
+#~ msgstr "Traductores"
+
+#~ msgid "You have already imported this translator"
+#~ msgstr "Ya has importado este traductor"
+
+#~ msgid "Translator trainer"
+#~ msgstr "Entrenador de traductores"
+
+#~ msgid ""
+#~ "Train SMT systems by combining bitexts and language models for a "
+#~ "language pair."
+#~ msgstr ""
+#~ "Entrena sistemas SMT mediante la combinación de bitextos y modelos de "
+#~ "lengua para un par de lenguas dado."
+
+#~ msgid "Translator name"
+#~ msgstr "Nombre"
+
+#~ msgid "Create a new translator"
+#~ msgstr "Crear un nuevo traductor"
+
+#~ msgid "Give a name to the translator"
+#~ msgstr "Pon un nombre al traductor"
+
+#~ msgid "First translator"
+#~ msgstr "Primer traductor"
+
+#~ msgid "Second translator"
+#~ msgstr "Segundo traductor"
+
+#~ msgid "Optimize translator"
+#~ msgstr "Optimizar traductor"
+
+#~ msgid "Evaluate translator"
+#~ msgstr "Evaluar traductor"
+
+#~ msgid "LM / LM from translator"
+#~ msgstr "Modelo de lengua / Modelo de lengua del traductor"
+
+#~ msgid "TM from translator"
+#~ msgstr "Modelo de traducción"
+
+#~ msgid ""
+#~ "Select a translator, input a text or a document and press 'Translate' "
+#~ "to get the translation\n"
+#~ "  done. Supported document types include HTML, TXT, DOCX, PPTX, XLSX, "
+#~ "ODT, ODS and ODP.\n"
+#~ "  You can translate also translation memories in TMX format."
+#~ msgstr ""
+#~ "Selecciona un traductor, añade un texto o documento y pulsa el botón "
+#~ "'Translate' para obtener el \n"
+#~ "  resultado. Damos soporte a los siguientes formatos de documento: "
+#~ "HTML, TXT, DOCX, PPTX, XLSX, ODT, ODS y ODP.\n"
+#~ "  También puedes traducir memorias de traducción en formato TMX\""
+
+#~ msgid "Build Translators"
+#~ msgstr "Entrenar traductores"
+
+#~ msgid ""
+#~ "Build a new machine translator with bitexts and language\n"
+#~ "      models. Create translators with different texts and see\n"
+#~ "      the effect of optimising them."
+#~ msgstr ""
+#~ "Crea un nuevo traductor automático a partir de un bitexto y un modelo "
+#~ "de lengua. Crea traductores con textos diferentes y observa el efecto "
+#~ "de la optimización."
+
+#~ msgid "Train a Translator"
+#~ msgstr "Entrenar un traductor"
+
+#~ msgid ""
+#~ "See your translators in action, test and compare them.\n"
+#~ "      Translate short texts or documents. As soon as you have a new "
+#~ "translator, you\n"
+#~ "      will be able to try it!"
+#~ msgstr ""
+#~ "Echa un vistazo a tus traductores, pruébalos y compáralos. Traduce "
+#~ "textos cortos o documentos tan pronto como tengas un nuevo traductor "
+#~ "disponible."

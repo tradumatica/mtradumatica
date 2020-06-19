@@ -47,16 +47,12 @@ def query_lm(text, model):
   return list
 
 def query_tm(text, model):
-  text = nl.sub("\n\n", text)  
-  text = splitter.sub("\n", text)
-  
-  input = tempfile.NamedTemporaryFile(delete = False)
-  input.write(text.encode("utf8"))
-  input.close()
+  text = text.replace("\"", "");
+  text = text.replace("\n", " ");
   
   output= tempfile.NamedTemporaryFile(delete = False)
   output.close()
-  query_command = "{0} -a -t {1} <{2} >{3}".format(qtm, model, input.name, output.name)
+  query_command = '{0} {1} "{2}" 1000 >{3}'.format(qtm, model, text, output.name)
   proc = subprocess.Popen(query_command, shell = True, preexec_fn = os.setsid, close_fds = True)
   proc.communicate();
   
@@ -65,7 +61,6 @@ def query_tm(text, model):
     for i in f:
       list.append(i)
   
-  os.unlink(input.name);
   os.unlink(output.name);
   
   return list

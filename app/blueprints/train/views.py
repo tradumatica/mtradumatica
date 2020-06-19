@@ -31,7 +31,7 @@ def translators():
 
   data = Corpus.query.filter(Corpus.user_id == user_utils.get_uid()).all()
   translators = [t for t in TranslatorFromBitext.query.filter(TranslatorFromBitext.user_id == user_utils.get_uid()).all() if t.mydatefinished != None]
-  return render_template("translators.html", title = _("Translators"), data = data, translators = translators,
+  return render_template("translators.html", title = _("MT Engines"), data = data, translators = translators,
                          user = user_utils.get_user())
 
 @train_blueprint.route('/actions/generate-share-link', methods=["POST"])
@@ -62,7 +62,7 @@ def grab_mt(share_key):
 
     try:
       os.stat(copy_mt_path)
-      flash(_('You have already imported this translator'), "danger")
+      flash(_('You have already imported this engine'), "danger")
     except:
       user = User.query.filter_by(id=mt.user_id).first()
       
@@ -329,7 +329,7 @@ def status_translator_optimization(id):
 @train_blueprint.route('/actions/translator-optimize/<int:translatorid>/<int:bitextid>')
 @utils.condec(login_required, USER_LOGIN_ENABLED)
 def translator_optimize(translatorid, bitextid):
-  #In order to tune, create a TMP dir with a copy of the trasnlator structure, run mert, and copy back the optimized moses.ini to
+  #In order to tune, create a TMP dir with a copy of the translator structure, run mert, and copy back the optimized moses.ini to
   # the translator directory
   #we will need both SL and TL truecasing models
 
@@ -539,7 +539,7 @@ def perform_eval_translator(id):
 
     t = TranslatorFromBitext.query.get(id)
     if t is None:
-      return jsonify(status = "Fail", message = "Translator not available")
+      return jsonify(status = "Fail", message = "Engine not available")
     try:
       result = mosestranslate.translate(text.decode("utf-8"), t.basename)
     except Exception as e:

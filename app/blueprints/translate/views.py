@@ -31,7 +31,7 @@ def translatechoose(id):
   text = json.loads(request.data)['text'] #.encode("utf-8")
   t = TranslatorFromBitext.query.get(id)
   if t is None:
-    return jsonify(status = "Fail", message = "Translator not available")
+    return jsonify(status = "Fail", message = "Translation engine not available")
   try:
     result = mosestranslate.translate(text, t.basename)
     return jsonify(status = "OK", text = result)
@@ -79,7 +79,7 @@ def query_lm():
 def query_tm():
   req_s = json.loads(request.data)
   tobj = TranslatorFromBitext.query.get(req_s['id'])
-  file_tm = os.path.join(tobj.get_path()[0],"phrase-table.minphr")
+  file_tm = os.path.join(tobj.get_path()[0],"phrase-table.gz")
 
   if file_tm is not None:
     lines = qm.query_tm(req_s['text'], file_tm)

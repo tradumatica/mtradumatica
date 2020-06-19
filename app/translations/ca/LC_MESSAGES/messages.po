@@ -7,8 +7,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PROJECT VERSION\n"
 "Report-Msgid-Bugs-To: EMAIL@ADDRESS\n"
-"POT-Creation-Date: 2020-06-16 08:40+0000\n"
-"PO-Revision-Date: 2020-06-16 10:57+0200\n"
+"POT-Creation-Date: 2020-06-17 05:39+0000\n"
+"PO-Revision-Date: 2020-06-17 08:16+0200\n"
 "Last-Translator: \n"
 "Language: ca\n"
 "Language-Team: ca <LL@li.org>\n"
@@ -17,7 +17,7 @@ msgstr ""
 "Content-Type: text/plain; charset=utf-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Generated-By: Babel 2.6.0\n"
-"X-Generator: Poedit 2.3\n"
+"X-Generator: Poedit 2.1\n"
 
 #: views.py:51
 msgid "Home"
@@ -70,8 +70,8 @@ msgstr "Cua"
 
 #: blueprints/dashboard/templates/dashboard.html:14 blueprints/train/views.py:34
 #: templates/base.html:110
-msgid "Translators"
-msgstr "Traductors"
+msgid "MT Engines"
+msgstr "Motors de TA"
 
 #: blueprints/dashboard/templates/dashboard.html:20
 msgid "Memory"
@@ -159,7 +159,7 @@ msgstr "Desactiva el registre de nous usuaris"
 
 #: blueprints/dashboard/templates/dashboard.html:88
 msgid "Task name"
-msgstr ""
+msgstr "Nom de la tasca"
 
 #: blueprints/dashboard/templates/dashboard.html:89
 msgid "Status"
@@ -488,8 +488,8 @@ msgid "Language models"
 msgstr "Models de llengua"
 
 #: blueprints/train/views.py:65
-msgid "You have already imported this translator"
-msgstr "Ja has importat aquest traductor"
+msgid "You have already imported this engine"
+msgstr "Ja heu importat aquest motor"
 
 #: blueprints/train/views.py:89
 msgid "The link you provided is invalid"
@@ -537,23 +537,23 @@ msgid "Train"
 msgstr "Entrenar"
 
 #: blueprints/train/templates/translators.html:5
-msgid "Translator trainer"
-msgstr "Entrenador de traductors"
+msgid "MT engine trainer"
+msgstr "Entrenador de motors de TA"
 
 #: blueprints/train/templates/translators.html:6
 msgid ""
-"Train SMT systems by combining bitexts and language models for a language pair."
+"Train SMT engines by combining bitexts and language models for a language pair."
 msgstr ""
-"Entreneu sistemes TAE combinant bitextos i models de llengua per a un par de "
-"llengües."
+"Entreneu motors de traducció automàtica estadística combinant bitextos i models "
+"de llengua per a cada parell de llengües."
 
 #: blueprints/train/templates/translators.html:7
 msgid "Optimising can take time but also bring higher quality."
 msgstr "L’optimització pot tardar prou, però també aporta una qualitat superior."
 
 #: blueprints/train/templates/translators.html:14
-msgid "Translator name"
-msgstr "Nom del traductor"
+msgid "Engine name"
+msgstr "Nom del motor"
 
 #: blueprints/train/templates/translators.html:16
 #: blueprints/train/templates/translators.html:148
@@ -608,12 +608,12 @@ msgid "Add"
 msgstr "Afegir"
 
 #: blueprints/train/templates/translators.html:109
-msgid "Create a new translator"
-msgstr "Crear un nou traductor"
+msgid "Create a new engine"
+msgstr "Crear un nou motor"
 
 #: blueprints/train/templates/translators.html:117
-msgid "Give a name to the translator"
-msgstr "Anomeneu el traductor"
+msgid "Give a name to the engine"
+msgstr "Doneu un nom al motor"
 
 #: blueprints/train/templates/translators.html:125
 msgid "From bitexts and LMs"
@@ -640,20 +640,20 @@ msgid "Target side"
 msgstr "Meta"
 
 #: blueprints/train/templates/translators.html:198
-msgid "First translator"
-msgstr "Primer traductor"
+msgid "First engine"
+msgstr "Primer motor"
 
 #: blueprints/train/templates/translators.html:210
-msgid "Second translator"
-msgstr "Segon traductor"
+msgid "Second engine"
+msgstr "Segon motor"
 
 #: blueprints/train/templates/translators.html:240
-msgid "Optimize translator"
-msgstr "Optimitzar traductor"
+msgid "Optimize engine"
+msgstr "Optimitzeu motor"
 
 #: blueprints/train/templates/translators.html:268
-msgid "Evaluate translator"
-msgstr "Avaluar traductor"
+msgid "Evaluate engine"
+msgstr "Avalueu motor"
 
 #: blueprints/train/templates/translators.html:272
 msgid ""
@@ -716,8 +716,8 @@ msgid "Insert tokenized text here"
 msgstr "Afegiu aquí el text tokenitzat"
 
 #: blueprints/translate/templates/inspect.html:33
-msgid "LM / LM from translator"
-msgstr "Model de llengua / Model de llengua del traductor"
+msgid "LM / LM from engine"
+msgstr "ML / ML de motor"
 
 #: blueprints/translate/templates/inspect.html:49
 #: blueprints/translate/templates/inspect.html:88
@@ -731,17 +731,16 @@ msgid "Query"
 msgstr "Consultar"
 
 #: blueprints/translate/templates/inspect.html:74
-msgid "TM from translator"
-msgstr "Memòria del traductor"
+msgid "TM from engine"
+msgstr "MT de motor"
 
 #: blueprints/translate/templates/inspect.html:105
 #: blueprints/translate/templates/inspect.html:224
 #: blueprints/translate/templates/inspect.html:264
-#: blueprints/translate/templates/translate.html:20
 #: blueprints/translate/templates/translate.html:68
 #: blueprints/translate/templates/translate.html:108
-msgid "Translator"
-msgstr "Traductor"
+msgid "Engine"
+msgstr "Motor"
 
 #: blueprints/translate/templates/inspect.html:126
 #: blueprints/translate/templates/translate.html:44
@@ -822,17 +821,16 @@ msgstr "Parar servidor"
 
 #: blueprints/translate/templates/translate.html:5
 msgid ""
-"Select a translator, input a text or a document and press 'Translate' to get the "
-"translation\n"
+"Select a translation engine, input a text or a document and press 'Translate' to "
+"get the translation\n"
 "  done. Supported document types include HTML, TXT, DOCX, PPTX, XLSX, ODT, ODS "
 "and ODP.\n"
 "  You can translate also translation memories in TMX format."
 msgstr ""
-"Seleccioneu un traductor, introduïu un document i premeu 'Traduir' per obtenir "
-"la traducció\n"
-"  automàtica. Els tipus de documents que podeu pujar són HTML, TXT, DOCX, PPTX, "
-"XLSX, ODT, ODS i ODP.\n"
-"  També podeu traduir memòries de traducció en format TMX."
+"Seleccioneu un traductor, introduïu un document i premeu ‘Traduir’ per obtenir\n"
+"la traducció automàtica. Els tipus de documents que podeu pujar són HTML, TXT, \n"
+"DOCX, PPTX, XLSX, ODT, ODS i ODP. També podeu traduir memòries de traducció en "
+"format TMX."
 
 #: blueprints/translate/templates/translate.html:10
 msgid "Text"
@@ -841,6 +839,10 @@ msgstr "Text"
 #: blueprints/translate/templates/translate.html:11
 msgid "Documents"
 msgstr "Documents"
+
+#: blueprints/translate/templates/translate.html:20
+msgid "Translator"
+msgstr "Traductor"
 
 #: blueprints/translate/templates/translate.html:56
 msgid "Select document"
@@ -966,7 +968,7 @@ msgstr "Podeu descarregar MTradumàtica en GitHub"
 
 #: templates/index.html:6
 msgid "Download"
-msgstr "Descàrrega:"
+msgstr "Descàrrega"
 
 #: templates/index.html:9
 msgid ""
@@ -1066,33 +1068,114 @@ msgid "Create a Bitext"
 msgstr "Crear un bitext"
 
 #: templates/index.html:68
-msgid "Build Translators"
-msgstr "Entrenar traductors"
+msgid "Build Engines"
+msgstr "Entrenar Motors"
 
 #: templates/index.html:69
 msgid ""
-"Build a new machine translator with bitexts and language\n"
+"Build a new machine translation engine with bitexts and language\n"
 "      models. Create translators with different texts and see\n"
 "      the effect of optimising them."
 msgstr ""
 "Creeu un nou traductor automàtic amb models de llengua i\n"
-" bitextos. Creeu traductors amb diferents textos i veieu quin\n"
-" és l’efecte d’optimitzar-los."
+"bitextos. Creeu traductors amb diferents textos i veieu quin\n"
+"és l’efecte d’optimitzar-los."
 
 #: templates/index.html:73
-msgid "Train a Translator"
-msgstr "Entrenar un traductor"
+msgid "Train an Engine"
+msgstr "Entreneu un Motor"
 
 #: templates/index.html:79
 msgid ""
-"See your translators in action, test and compare them.\n"
-"      Translate short texts or documents. As soon as you have a new translator, "
-"you\n"
+"See your engines in action, test and compare them.\n"
+"      Translate short texts or documents. As soon as you have a new engine, you\n"
 "      will be able to try it!"
 msgstr ""
-"Veieu els vostres traductors en acció, proveu-los i compareu-los.\n"
-" Tradueix textos o documents breus. Tan aviat com tingueu un traductor nou, el\n"
-" podreu provar!"
+"Veieu els vostres traductors en acció, proveu-los i compareu-los. \n"
+"Tradueix textos o documents breus. Tan aviat com tingueu un traductor\n"
+"nou, el podreu provar!”"
 
 #~ msgid "Toggle"
 #~ msgstr "Cambiar"
+
+#~ msgid "Translators"
+#~ msgstr "Traductors"
+
+#~ msgid "You have already imported this translator"
+#~ msgstr "Ja has importat aquest traductor"
+
+#~ msgid "Translator trainer"
+#~ msgstr "Entrenador de traductors"
+
+#~ msgid ""
+#~ "Train SMT systems by combining bitexts and language models for a language "
+#~ "pair."
+#~ msgstr ""
+#~ "Entreneu sistemes TAE combinant bitextos i models de llengua per a un par de "
+#~ "llengües."
+
+#~ msgid "Translator name"
+#~ msgstr "Nom del traductor"
+
+#~ msgid "Create a new translator"
+#~ msgstr "Crear un nou traductor"
+
+#~ msgid "Give a name to the translator"
+#~ msgstr "Anomeneu el traductor"
+
+#~ msgid "First translator"
+#~ msgstr "Primer traductor"
+
+#~ msgid "Second translator"
+#~ msgstr "Segon traductor"
+
+#~ msgid "Optimize translator"
+#~ msgstr "Optimitzar traductor"
+
+#~ msgid "Evaluate translator"
+#~ msgstr "Avaluar traductor"
+
+#~ msgid "LM / LM from translator"
+#~ msgstr "Model de llengua / Model de llengua del traductor"
+
+#~ msgid "TM from translator"
+#~ msgstr "Memòria del traductor"
+
+#~ msgid ""
+#~ "Select a translator, input a text or a document and press 'Translate' to get "
+#~ "the translation\n"
+#~ "  done. Supported document types include HTML, TXT, DOCX, PPTX, XLSX, ODT, "
+#~ "ODS and ODP.\n"
+#~ "  You can translate also translation memories in TMX format."
+#~ msgstr ""
+#~ "Seleccioneu un traductor, introduïu un document i premeu 'Traduir' per "
+#~ "obtenir la traducció\n"
+#~ "  automàtica. Els tipus de documents que podeu pujar són HTML, TXT, DOCX, "
+#~ "PPTX, XLSX, ODT, ODS i ODP.\n"
+#~ "  També podeu traduir memòries de traducció en format TMX."
+
+#~ msgid "Build Translators"
+#~ msgstr "Entrenar traductors"
+
+#~ msgid ""
+#~ "Build a new machine translator with bitexts and language\n"
+#~ "      models. Create translators with different texts and see\n"
+#~ "      the effect of optimising them."
+#~ msgstr ""
+#~ "Creeu un nou traductor automàtic amb models de llengua i\n"
+#~ " bitextos. Creeu traductors amb diferents textos i veieu quin\n"
+#~ " és l’efecte d’optimitzar-los."
+
+#~ msgid "Train a Translator"
+#~ msgstr "Entrenar un traductor"
+
+#~ msgid ""
+#~ "See your translators in action, test and compare them.\n"
+#~ "      Translate short texts or documents. As soon as you have a new "
+#~ "translator, you\n"
+#~ "      will be able to try it!"
+#~ msgstr ""
+#~ "Veieu els vostres traductors en acció, proveu-los i compareu-los.\n"
+#~ " Tradueix textos o documents breus. Tan aviat com tingueu un traductor nou, "
+#~ "el\n"
+#~ " podreu provar!"
