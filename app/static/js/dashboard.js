@@ -54,9 +54,9 @@ $(document).ready(function() {
         targets: 3,
         render: function(data, type, row) {
           let date_string = row[3];
-          let date_utc = new Date(date_string)
+          let date_utc = parseDate(date_string);
           let date_local = new Date(date_utc.getTime() - (date_utc.getTimezoneOffset() * 60000))
-          return `${date_local.toLocaleDateString()} ${date_local.toLocaleTimeString()}`
+          return `${date_utc.toLocaleDateString()} ${date_utc.toLocaleTimeString()}`
         }
       },
       {

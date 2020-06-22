@@ -6,7 +6,17 @@ function pad(num) {
 }
 
 function parseDate(dateTimeStr) {
-	return new Date(dateTimeStr)
+	splitBySpace=dateTimeStr.split(" ")
+	dateParts=splitBySpace[0].split("-")
+	timeParts=splitBySpace[1].split(":")
+
+	year    = dateParts[0];
+    month   = dateParts[1];
+    day     = dateParts[2];
+    hours   = timeParts[0];
+    minutes = timeParts[1];
+    seconds = timeParts[2];
+	return new Date(Date.UTC(year, month - 1, day, hours, minutes, seconds));
 }
 
 function formatDateDiff(start, now) {
@@ -23,9 +33,9 @@ function formatDateDiff(start, now) {
 }
 
 function init_clock(dateTimeStr, spanid, dataid) {
-	let startDate = new Date(dateTimeStr);
+	let startDate = parseDate(dateTimeStr);
 	let timerid = setInterval(() => {
-		let today = new Date(new Date().getTime() + (new Date().getTimezoneOffset() * 60000));
+		let today = new Date();
 		let timeElapsed = formatDateDiff(startDate, today);
 		if (timeElapsed != "") {
 			$("#" + spanid).html(timeElapsed);

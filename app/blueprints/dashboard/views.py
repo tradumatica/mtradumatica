@@ -112,7 +112,7 @@ def queue_list():
     for status in tasks.keys():
       for task in tasks[status]:
         print(task)
-        start_utc = datetime.fromtimestamp(time() - kombu.five.monotonic() + task['time_start']).strftime("%Y-%m-%d %H:%M:%S")
+        start_utc = datetime.utcfromtimestamp(time() - kombu.five.monotonic() + task['time_start']).strftime("%Y-%m-%d %H:%M:%S")
 
         item = None
         if task['type'] == 'app.utils.tasks.train_smt':
