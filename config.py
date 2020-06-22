@@ -51,3 +51,7 @@ GOOGLE_USER_DATA_URL        = '/oauth2/v1/userinfo'
 # in TIME_LIMIT_DAYS days (must be an integer)
 # 0 means no limits
 TIME_LIMIT_DAYS = 0
+
+# Count words on upload
+WORD_COUNT_ON_UPLOAD = True
+WORD_COUNT_UNIQUE_ON_UPLOAD = True

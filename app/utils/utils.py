@@ -1,3 +1,4 @@
+from app import app
 from sqlalchemy import asc, desc, not_
 
 import errno
@@ -61,7 +62,7 @@ def write_upload(input_file, filename):
 
     s = str(i, errors='ignore')
     nl += 1
-    nw += len(s.split())
+    if app.config['WORD_COUNT_ON_UPLOAD']: nw += len(s.split())
     nc += len(s)
 
     if nl < 1000:
@@ -88,7 +89,7 @@ def file_properties(input_filename):
     sz += len(i)
     s = i
     nl += 1
-    nw += len(s.split())
+    if app.config['WORD_COUNT_ON_UPLOAD']: nw += len(s.split())
     nc += len(s)
 
     if nl < 1000:
