@@ -238,7 +238,7 @@ def file_upload():
       mime     = magic.Magic(mime=True)
       mimetype = mime.from_file(i)
       basename = "-".join(secure_filename(os.path.basename(i)).split("-")[1:])
-      uw = metrics.count_unique_words(i)
+      uw = metrics.count_unique_words(i) if app.config['WORD_COUNT_UNIQUE_ON_UPLOAD'] else 0
       c = Corpus(name = basename, mydate = datetime.utcnow(),
                lang = lang if mimetype[0:4] == "text" else '<binary>', nlines = nl, nwords = nw,
                nchars = nc, size = sz, path = i,
@@ -248,7 +248,7 @@ def file_upload():
     db.session.commit()
     os.unlink(filename)
   else:
-    uw = metrics.count_unique_words(filename)    
+    uw = metrics.count_unique_words(filename) if app.config['WORD_COUNT_UNIQUE_ON_UPLOAD'] else 0
     c = Corpus(name = basename, mydate = datetime.utcnow(),
                lang = lang if mimetype[0:4] == "text" else '<binary>', nlines = nl, nwords = nw,
                nchars = nc, size = sz, path = filename,

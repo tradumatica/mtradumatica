@@ -57,7 +57,7 @@ $(document).ready(function() {
 			}
 
 			//Once counters are initialized, display the date according to client's locale
-			let date = new Date(new Date(startDateTimeStr).getTime() - (new Date().getTimezoneOffset() * 60000))
+			let date = parseDate(startDateTimeStr)
 			if (!isNaN(date.getTime())) {
 				$('td', row).eq(5).text(`${date.toLocaleDateString()} ${date.toLocaleTimeString()}`);
 			}

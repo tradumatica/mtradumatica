@@ -156,3 +156,29 @@ Then edit all .po files to translate the new strings
 
 When you find a "fuzzy" comment after a hash inside the po files, check it
 and remove this comment before compiling.
+
+## Database migrations
+
+This project uses [Flask-Migrate](https://flask-migrate.readthedocs.io/en/latest/) to manage database changes. A _migration_ contains the changes from the previous version of the database to the next one. The process of applying a migration is known as _upgrade_.
+
+### Upgrading with the provided migrations
+
+In the root directory of this project, run:
+
+```
+flask db upgrade
+```
+
+This will run migrations that include changes which have not been already applied to the database. 
+
+⚠ Please note that this project runs SQLite as the database engine. __Dropping columns in SQLite is not supported__, so be sure that you really want to upgrade to a version with new columns.
+
+### Generate your own migrations
+
+If you change the database, you can generate a migration by running:
+
+```
+flask db migrate -m "[DESCRIPTION]"
+```
+
+Don't forget to apply the migration by running `flask db upgrade`

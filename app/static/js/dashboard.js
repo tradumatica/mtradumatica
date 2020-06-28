@@ -54,9 +54,9 @@ $(document).ready(function() {
         targets: 3,
         render: function(data, type, row) {
           let date_string = row[3];
-          let date_utc = new Date(date_string)
+          let date_utc = parseDate(date_string);
           let date_local = new Date(date_utc.getTime() - (date_utc.getTimezoneOffset() * 60000))
-          return `${date_local.toLocaleDateString()} ${date_local.toLocaleTimeString()}`
+          return `${date_utc.toLocaleDateString()} ${date_utc.toLocaleTimeString()}`
         }
       },
       {
@@ -78,8 +78,8 @@ $(document).ready(function() {
     });
   })
 
-  $('#tasklist').on('init.dt', function() {
-    $('input.task_checkbox').on('change', function() {
+  $('#tasklist').on('draw.dt', function() {
+    $('input.task_checkbox').off('change').on('change', function() {
       if ($('#task_checkbox_all').is(":checked")) {
         $('#task_checkbox_all').addClass("checkbox-inconsistent");
       }
@@ -101,7 +101,7 @@ $(document).ready(function() {
       }
     });
 
-    $('#task_checkbox_all').change(function() {
+    $('#task_checkbox_all').off('change').on('change', function() {
       $(this).removeClass("checkbox-inconsistent");
       if ($(this).is(":checked")) {
         $('.task_checkbox').prop("checked", true);
@@ -112,7 +112,7 @@ $(document).ready(function() {
       }
     });
 
-    $('#tasks_delete').click(function() {
+    $('#tasks_delete').off('click').on('click', function() {
       $('.task_checkbox').each(function () {
         if($(this).is(":checked")) {
           $.ajax({
