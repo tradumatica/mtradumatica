@@ -60,12 +60,11 @@ def process_tmx(input, output, lang1, lang2):
         if inside:
             storage.append(escape(data))
 
-        if re.match("^\s+$", escape(data)):
-            output.write("<!--")
-            output.write(escape(data))
-            output.write("-->")
-        else:
-            output.write(escape(data))
+
+        output.write("<!--")
+        output.write(escape(data))
+        output.write("-->")
+
 
 
     
