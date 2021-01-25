@@ -9,7 +9,7 @@ PIDFILE="$3"
 source $ROOT/venv/bin/activate
 
 MOSES_INI="moses.ini"
-if [ -f "$ROOT/translators/$ENGINE/moses.tuned.ini" ]; then
+if [ -f "$ROOT/data/translators/$ENGINE/moses.tuned.ini" ]; then
   MOSES_INI="moses.tuned.ini"
 fi
 
@@ -21,6 +21,6 @@ fi
 
 [ -d $ROOT/logs ] || mkdir $ROOT/logs
 
-cd $ROOT/translators/$ENGINE
-nohup mosesserver --server-port $PORT -f $MOSES_INI &>>$ROOT/logs/moses_server.log &
+cd $ROOT/data/translators/$ENGINE
+nohup mosesserver --server-port $PORT -f $MOSES_INI &>>$ROOT/data/logs/moses_server.log &
 echo $! >"$PIDFILE"
