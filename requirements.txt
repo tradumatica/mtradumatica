@@ -28,7 +28,7 @@ httplib2==0.11.3
 idna==2.6
 iso-639==0.4.5
 itsdangerous==0.24
-Jinja2==2.10
+Jinja2==2.11.3
 kombu==4.1.0
 langid==1.1.5
 lazy==1.3
