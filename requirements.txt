@@ -35,7 +35,7 @@ lazy==1.3
 Mako==1.1.3
 MarkupSafe==0.23
 nltk==3.4.5
-numpy==1.10.1
+numpy==1.21.0
 oauthlib==3.1.0
 pbr==1.8.1
 pkg-resources==0.0.0
