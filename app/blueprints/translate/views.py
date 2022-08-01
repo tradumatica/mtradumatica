@@ -9,7 +9,7 @@ from app.utils.dictionaries import search_dictionary
 from flask import Blueprint, render_template, abort, request, jsonify, url_for, send_file
 from flask_login import login_required, current_user
 from flask_babel import _
-from werkzeug import secure_filename
+from werkzeug.utils import secure_filename
 from sqlalchemy import not_
 
 import json, os, tempfile

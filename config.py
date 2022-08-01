@@ -46,6 +46,7 @@ OAUTHLIB_INSECURE_TRANSPORT = True # True also behind firewall,  False -> requir
 GOOGLE_OAUTH_CLIENT_ID      = ''
 GOOGLE_OAUTH_CLIENT_SECRET  = ''
 GOOGLE_USER_DATA_URL        = '/oauth2/v1/userinfo'
+USE_PROXY_FIX               = True 
 
 # Delete users and their associated data if they have not logged in 
 # in TIME_LIMIT_DAYS days (must be an integer)

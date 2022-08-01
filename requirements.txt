@@ -11,9 +11,9 @@ coverage==4.0.1
 decorator==4.0.4
 defusedxml==0.6.0
 docopt==0.6.2
-Flask==1.0.4
-Flask-Babel==0.12.2
-Flask-Dance==2.2.0
+Flask==1.1.2
+Flask-Babel==1.0.0
+Flask-Dance==3.0.0
 Flask-Login==0.4.1
 Flask-Mail==0.9.1
 Flask-Migrate==2.5.3
@@ -28,12 +28,12 @@ httplib2==0.11.3
 idna==2.6
 iso-639==0.4.5
 itsdangerous==0.24
-Jinja2==2.10
+Jinja2==3.0.3
 kombu==4.1.0
 langid==1.1.5
 lazy==1.3
 Mako==1.1.3
-MarkupSafe==0.23
+MarkupSafe==2.0.1
 nltk==3.4.5
 numpy==1.10.1
 oauthlib==3.1.0
@@ -62,6 +62,6 @@ Tempita==0.5.2
 urllib3==1.22
 URLObject==2.4.3
 vine==1.1.4
-Werkzeug==0.14.1
+Werkzeug==1.0.1
 Whoosh==2.7.0
 WTForms==2.0.2

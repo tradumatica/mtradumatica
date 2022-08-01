@@ -3,9 +3,11 @@ from flask_babel import Babel
 from flask_sqlalchemy import SQLAlchemy
 from flask_login import LoginManager
 from flask_migrate import Migrate
+from werkzeug.middleware.proxy_fix import ProxyFix
 import os
 
 app    = Flask(__name__, static_folder='static', static_url_path='', instance_relative_config=True)
+
 app.config.from_object('config')
 app.config.from_pyfile('config.py', silent=True)
 
@@ -22,6 +24,9 @@ babel            = Babel(app)
 db               = SQLAlchemy(app)
 login_manager    = LoginManager(app)
 migrate          = Migrate(app, db)
+
+if app.config['USE_PROXY_FIX']:
+    app.wsgi_app = ProxyFix(app.wsgi_app)
 
 if not os.path.exists(app.config['TMP_FOLDER']):
     os.makedirs(app.config['TMP_FOLDER'])

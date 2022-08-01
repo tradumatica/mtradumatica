@@ -6,7 +6,7 @@ from app.models import MonolingualCorpus, Bitext, Corpus, AddCorpusBitext, AddCo
 from flask import Blueprint, render_template, abort, request, jsonify, Response
 from flask_login import login_required, current_user
 from flask_babel import _
-from werkzeug import secure_filename
+from werkzeug.utils import secure_filename
 from random import randint
 from datetime import datetime
 
