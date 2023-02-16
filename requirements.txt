@@ -62,6 +62,6 @@ Tempita==0.5.2
 urllib3==1.22
 URLObject==2.4.3
 vine==1.1.4
-Werkzeug==1.0.1
+Werkzeug==2.2.3
 Whoosh==2.7.0
 WTForms==2.0.2
